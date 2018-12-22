@@ -1,6 +1,6 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.6
+sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.moag.game.desktop.DesktopLauncher"
@@ -29,22 +29,26 @@ task dist(type: Jar) {
     from {configurations.compile.collect {zipTree(it)}}
     from files(project.assetsDir);
  
-    manifest {
+    manifest
+    {
         attributes 'Main-Class': project.mainClassName
     }
 }
 
 dist.dependsOn classes
 
-eclipse {
-    project {
+eclipse
+{
+    project
+    {
         name = appName + "-desktop"
         linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
     }
 }
 
 task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-  doLast {
+  doLast
+  {
     def classpath = new XmlParser().parse(file(".classpath"))
     new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
     def writer = new FileWriter(file(".classpath"))
