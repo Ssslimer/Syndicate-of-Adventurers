@@ -4,7 +4,7 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
-import com.moag.game.client.Game;
+import com.moag.game.Game;
 
 public class DesktopLauncher
 {
