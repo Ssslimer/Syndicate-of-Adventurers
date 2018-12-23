@@ -8,6 +8,7 @@ import com.moag.game.gui.GuiMainMenu;
 
 public class Game extends ApplicationAdapter
 {
+	//public static Client;
 	private Stage stage;
 
 	@Override

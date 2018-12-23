@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
+import javax.net.ssl.SSLServerSocketFactory;
+
 public class Server
 {	
 	private final String ip;
@@ -27,15 +29,18 @@ public class Server
 			e.printStackTrace();
 		}
 		
-		try(ServerSocket echoServer = new ServerSocket(port, 0, address))
+		System.setProperty("javax.net.ssl.keyStore", "za.store");
+		System.setProperty("javax.net.ssl.keyStorePassword", "qazwsx123");
+		SSLServerSocketFactory sslserversocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+		try(ServerSocket serverSocket = sslserversocketfactory.createServerSocket(port, 0, address))
 		{
 			System.out.println("Server was setup successfully");
-			System.out.println("ip: " + echoServer.getInetAddress().getHostAddress());
-			System.out.println("port: " + echoServer.getLocalPort());
+			System.out.println("ip: " + serverSocket.getInetAddress().getHostAddress());
+			System.out.println("port: " + serverSocket.getLocalPort());
 		
 			while(true)
 			{
-				ConnectionServer connectionToClient = new ConnectionServer(echoServer.accept());
+				ConnectionServer connectionToClient = new ConnectionServer(serverSocket.accept());
 				System.out.println("New connection is open");       			
 				connectionToClient.start();
         	}
