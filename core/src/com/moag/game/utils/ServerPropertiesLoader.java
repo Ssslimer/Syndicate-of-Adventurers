@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ServerPropertiesLoader 
@@ -28,10 +29,10 @@ public class ServerPropertiesLoader
 			docBuilderFactory = DocumentBuilderFactory.newInstance();
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			doc = docBuilder.parse(new File(xmlFileString));
-			System.out.println(doc); // null
 			doc.getDocumentElement().normalize();
 
-			server_info = doc.getElementById("1001");
+			NodeList list = doc.getElementsByTagName("server-info");
+			server_info = (Element) list.item(0);
 			
 		} 
 		catch(ParserConfigurationException e)
@@ -49,8 +50,7 @@ public class ServerPropertiesLoader
 	}
 	
 	public String getIP()
-	{		
-		System.out.println(server_info); // null
+	{	
 		return server_info.getElementsByTagName("ip").item(0).getTextContent();
 	}
 	
