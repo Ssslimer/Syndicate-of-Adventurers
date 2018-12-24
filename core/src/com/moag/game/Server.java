@@ -10,7 +10,7 @@ public class Server
 {	
 	private final String ip;
 	private final int port;
-	
+
 	public Server(String ip, int port)
 	{
 		this.ip = ip;
