@@ -1,16 +1,16 @@
 package com.moag.game;
 
-import com.moag.game.utils.ServerPropertiesLoader;
+import com.moag.game.utils.ServerProperties;
 
 public class MainServer
 {
 	public static void main(String[] args)
 	{
-//		ServerPropertiesLoader serverProperties = new ServerPropertiesLoader();
-//		String ip = serverProperties.getIP();
-//		int port = serverProperties.getPortNumber();
+		ServerProperties serverProperties = new ServerProperties();
 				
-        Server server = new Server("192.168.2.59", 4444); 
-        server.start();
+        Server server = new Server(serverProperties);
+        server.init();
+        server.loop();
+        server.stop();
 	}
 }

@@ -1,53 +1,58 @@
 package com.moag.game;
 
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.UnknownHostException;
-
-import javax.net.ssl.SSLServerSocketFactory;
+import com.moag.game.utils.ServerProperties;
+import com.moag.game.utils.Timer;
 
 public class Server
 {	
-	private final String ip;
-	private final int port;
+	private final ServerProperties serverProperties;	
+	private ConnectionManager connectionManager;
 
-	public Server(String ip, int port)
+	public Server(ServerProperties serverProperties)
 	{
-		this.ip = ip;
-		this.port = port;
+		this.serverProperties = serverProperties;
 	}
 	
-	public void start()
+	public void init()
 	{
-		InetAddress address = null;
-		try
-		{
-			address = InetAddress.getByName(this.ip);
-		}
-		catch(UnknownHostException e)
-		{
-			e.printStackTrace();
-		}
+		connectionManager = new ConnectionManager(serverProperties.getIP(), serverProperties.getPortNumber());
+		connectionManager.start();
 		
-		System.setProperty("javax.net.ssl.keyStore", "za.store");
-		System.setProperty("javax.net.ssl.keyStorePassword", "qazwsx123");
-		SSLServerSocketFactory sslserversocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-		try(ServerSocket serverSocket = sslserversocketfactory.createServerSocket(port, 0, address))
-		{
-			System.out.println("Server was setup successfully");
-			System.out.println("ip: " + serverSocket.getInetAddress().getHostAddress());
-			System.out.println("port: " + serverSocket.getLocalPort());
+		Thread.currentThread().setPriority(10);
+		Timer.setLogicFrequency(serverProperties.getTPS());
+	}
+
+	public void loop()
+	{		
+		long currentTickTime = 0;		
 		
-			while(true)
+		while(true)
+		{
+			currentTickTime = Timer.getTime();
+			
+			update();
+			
+			long timeLeft = (long)Timer.getLogicDeltaTime() + currentTickTime - Timer.getTime();	
+			Timer.updateTPS(timeLeft);
+			
+			try
 			{
-				ConnectionServer connectionToClient = new ConnectionServer(serverSocket.accept());
-				System.out.println("New connection is open");       			
-				connectionToClient.start();
-        	}
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+				Thread.sleep(timeLeft);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void update()
+	{	
+		
+	}
+
+	public void stop()
+	{
+		
 	}
 }

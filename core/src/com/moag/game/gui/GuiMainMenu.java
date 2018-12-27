@@ -5,47 +5,32 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.moag.game.Game;
 
-public class GuiMainMenu
+public class GuiMainMenu extends Gui
 {
 	private Skin skin;
-	private final Stage stage;
-	private TextField playerNameField, serverIPField, serverPortField;
+	private TextField serverIPField, serverPortField;
 	private TextButton joinServerButton;
 
 	public GuiMainMenu()
 	{
+		super(null);
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		stage = new Stage(new ScreenViewport());
 
-		setupPlayerNameTextField();
 		setupServerIPTextField();
 		setupServerPortTextField();
 		setupJoinServerButton();
 	}
 
-	private void setupPlayerNameTextField()
-	{
-		TextFieldStyle style = new TextFieldStyle();
-		style.fontColor = Color.RED;
-		style.font = new BitmapFont();
-		
-		playerNameField = new TextField("", style);
-		playerNameField.setText("Player name");
-		playerNameField.setWidth(200);
-		playerNameField.setHeight(50);
-		float posX = (Gdx.graphics.getWidth()-playerNameField.getWidth()) / 2f;
-		float posY = (Gdx.graphics.getHeight()-playerNameField.getHeight()) / 2f + 100;
-		playerNameField.setPosition(posX, posY);
-		stage.addActor(playerNameField);
-	}
-	
 	private void setupServerIPTextField()
 	{
 		TextFieldStyle style = new TextFieldStyle();
@@ -87,18 +72,18 @@ public class GuiMainMenu
 		float posY = (Gdx.graphics.getHeight()-joinServerButton.getHeight()) / 2f - 200;
 		joinServerButton.setPosition(posX, posY);
 		
-		joinServerButton.addListener(new EventListener()
+		joinServerButton.addListener(new ClickListener()
 	    {
-			@Override
-			public boolean handle(Event event)
-			{
-				return true;
-			}
+		    @Override
+		    public void clicked(InputEvent event, float x, float y)
+		    {
+		    	Game.openGui(new GuiJoinServer(stage));
+		    }
 	    });
 		
 		stage.addActor(joinServerButton);
 	}
-	
+		
 	public Stage getStage()
 	{
 		return stage;

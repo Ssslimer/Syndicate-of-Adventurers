@@ -12,7 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class ServerPropertiesLoader 
+public class ServerProperties 
 {
 	private final String xmlFileString = "server_properties.xml";
 	
@@ -22,7 +22,7 @@ public class ServerPropertiesLoader
 	
 	private Element server_info;
 	
-	public ServerPropertiesLoader()
+	public ServerProperties()
 	{	
 		try 
 		{
@@ -57,5 +57,10 @@ public class ServerPropertiesLoader
 	public int getPortNumber()
 	{
 		return Integer.parseInt(server_info.getElementsByTagName("port").item(0).getTextContent());
+	}
+	
+	public int getTPS()
+	{
+		return Integer.parseInt(server_info.getElementsByTagName("tps").item(0).getTextContent());
 	}
 }

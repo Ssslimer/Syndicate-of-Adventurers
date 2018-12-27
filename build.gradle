@@ -46,9 +46,9 @@ allprojects
 project(":desktop")
 {
     apply plugin: "java"
-    //apply plugin: 'org.junit.platform.gradle.plugin'
 
-    dependencies {
+    dependencies
+    {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
@@ -70,31 +70,7 @@ project(":desktop")
     }
 }
 
-project(":core") 
+tasks.eclipse.doLast
 {
-    apply plugin: "java"   
-
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    
-	    testRuntime(
-	    	'org.junit.jupiter:junit-jupiter-engine:5.3.1',
-	    	'org.junit.vintage:junit-vintage-engine:5.3.1',
-	    	'org.junit.platform:junit-platform-launcher:1.1.0',
-	    	'org.junit.platform:junit-platform-runner:1.1.0'
-	    )
-    }
-}
-
-tasks.eclipse.doLast {
     delete ".project"
 }

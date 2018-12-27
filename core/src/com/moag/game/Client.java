@@ -10,17 +10,19 @@ import javax.net.ssl.SSLSocketFactory;
 
 import com.moag.game.networking.Message;
 
-class Client
+public class Client
 {
 	private Socket clientSocket;
 	private ObjectOutputStream streamToServer;
 	private ObjectInputStream streamFromServer;
 	
+	private final String userName;
 	private final String ip;
 	private final int port;
 
-	public Client(String ip, int port)
+	public Client(String userName, String ip, int port)
 	{
+		this.userName = userName;
 		this.ip = ip;
 		this.port = port;
 	}
@@ -64,5 +66,10 @@ class Client
 	private Message getDataFromServer() throws ClassNotFoundException, IOException
 	{
 		return (Message) streamFromServer.readObject();	
+	}
+	
+	public String getUserName()
+	{
+		return userName;
 	}
 }
