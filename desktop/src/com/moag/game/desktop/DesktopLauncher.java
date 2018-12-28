@@ -4,7 +4,8 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
-import com.moag.game.Game;
+import com.moag.game.SyndicateOfAdventurers;
+import com.moag.game.utils.ConfigConstants;
 
 public class DesktopLauncher
 {
@@ -18,6 +19,8 @@ public class DesktopLauncher
 		config.addIcon("icon128x.png", FileType.Internal);
 		config.addIcon("icon32x.png", FileType.Internal);
 		config.addIcon("icon16x.png", FileType.Internal);
-		new LwjglApplication(new Game(), config);
+		config.width = ConfigConstants.WIDTH;
+		config.height = ConfigConstants.HEIGHT;
+		new LwjglApplication(new SyndicateOfAdventurers(), config);
 	}
 }
