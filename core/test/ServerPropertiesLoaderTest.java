@@ -4,28 +4,16 @@ import org.junit.jupiter.api.Test;
 
 import com.moag.game.utils.ServerPropertiesLoader;
 
-class ServerPropertiesLoaderTest {
-
+class ServerPropertiesLoaderTest
+{
 	@Test
-	void test() 
+	void loadServerPropertiesTest() 
 	{
-		String expectedIp = "192.168.2.59";
-		int expectedPort = 4444;
-		
-		String ip;
-		int port;
-		
 		ServerPropertiesLoader loader = new ServerPropertiesLoader();
-		
-		ip = loader.getIP();
-		port = loader.getPortNumber();
-		
-		assertNotNull(loader);
-		
-		assertNotNull(ip);
-		
-		assertTrue(port == expectedPort);
-		assertTrue(ip.compareTo(expectedIp) == 0);
+
+		assertEquals("192.168.2.59", loader.getIP());
+		assertEquals(4444, loader.getPortNumber());
+		assertEquals(50, loader.getTPS());
 	}
 
 }

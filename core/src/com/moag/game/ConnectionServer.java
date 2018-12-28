@@ -1,6 +1,5 @@
 package com.moag.game;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,13 +7,15 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import com.moag.game.networking.Message;
-import com.moag.game.networking.MessageContent;
+import com.moag.game.networking.NetworkingEnums.MessageContent;
 
 class ConnectionServer extends Thread
 {	
 	private Socket clientSocket;
 	private ObjectInputStream streamFromClient;
 	private ObjectOutputStream streamToClient;
+	
+	private boolean hasLogedIn = false;
 
 	public ConnectionServer(Socket clientSocket)
 	{
@@ -42,11 +43,11 @@ class ConnectionServer extends Thread
 	    	System.out.println("Lost connection with client");
 	    	return;
 	    }
-	    catch(EOFException e)
-	    {	 
-	    	try {wait(1);}
-	    	catch(InterruptedException e1) {}
-	    }
+//	    catch(EOFException e)
+//	    {	 
+//	    	try {wait(1);}
+//	    	catch(InterruptedException e1) {}
+//	    }
 	    catch(ClassNotFoundException | IOException e)
 	    {
 			e.printStackTrace();

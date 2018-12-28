@@ -3,8 +3,6 @@ package com.moag.game.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -12,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.moag.game.Client;
 import com.moag.game.Game;
 
 public class GuiMainMenu extends Gui
@@ -74,9 +72,11 @@ public class GuiMainMenu extends Gui
 		
 		joinServerButton.addListener(new ClickListener()
 	    {
+			/** TODO add popup messages when strings are incorrect */
 		    @Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
+		    	Game.client = new Client(serverIPField.getText(), Integer.parseInt(serverPortField.getText()));
 		    	Game.openGui(new GuiJoinServer(stage));
 		    }
 	    });

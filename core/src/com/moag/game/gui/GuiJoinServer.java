@@ -93,7 +93,7 @@ public class GuiJoinServer extends Gui
 		float posX = (Gdx.graphics.getWidth()-registerButton.getWidth()) / 2f;
 		float posY = (Gdx.graphics.getHeight()-registerButton.getHeight()) / 2f - 200;
 		registerButton.setPosition(posX, posY);
-		
+
 		registerButton.addListener(new EventListener()
 	    {
 			@Override
@@ -107,7 +107,7 @@ public class GuiJoinServer extends Gui
 	}
 	
 	private void setupBackButton()
-	{				
+	{
 		backButton = new TextButton("Back to main menu", skin, "default");
 		backButton.setWidth(200);
 		backButton.setHeight(50);
@@ -123,7 +123,7 @@ public class GuiJoinServer extends Gui
 				return true;
 			}
 	    });
-		
+
 		stage.addActor(backButton);
 	}
 }

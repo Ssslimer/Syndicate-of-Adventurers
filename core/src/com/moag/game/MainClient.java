@@ -7,7 +7,8 @@ public class MainClient
 		String ip = "192.168.2.59";
 		int port = 4444;
 		
-		Client client = new Client("TestUser", ip, port);
-		client.connectToServer();
+		Client client = new Client(ip, port);
+		client.register("Maciej", "");
+		//client.login(userName, password);
 	}
 }

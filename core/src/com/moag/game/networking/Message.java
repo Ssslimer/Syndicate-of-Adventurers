@@ -2,6 +2,8 @@ package com.moag.game.networking;
 
 import java.io.Serializable;
 
+import com.moag.game.networking.NetworkingEnums.MessageContent;
+
 public class Message implements Serializable
 {
 	private static final long serialVersionUID = -5885736425999483646L;

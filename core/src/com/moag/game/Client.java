@@ -16,18 +16,16 @@ public class Client
 	private ObjectOutputStream streamToServer;
 	private ObjectInputStream streamFromServer;
 	
-	private final String userName;
 	private final String ip;
 	private final int port;
 
-	public Client(String userName, String ip, int port)
+	public Client(String ip, int port)
 	{
-		this.userName = userName;
 		this.ip = ip;
 		this.port = port;
 	}
 	
-	public void connectToServer()
+	public boolean register(String userName, String password)
 	{
 		try
     	{	
@@ -37,16 +35,51 @@ public class Client
 			System.out.println("Connected to server IP: " + ip + " Port: " + clientSocket.getPort());
 	
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
-	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());					
+	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
+	    	return true;
+    	}
+    	catch(IOException e)
+    	{  		
+    		System.out.println(e.getMessage());   		   		
+    	}
+		finally
+		{
+    		try
+			{
+				clientSocket.close();
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+    		return false;
+		}
+	}
+	
+	public boolean login(String userName, String password)
+	{
+		try
+    	{	
+			System.setProperty("javax.net.ssl.trustStore", "za.store");
+			SocketFactory sslsocketfactory = SSLSocketFactory.getDefault();
+			clientSocket = sslsocketfactory.createSocket(ip, port);
+			System.out.println("Connected to server IP: " + ip + " Port: " + clientSocket.getPort());
+	
+    		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
+	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
+	    	return true;
     	}
     	catch(IOException e)
     	{  		
     		System.out.println(e.getMessage());
-    		e.printStackTrace();
     		
-    		try{clientSocket.close();
-			}catch(IOException e1){}
-    	}		
+    		try
+    		{
+    			clientSocket.close();
+			}
+    		catch(IOException e1) {}
+    		return false;
+    	}	
 	}
 
 	private void handleCallback(Message serverCallback)
@@ -67,9 +100,5 @@ public class Client
 	{
 		return (Message) streamFromServer.readObject();	
 	}
-	
-	public String getUserName()
-	{
-		return userName;
-	}
+
 }
