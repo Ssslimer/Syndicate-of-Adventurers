@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,10 +18,12 @@ import com.moag.game.Client;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.utils.GdxUtils;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 public class JoinServerScreen implements Screen
 {
 	private SyndicateOfAdventurers game;
-	private Client client;
 	private Stage stage;
 	
 	private Skin skin;
@@ -33,7 +33,7 @@ public class JoinServerScreen implements Screen
 	public JoinServerScreen(SyndicateOfAdventurers game, Client client)
 	{	
 		this.game = game;
-		this.client = client;
+		SyndicateOfAdventurers.setClient(client);
 		
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -84,7 +84,7 @@ public class JoinServerScreen implements Screen
 		style.font = new BitmapFont();
 		
 		playerNameField = new TextField("", style);
-		playerNameField.setText("Player name...");
+		playerNameField.setText("Login...");
 		playerNameField.setWidth(200);
 		playerNameField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-playerNameField.getWidth()) / 2f;
@@ -116,7 +116,7 @@ public class JoinServerScreen implements Screen
 		style.font = new BitmapFont();
 		
 		passwordField = new TextField("", style);
-		passwordField.setText("Server IP...");
+		passwordField.setText("Password...");
 		passwordField.setWidth(200);
 		passwordField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-passwordField.getWidth()) / 2f;
@@ -128,7 +128,7 @@ public class JoinServerScreen implements Screen
 		background.fill();
 		
 		passwordField.getStyle().background = new Image(new Texture(background)).getDrawable();
-		
+
 		passwordField.addListener(new ClickListener()
 		{
 			@Override
@@ -150,12 +150,12 @@ public class JoinServerScreen implements Screen
 		float posY = (Gdx.graphics.getHeight()-loginButton.getHeight()) / 2f - 60;
 		loginButton.setPosition(posX, posY);
 		
-		loginButton.addListener(new EventListener()
+		loginButton.addListener(new ClickListener()
 	    {
 			@Override
-			public boolean handle(Event event)
+			public void clicked(InputEvent event, float x, float y)
 			{
-				return true;
+
 			}
 	    });
 		
@@ -171,12 +171,32 @@ public class JoinServerScreen implements Screen
 		float posY = (Gdx.graphics.getHeight()-registerButton.getHeight()) / 2f - 130;
 		registerButton.setPosition(posX, posY);
 
-		registerButton.addListener(new EventListener()
+		registerButton.addListener(new ClickListener()
 	    {
 			@Override
-			public boolean handle(Event event)
+			public void clicked(InputEvent event, float x, float y)
 			{
-				return true;
+				String login = playerNameField.getText();
+				char[] password = passwordField.getText().toCharArray();
+				
+				Argon2 argon2 = Argon2Factory.create();
+				try
+				{
+				    String hashedPassword = argon2.hash(10, 65536, 1, password);
+
+				    if (argon2.verify(hashedPassword, password))
+				    {
+				    	SyndicateOfAdventurers.getClient().register(login, hashedPassword);
+				    }
+				    else
+				    {
+				    	/** ADD POPUP? STH WITH PASSWORD? */
+				    }
+				}
+				finally
+				{
+				    argon2.wipeArray(password);
+				}
 			}
 	    });
 		

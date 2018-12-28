@@ -1,5 +1,7 @@
 package com.moag.game.Screens;
 
+import java.util.regex.Pattern;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -19,11 +21,9 @@ import com.moag.game.Client;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.utils.GdxUtils;
 
-
 public class MainMenuScreen implements Screen
 {
-	private SyndicateOfAdventurers game;
-	
+	private SyndicateOfAdventurers game;	
 	private Stage stage;
 	
 	private Skin skin;
@@ -152,8 +152,49 @@ public class MainMenuScreen implements Screen
 		    @Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
-		    	Client client = new Client(serverIPField.getText(), Integer.parseInt(serverPortField.getText()));
+		    	String ip = serverIPField.getText();
+		    	/** ADD POPUP */
+		    	if(!isIPValid(ip)) return;
+		    	
+		    	int port = -1;		    	
+				try
+				{
+					port = getPort(serverPortField.getText());
+				}
+				catch(NumberFormatException e)
+				{
+					/** ADD POPUP */
+					return;
+				}
+				catch(PortFormatException e)
+				{
+					/** ADD POPUP */
+					return;
+				}
+		    	
+		    	Client client = new Client(ip, port);
 		    	game.setScreen(new JoinServerScreen(game, client));
+		    }
+
+		    // https://www.mkyong.com/regular-expressions/how-to-validate-ip-address-with-regular-expression/
+		    private static final String IPADDRESS_PATTERN = 
+		    		"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+		    		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+		    		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+		    		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+		    
+		    private boolean isIPValid(String ip)
+		    {
+		    	return Pattern.matches(IPADDRESS_PATTERN, ip);
+		    }
+		    
+		    private int getPort(String s) throws NumberFormatException, PortFormatException
+		    {
+		    	int port = Integer.parseInt(s);
+		    	
+		    	if(port < 0 || port > 65535) throw new PortFormatException();
+		    	
+		    	return port;
 		    }
 	    });
 		stage.addActor(joinServerButton);

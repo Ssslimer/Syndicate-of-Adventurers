@@ -4,7 +4,7 @@ public class NetworkingEnums
 {
 	public enum MessageContent
 	{
-		STRING, REGISTER, LOGIN;
+		STRING, REGISTER, LOGIN, WRONG_COMMAND;
 	}
 
 	public enum RegisterStatus

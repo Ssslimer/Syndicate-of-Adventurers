@@ -7,6 +7,7 @@ import com.moag.game.Screens.MainMenuScreen;
 public class SyndicateOfAdventurers extends Game
 {	 
 	private AssetManager assetManager;
+	private static Client client;
 
 	@Override
 	public void create()
@@ -19,4 +20,14 @@ public class SyndicateOfAdventurers extends Game
 	public void dispose() { assetManager.dispose(); }
 	
 	public AssetManager getAssetManager() { return assetManager; }
+
+	public static Client getClient()
+	{
+		return client;
+	}
+	
+	public static void setClient(Client client)
+	{
+		SyndicateOfAdventurers.client = client;
+	}
 }
