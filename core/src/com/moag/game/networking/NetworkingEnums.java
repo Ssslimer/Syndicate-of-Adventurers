@@ -14,6 +14,6 @@ public class NetworkingEnums
 	
 	public enum LoginStatus
 	{
-		OK, WRONG_PASSWORD;
+		OK, WRONG_PASSWORD, NOT_REGISTERED;
 	}
 }

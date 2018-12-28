@@ -155,7 +155,9 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-
+				String login = playerNameField.getText();
+				String password = passwordField.getText();
+				SyndicateOfAdventurers.getClient().login(login, password);
 			}
 	    });
 		
@@ -177,26 +179,8 @@ public class JoinServerScreen implements Screen
 			public void clicked(InputEvent event, float x, float y)
 			{
 				String login = playerNameField.getText();
-				char[] password = passwordField.getText().toCharArray();
-				
-				Argon2 argon2 = Argon2Factory.create();
-				try
-				{
-				    String hashedPassword = argon2.hash(10, 65536, 1, password);
-
-				    if (argon2.verify(hashedPassword, password))
-				    {
-				    	SyndicateOfAdventurers.getClient().register(login, hashedPassword);
-				    }
-				    else
-				    {
-				    	/** ADD POPUP? STH WITH PASSWORD? */
-				    }
-				}
-				finally
-				{
-				    argon2.wipeArray(password);
-				}
+				String password = passwordField.getText();
+				SyndicateOfAdventurers.getClient().register(login, password);
 			}
 	    });
 		
@@ -222,5 +206,5 @@ public class JoinServerScreen implements Screen
 	    });
 
 		stage.addActor(backButton);
-}
+	}
 }

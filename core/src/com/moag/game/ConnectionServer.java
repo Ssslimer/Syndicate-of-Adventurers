@@ -14,8 +14,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.moag.game.networking.Message;
+import com.moag.game.networking.NetworkingEnums.LoginStatus;
 import com.moag.game.networking.NetworkingEnums.MessageContent;
 import com.moag.game.networking.NetworkingEnums.RegisterStatus;
+
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 
 class ConnectionServer extends Thread
 {	
@@ -23,7 +27,7 @@ class ConnectionServer extends Thread
 	private ObjectInputStream streamFromClient;
 	private ObjectOutputStream streamToClient;
 	
-	private boolean hasLogedIn = false;
+	private boolean hasLogedIn = false, terminateConnection = false;
 
 	public ConnectionServer(Socket clientSocket)
 	{
@@ -38,12 +42,15 @@ class ConnectionServer extends Thread
 			streamToClient = new ObjectOutputStream(clientSocket.getOutputStream());
 			streamFromClient = new ObjectInputStream(clientSocket.getInputStream());
 			
-	    	Message fromClient = (Message) streamFromClient.readObject();	
-	    	System.out.println("Message from: " + fromClient.toString());
-	    		
-	    	Message toClient = handleMessage(fromClient);
-	    		
-	    	streamToClient.writeObject(toClient);
+			while(!terminateConnection)
+			{
+				Message fromClient = (Message) streamFromClient.readObject();	
+		    	System.out.println("Message from: " + fromClient.toString());
+		    		
+		    	Message toClient = handleMessage(fromClient);
+		    		
+		    	streamToClient.writeObject(toClient);
+			}    	
 	    }
 	    catch(SocketException e)
 	    {
@@ -71,14 +78,17 @@ class ConnectionServer extends Thread
 		{	
 			case REGISTER:
 				try
-				{					
+				{			
+					terminateConnection = true;
 					List<String> data = (List<String>) message.getData();
 					String login = data.get(0);
-					String password = data.get(1);
+					char[] password = data.get(1).toCharArray();
+					Argon2 argon2 = Argon2Factory.create();
+					String hashedPassword = argon2.hash(10, 65536, 1, password);
 					
 					if(isPlayerRegistered(login)) return new Message(MessageContent.REGISTER, RegisterStatus.OCCUPIED);
 					
-					if(registerPlayer(login, password)) new Message(MessageContent.REGISTER, RegisterStatus.OK);
+					if(registerPlayer(login, hashedPassword)) new Message(MessageContent.REGISTER, RegisterStatus.OK);
 					else new Message(MessageContent.REGISTER, RegisterStatus.ERROR);
 									
 					return new Message(MessageContent.REGISTER, RegisterStatus.OK);
@@ -87,14 +97,35 @@ class ConnectionServer extends Thread
 				{
 					return new Message(MessageContent.REGISTER, RegisterStatus.ERROR);	
 				}
-				
+			case LOGIN:
+				try
+				{			
+					terminateConnection = true;
+					List<String> data = (List<String>) message.getData();
+					String login = data.get(0);
+					String password = data.get(1);
+					
+					if(!isPlayerRegistered(login)) return new Message(MessageContent.LOGIN, LoginStatus.NOT_REGISTERED);
+					
+					if(checkPassword(login, password))
+					{
+						hasLogedIn = true;
+						return new Message(MessageContent.LOGIN, LoginStatus.OK);
+					}
+					
+					return new Message(MessageContent.LOGIN, LoginStatus.WRONG_PASSWORD);
+				}
+				catch(Exception e)
+				{
+					return new Message(MessageContent.REGISTER, RegisterStatus.ERROR);
+				}	
 			default:
 				return new Message(MessageContent.STRING, "Unknown command");
 		}
 	}
 
 	private boolean registerPlayer(String login, String password)
-	{			
+	{
 		Path pathToFolder = Paths.get("save", "auth");
 		Path pathToFile = Paths.get("save", "auth", login+".txt");
 		
@@ -124,6 +155,17 @@ class ConnectionServer extends Thread
 	private boolean isPlayerRegistered(String login)
 	{
 		return Files.exists(Paths.get("save", "auth", login+".txt"));
+	}
+	
+	private boolean checkPassword(String login, String password) throws IOException
+	{
+		Path pathToFile = Paths.get("save", "auth", login+".txt");
+		List<String> lines = Files.readAllLines(pathToFile);
+		if(lines.size() != 1) return false;
+		
+		Argon2 argon2 = Argon2Factory.create();
+		
+		return argon2.verify(lines.get(0), password);
 	}
 
 }

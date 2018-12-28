@@ -45,11 +45,10 @@ public class Client
 	    	data.add(password);
 	    	sendToServer(new Message(MessageContent.REGISTER, data));
 	    	
-	    	Message fromServer = (Message) streamFromServer.readObject();	
+	    	Message fromServer = getDataFromServer();
+	    	handleCallback(fromServer);
 	    	System.out.println("Message from server: " + fromServer.toString());
-	    		
-	    	Message toClient = handleMessage(fromServer);
-	    	
+
 	    	return true;
     	}
     	catch(IOException e)
@@ -70,22 +69,7 @@ public class Client
 		}
 	}
 	
-	private Message handleMessage(Message message)
-	{
-		MessageContent content = message.getActivity();
-		
-		switch(content)
-		{	
-			case REGISTER:				
-				//List<String> data = (List<String>) message.getData();
-				System.out.println(message.getData());
-				
-			default:
-				return new Message(MessageContent.STRING, "Unknown command");
-		}
-	}
-	
-	public boolean login(String userName, String password)
+	public boolean login(String login, String password)
 	{
 		try
     	{	
@@ -96,25 +80,47 @@ public class Client
 	
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
-	    	return true;
+	    	
+	    	List<String> data = new ArrayList<>(2);
+	    	data.add(login);
+	    	data.add(password);
+	    	sendToServer(new Message(MessageContent.LOGIN, data));
+	    	
+	    	Message fromServer = getDataFromServer();
+	    	handleCallback(fromServer);
+	    	System.out.println("Message from server: " + fromServer.toString());
     	}
-    	catch(IOException e)
+    	catch(Exception e)
     	{  		
-    		System.out.println(e.getMessage());
-    		
-    		try
-    		{
-    			clientSocket.close();
+    		System.out.println(e.getMessage());   	
+
+			try
+			{
+				clientSocket.close();
 			}
-    		catch(IOException e1) {}
-    		return false;
-    	}	
+			catch(IOException e2)
+			{
+				System.out.println(e2.getMessage());
+			}
+
+			return false;
+    	}
+		
+    	return true;
 	}
 
 	private void handleCallback(Message serverCallback)
 	{
 		switch(serverCallback.getActivity())
 		{
+			case REGISTER:
+				System.out.println(serverCallback.getData().toString());
+			break;
+			
+			case LOGIN:
+				System.out.println(serverCallback.getData().toString());
+			break;
+			
 			default:
 				System.out.println("Server have send unknown message");
 		}

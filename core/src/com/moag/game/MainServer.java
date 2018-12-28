@@ -12,6 +12,6 @@ public class MainServer
         Server server = new Server(serverProperties);
         server.init();
         server.loop();
-        server.stop();
+        server.stop(); 
 	}
 }

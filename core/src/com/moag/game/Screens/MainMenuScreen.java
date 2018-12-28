@@ -28,7 +28,7 @@ public class MainMenuScreen implements Screen
 	
 	private Skin skin;
 	private TextField serverIPField, serverPortField;
-	private TextButton joinServerButton;
+	private TextButton joinServerButton, quitButton;
 
 	public MainMenuScreen(SyndicateOfAdventurers game)
 	{
@@ -40,20 +40,12 @@ public class MainMenuScreen implements Screen
 		setupServerIPField();
 		setupServerPortField();
 		setupJoinServerButton();
+		setupQuitButton();
 	}
-
 
 	@Override
 	public void show() {}
-
-	@Override
-	public void render(float delta) 
-	{
-		GdxUtils.clearScreen(Color.WHITE);
-		stage.draw();
-		Gdx.input.setInputProcessor(stage);		
-	}
-
+	
 	@Override
 	public void resize(int width, int height) {}
 
@@ -65,6 +57,14 @@ public class MainMenuScreen implements Screen
 
 	@Override
 	public void hide() {}
+
+	@Override
+	public void render(float delta) 
+	{
+		GdxUtils.clearScreen(Color.WHITE);
+		stage.draw();
+		Gdx.input.setInputProcessor(stage);		
+	}
 
 	@Override
 	public void dispose() 
@@ -84,7 +84,7 @@ public class MainMenuScreen implements Screen
 		serverIPField.setWidth(200);
 		serverIPField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-serverIPField.getWidth()) / 2f;
-		float posY = (Gdx.graphics.getHeight()-serverIPField.getHeight()) / 2f;
+		float posY = (Gdx.graphics.getHeight()-serverIPField.getHeight()) / 2f + 100;
 		serverIPField.setPosition(posX, posY);
 		
 		Pixmap background = new Pixmap((int)posX, (int)posY, Pixmap.Format.RGB888);
@@ -116,7 +116,7 @@ public class MainMenuScreen implements Screen
 		serverPortField.setWidth(200);
 		serverPortField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-serverPortField.getWidth()) / 2f;
-		float posY = (Gdx.graphics.getHeight()-serverPortField.getHeight()) / 2f - 100;
+		float posY = (Gdx.graphics.getHeight()-serverPortField.getHeight()) / 2f;
 		serverPortField.setPosition(posX, posY);
 		
 		Pixmap background = new Pixmap((int)posX, (int)posY, Pixmap.Format.RGB888);
@@ -143,7 +143,7 @@ public class MainMenuScreen implements Screen
 		joinServerButton.setWidth(200);
 		joinServerButton.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-joinServerButton.getWidth()) / 2f;
-		float posY = (Gdx.graphics.getHeight()-joinServerButton.getHeight()) / 2f - 200;
+		float posY = (Gdx.graphics.getHeight()-joinServerButton.getHeight()) / 2f - 100;
 		joinServerButton.setPosition(posX, posY);
 		
 		joinServerButton.addListener(new ClickListener()
@@ -198,5 +198,25 @@ public class MainMenuScreen implements Screen
 		    }
 	    });
 		stage.addActor(joinServerButton);
+	}
+	
+	private void setupQuitButton()
+	{
+		quitButton = new TextButton("Quit", skin, "default");
+		quitButton.setWidth(200);
+		quitButton.setHeight(50);
+		float posX = (Gdx.graphics.getWidth()-quitButton.getWidth()) / 2f;
+		float posY = (Gdx.graphics.getHeight()-quitButton.getHeight()) / 2f - 200;
+		quitButton.setPosition(posX, posY);
+		
+		quitButton.addListener(new ClickListener()
+	    {
+		    @Override
+		    public void clicked(InputEvent event, float x, float y)
+		    {
+		    	Gdx.app.exit();
+		    }
+	    });
+		stage.addActor(quitButton);
 	}
 }
