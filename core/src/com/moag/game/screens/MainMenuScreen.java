@@ -1,4 +1,4 @@
-package com.moag.game.Screens;
+package com.moag.game.screens;
 
 import java.util.regex.Pattern;
 

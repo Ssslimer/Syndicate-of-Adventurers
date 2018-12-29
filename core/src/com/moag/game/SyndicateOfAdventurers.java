@@ -2,7 +2,7 @@ package com.moag.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
-import com.moag.game.Screens.MainMenuScreen;
+import com.moag.game.screens.MainMenuScreen;
 
 public class SyndicateOfAdventurers extends Game
 {	 
