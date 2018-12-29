@@ -4,11 +4,10 @@ public enum MessageType
 {
 	REGISTER, 
 	LOGIN,
-	
-	WRONG_COMMAND,
 	QUIT,
 	
 	MOVE,
+	ATTACK,
 	
 	FROM_SERVER
 }

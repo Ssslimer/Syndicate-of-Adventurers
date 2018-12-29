@@ -83,6 +83,11 @@ public class EntityPlayer extends Entity
 		}
 	}
 	
+	public void move(Vector3 translation)
+	{
+		this.position.add(translation);
+	}
+	
 	private void determinePlayerStats()
 	{
 		for(Item item : eqList)
