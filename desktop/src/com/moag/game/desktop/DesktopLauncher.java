@@ -24,7 +24,7 @@ public class DesktopLauncher
 		config.addIcon(Paths.get("assets", "icon16x.png").toString(), FileType.Internal);
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
-		//new LwjglApplication(new SyndicateOfAdventurers(), config);
-		new LwjglApplication(new TestCamera(), config);
+		new LwjglApplication(new SyndicateOfAdventurers(), config);
+		//new LwjglApplication(new TestCamera(), config);
 	}
 }

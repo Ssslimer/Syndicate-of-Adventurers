@@ -10,8 +10,10 @@ import java.util.List;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.moag.game.networking.LoginMessage;
 import com.moag.game.networking.Message;
-import com.moag.game.networking.NetworkingEnums.MessageContent;
+import com.moag.game.networking.MessageFromServer;
+import com.moag.game.networking.RegisterMessage;
 
 public class Client
 {
@@ -40,10 +42,7 @@ public class Client
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
 	    	
-	    	List<String> data = new ArrayList<>(2);
-	    	data.add(login);
-	    	data.add(password);
-	    	sendToServer(new Message(MessageContent.REGISTER, data));
+	    	sendToServer(new RegisterMessage(login, password));
 	    	
 	    	Message fromServer = getDataFromServer();
 	    	handleCallback(fromServer);
@@ -80,11 +79,8 @@ public class Client
 	
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
-	    	
-	    	List<String> data = new ArrayList<>(2);
-	    	data.add(login);
-	    	data.add(password);
-	    	sendToServer(new Message(MessageContent.LOGIN, data));
+
+	    	sendToServer(new LoginMessage(login, password));
 	    	
 	    	Message fromServer = getDataFromServer();
 	    	handleCallback(fromServer);
@@ -111,19 +107,22 @@ public class Client
 
 	private void handleCallback(Message serverCallback)
 	{
-		switch(serverCallback.getActivity())
-		{
-			case REGISTER:
-				System.out.println(serverCallback.getData().toString());
-			break;
-			
-			case LOGIN:
-				System.out.println(serverCallback.getData().toString());
-			break;
-			
-			default:
-				System.out.println("Server have send unknown message");
-		}
+//		switch(serverCallback.getMessageType())
+//		{
+//			case REGISTER:
+//				
+//			break;
+//			
+//			case LOGIN:
+//				
+//			break;
+//			
+//			default:
+//				System.out.println("Server have send unknown message");
+//		}
+		
+		String messageFromServer = ((MessageFromServer)serverCallback).getMessageString();
+		System.out.println(messageFromServer);
 	}
 	
 	public void sendToServer(Message message) throws IOException

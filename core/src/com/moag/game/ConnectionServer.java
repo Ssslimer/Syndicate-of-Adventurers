@@ -13,10 +13,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.moag.game.networking.LoginMessage;
 import com.moag.game.networking.Message;
-import com.moag.game.networking.NetworkingEnums.LoginStatus;
-import com.moag.game.networking.NetworkingEnums.MessageContent;
-import com.moag.game.networking.NetworkingEnums.RegisterStatus;
+import com.moag.game.networking.MessageFromServer;
+import com.moag.game.networking.MessageType;
+import com.moag.game.networking.RegisterMessage;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -27,7 +28,8 @@ class ConnectionServer extends Thread
 	private ObjectInputStream streamFromClient;
 	private ObjectOutputStream streamToClient;
 	
-	private boolean hasLogedIn = false, terminateConnection = false;
+	private boolean hasLogedIn = false; 
+	private boolean terminateConnection = false;
 
 	public ConnectionServer(Socket clientSocket)
 	{
@@ -72,56 +74,54 @@ class ConnectionServer extends Thread
 
 	private Message handleMessage(Message message)
 	{
-		MessageContent content = message.getActivity();
+		MessageType content = message.getMessageType();
 		
 		switch(content)
 		{	
-			case REGISTER:
-				try
-				{			
-					terminateConnection = true;
-					List<String> data = (List<String>) message.getData();
-					String login = data.get(0);
-					char[] password = data.get(1).toCharArray();
-					Argon2 argon2 = Argon2Factory.create();
-					String hashedPassword = argon2.hash(10, 65536, 1, password);
-					
-					if(isPlayerRegistered(login)) return new Message(MessageContent.REGISTER, RegisterStatus.OCCUPIED);
-					
-					if(registerPlayer(login, hashedPassword)) new Message(MessageContent.REGISTER, RegisterStatus.OK);
-					else new Message(MessageContent.REGISTER, RegisterStatus.ERROR);
-									
-					return new Message(MessageContent.REGISTER, RegisterStatus.OK);
-				}
-				catch(Exception e)
+		
+		case REGISTER:
+			try
+			{			
+				terminateConnection = true;
+				String login = ((RegisterMessage)message).getLogin();
+				char[] password = ((RegisterMessage)message).getPassword().toCharArray();
+				Argon2 argon2 = Argon2Factory.create();
+				String hashedPassword = argon2.hash(10, 65536, 1, password);
+				
+				if(isPlayerRegistered(login)) return new MessageFromServer(false, "User with such login already exist!");
+				
+				if(registerPlayer(login, hashedPassword)) new MessageFromServer(true, "Successfuly registered!");
+				else new MessageFromServer(false, "Something went wrong!");
+			}
+			catch(Exception e)
+			{
+				return new MessageFromServer(false, "Something went wrong!");	
+			}
+
+		case LOGIN:
+			try
+			{
+				terminateConnection = true;
+				String login = ((LoginMessage)message).getLogin();
+				String password = ((LoginMessage)message).getPassword();
+				
+				if(!isPlayerRegistered(login)) return new MessageFromServer(false, "User with such login does not exist!");
+				
+				if(checkPassword(login, password))
 				{
-					return new Message(MessageContent.REGISTER, RegisterStatus.ERROR);	
+					hasLogedIn = true;
+					terminateConnection = false;
+					return new MessageFromServer(true, "Successfuly logged in!");
 				}
-			case LOGIN:
-				try
-				{
-					terminateConnection = true;
-					List<String> data = (List<String>) message.getData();
-					String login = data.get(0);
-					String password = data.get(1);
-					
-					if(!isPlayerRegistered(login)) return new Message(MessageContent.LOGIN, LoginStatus.NOT_REGISTERED);
-					
-					if(checkPassword(login, password))
-					{
-						hasLogedIn = true;
-						terminateConnection = false;
-						return new Message(MessageContent.LOGIN, LoginStatus.OK);
-					}
-					
-					return new Message(MessageContent.LOGIN, LoginStatus.WRONG_PASSWORD);
-				}
-				catch(Exception e)
-				{
-					return new Message(MessageContent.REGISTER, RegisterStatus.ERROR);
-				}	
+				else return new MessageFromServer(false, "Given password is wrong!");
+			}
+			catch(Exception e)
+			{
+				return new MessageFromServer(false, "Something went wrong!");
+			}	
+			
 			default:
-				return new Message(MessageContent.STRING, "Unknown command");
+				return new MessageFromServer(false, "Unknown command");
 		}
 	}
 
