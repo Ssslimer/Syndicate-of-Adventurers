@@ -1,4 +1,4 @@
-package com.moag.game;
+package com.moag.game.server;
 
 import java.io.EOFException;
 import java.io.FileWriter;
@@ -22,7 +22,7 @@ import com.moag.game.networking.RegisterMessage;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
-class ConnectionServer extends Thread
+public class ConnectionServer extends Thread
 {	
 	private Socket clientSocket;
 	private ObjectInputStream streamFromClient;
@@ -113,7 +113,7 @@ class ConnectionServer extends Thread
 					terminateConnection = false;
 					return new MessageFromServer(true, "Successfuly logged in!");
 				}
-				else return new MessageFromServer(false, "Given password is wrong!");
+				return new MessageFromServer(false, "Given password is wrong!");
 			}
 			catch(Exception e)
 			{

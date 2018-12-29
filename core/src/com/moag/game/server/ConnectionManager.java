@@ -1,9 +1,11 @@
-package com.moag.game;
+package com.moag.game.server;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -11,6 +13,8 @@ public class ConnectionManager extends Thread
 {
 	private final String ip;
 	private final int port;
+	
+	private List<ConnectionServer> connectionsToClients = new LinkedList<>();
 	
 	public ConnectionManager(String ip, int port)
 	{
@@ -46,6 +50,7 @@ public class ConnectionManager extends Thread
 				ConnectionServer connectionToClient = new ConnectionServer(serverSocket.accept());
 				System.out.println("New connection is open");       			
 				connectionToClient.start();
+				connectionsToClients.add(connectionToClient);
         	}
         }
 		catch(IOException e)

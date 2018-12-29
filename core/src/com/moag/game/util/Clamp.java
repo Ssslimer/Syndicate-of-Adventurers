@@ -1,6 +1,5 @@
 package com.moag.game.util;
 
-
 public class Clamp
 {
     public static byte clampByte(byte value, byte min, byte max)

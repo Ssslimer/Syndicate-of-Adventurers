@@ -21,9 +21,15 @@ public class SyndicateOfAdventurers extends Game
 	}
 	
 	@Override
-	public void dispose() { assetManager.dispose(); }
+	public void dispose() 
+	{ 
+		assetManager.dispose(); 
+	}
 	
-	public AssetManager getAssetManager() { return assetManager; }
+	public AssetManager getAssetManager() 
+	{
+		return assetManager; 
+	}
 
 	public static Client getClient()
 	{

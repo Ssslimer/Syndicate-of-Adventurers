@@ -1,4 +1,4 @@
-package com.moag.game;
+package com.moag.game.server;
 
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.Timer;
@@ -13,7 +13,7 @@ public class Server
 		this.serverProperties = serverProperties;
 	}
 	
-	public void init()
+	public void start()
 	{
 		connectionManager = new ConnectionManager(serverProperties.getIP(), serverProperties.getPortNumber());
 		connectionManager.start();
@@ -24,15 +24,13 @@ public class Server
 
 	public void loop()
 	{		
-		long currentTickTime = 0;		
-		
 		while(true)
 		{
-			currentTickTime = Timer.getTime();
+			long timeBefore = Timer.getTime();
 			
 			update();
 			
-			long timeLeft = (long)Timer.getLogicDeltaTime() + currentTickTime - Timer.getTime();	
+			long timeLeft = (long)Timer.getLogicDeltaTime() + timeBefore - Timer.getTime();	
 			Timer.updateTPS(timeLeft);
 			
 			try

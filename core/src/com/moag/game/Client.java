@@ -33,7 +33,6 @@ public class Client
 	{
 		this.ip = ip;
 		this.port = port;
-		isLogedIn = false;
 	}
 	
 	public boolean register(String login, String password)

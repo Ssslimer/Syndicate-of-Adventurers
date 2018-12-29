@@ -23,6 +23,7 @@ public class Resources
 		for(int i = 1; i <= grassTextures; i++)
 		{
 			Texture texTile = new Texture(Paths.get("assets", "terrain", "grass_"+i+".png").toString());
+			texTile.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 			terrainMaterials.add(new Material(TextureAttribute.createDiffuse(texTile)));
 		}
 	}

@@ -6,7 +6,6 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
-import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.TestCamera;
 import com.moag.game.util.ConfigConstants;
 
@@ -25,6 +24,6 @@ public class DesktopLauncher
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
 		//new LwjglApplication(new SyndicateOfAdventurers(), config);
-		new LwjglApplication(new TestCamera(), config);
+		//new LwjglApplication(new TestCamera(), config);
 	}
 }

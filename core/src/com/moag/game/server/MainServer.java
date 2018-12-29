@@ -1,4 +1,4 @@
-package com.moag.game;
+package com.moag.game.server;
 
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.ServerPropertiesLoader;
@@ -10,7 +10,7 @@ public class MainServer
 		ServerProperties serverProperties = new ServerProperties(new ServerPropertiesLoader());
 				
         Server server = new Server(serverProperties);
-        server.init();
+        server.start();
         server.loop();
         server.stop(); 
 	}
