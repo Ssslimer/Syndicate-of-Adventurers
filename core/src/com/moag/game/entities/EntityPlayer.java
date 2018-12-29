@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.Vector3;
 
 public class EntityPlayer extends Entity
 {
-	private static final int BASE_ATTACK = 10;
-	private static final int BASE_DEFENSE = 5;
-	private static final int BASE_HP = 100;
+	private static final int BASE_PLAYER_ATTACK = 10;
+	private static final int BASE_PLAYER_DEFENCE = 5;
+	private static final int BASE_PLAYER_HP = 100;
 	
 	private long playerID; // equal to sessionID ?
 	
@@ -22,9 +22,9 @@ public class EntityPlayer extends Entity
 	public EntityPlayer(Vector3 position) {
 		super(position);
 		
-		HP = BASE_HP;
-		attackPower = BASE_ATTACK;
-		defencePower = BASE_DEFENSE;
+		HP = BASE_PLAYER_HP;
+		attackPower = BASE_PLAYER_ATTACK;
+		defencePower = BASE_PLAYER_DEFENCE;
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -93,4 +93,13 @@ public class EntityPlayer extends Entity
 		}
 	}
 
+	public void getDamage(int damageAttack)
+	{
+		damageAttack -= defencePower;
+		
+		if(damageAttack > 0)
+		{
+			HP -= damageAttack;
+		}
+	}
 }

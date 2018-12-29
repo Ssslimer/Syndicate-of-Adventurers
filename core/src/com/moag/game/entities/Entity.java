@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Entity
 {
-	private Vector3 position;
-	private float rotation;
+	protected Vector3 position;
+	protected float rotation;
 
 	public Entity(Vector3 position)
 	{
