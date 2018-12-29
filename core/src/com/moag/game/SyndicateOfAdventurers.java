@@ -8,11 +8,13 @@ public class SyndicateOfAdventurers extends Game
 {	 
 	private AssetManager assetManager;
 	private static Client client;
+	private static Resources resources;
 
 	@Override
 	public void create()
 	{
 		assetManager = new AssetManager();
+		resources = new Resources();
 		setScreen(new MainMenuScreen(this));
 	}
 	
@@ -29,5 +31,10 @@ public class SyndicateOfAdventurers extends Game
 	public static void setClient(Client client)
 	{
 		SyndicateOfAdventurers.client = client;
+	}
+
+	public static Resources getResources()
+	{
+		return resources;
 	}
 }

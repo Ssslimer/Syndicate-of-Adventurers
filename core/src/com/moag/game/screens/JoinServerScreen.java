@@ -18,9 +18,6 @@ import com.moag.game.Client;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.util.GdxUtils;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
-
 public class JoinServerScreen implements Screen
 {
 	private SyndicateOfAdventurers game;
