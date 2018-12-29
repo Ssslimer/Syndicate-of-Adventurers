@@ -1,4 +1,4 @@
-package com.moag.game.utils;
+package com.moag.game.util;
 
 public class Timer
 {

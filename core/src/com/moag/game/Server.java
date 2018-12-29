@@ -1,7 +1,7 @@
 package com.moag.game;
 
-import com.moag.game.utils.ServerProperties;
-import com.moag.game.utils.Timer;
+import com.moag.game.util.ServerProperties;
+import com.moag.game.util.Timer;
 
 public class Server
 {	

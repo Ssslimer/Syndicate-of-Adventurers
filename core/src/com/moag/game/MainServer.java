@@ -1,7 +1,7 @@
 package com.moag.game;
 
-import com.moag.game.utils.ServerProperties;
-import com.moag.game.utils.ServerPropertiesLoader;
+import com.moag.game.util.ServerProperties;
+import com.moag.game.util.ServerPropertiesLoader;
 
 public class MainServer
 {

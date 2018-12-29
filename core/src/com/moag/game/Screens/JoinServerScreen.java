@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.moag.game.Client;
 import com.moag.game.SyndicateOfAdventurers;
-import com.moag.game.utils.GdxUtils;
+import com.moag.game.util.GdxUtils;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;

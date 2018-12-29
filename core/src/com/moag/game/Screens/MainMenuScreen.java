@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.moag.game.Client;
 import com.moag.game.SyndicateOfAdventurers;
-import com.moag.game.utils.GdxUtils;
+import com.moag.game.util.GdxUtils;
 
 public class MainMenuScreen implements Screen
 {

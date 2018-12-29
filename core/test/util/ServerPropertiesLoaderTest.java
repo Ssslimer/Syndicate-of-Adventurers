@@ -1,8 +1,9 @@
+package util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.moag.game.utils.ServerPropertiesLoader;
+import com.moag.game.util.ServerPropertiesLoader;
 
 class ServerPropertiesLoaderTest
 {

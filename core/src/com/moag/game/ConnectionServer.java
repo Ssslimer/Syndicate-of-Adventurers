@@ -99,7 +99,7 @@ class ConnectionServer extends Thread
 				}
 			case LOGIN:
 				try
-				{			
+				{
 					terminateConnection = true;
 					List<String> data = (List<String>) message.getData();
 					String login = data.get(0);
@@ -110,6 +110,7 @@ class ConnectionServer extends Thread
 					if(checkPassword(login, password))
 					{
 						hasLogedIn = true;
+						terminateConnection = false;
 						return new Message(MessageContent.LOGIN, LoginStatus.OK);
 					}
 					
