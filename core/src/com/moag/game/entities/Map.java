@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 import com.moag.game.Resources;
-import com.moag.game.SyndicateOfAdventurers;
 
 public class Map
 {

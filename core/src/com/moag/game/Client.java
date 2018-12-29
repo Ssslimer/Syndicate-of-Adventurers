@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.badlogic.gdx.math.Vector3;
+import com.moag.game.networking.AttackMessage;
 import com.moag.game.networking.LoginMessage;
 import com.moag.game.networking.Message;
 import com.moag.game.networking.MessageFromServer;
+import com.moag.game.networking.MoveMessage;
 import com.moag.game.networking.RegisterMessage;
 
 public class Client
@@ -23,11 +24,16 @@ public class Client
 	
 	private final String ip;
 	private final int port;
+	
+	private boolean isLogedIn;
+	private String login;
+	private long sessionID;
 
 	public Client(String ip, int port)
 	{
 		this.ip = ip;
 		this.port = port;
+		isLogedIn = false;
 	}
 	
 	public boolean register(String login, String password)
@@ -84,6 +90,7 @@ public class Client
 	    	
 	    	Message fromServer = getDataFromServer();
 	    	handleCallback(fromServer);
+	    	handleLoginCallback(fromServer);
 	    	System.out.println("Message from server: " + fromServer.toString());
     	}
     	catch(Exception e)
@@ -104,25 +111,68 @@ public class Client
 		
     	return true;
 	}
+	
+	public boolean move(Vector3 translation)
+	{
+		if(isLogedIn)
+		{
+			try 
+			{
+				sendToServer(new MoveMessage(translation, login, sessionID));
+				
+				Message fromServer = getDataFromServer();
+				handleCallback(fromServer);
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (ClassNotFoundException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean attack()
+	{
+		if(isLogedIn)
+		{
+			try 
+			{
+				sendToServer(new AttackMessage(login, sessionID));
+				
+				Message fromServer = getDataFromServer();
+				handleCallback(fromServer);
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (ClassNotFoundException e) 
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		return false;
+	}
 
 	private void handleCallback(Message serverCallback)
-	{
-//		switch(serverCallback.getMessageType())
-//		{
-//			case REGISTER:
-//				
-//			break;
-//			
-//			case LOGIN:
-//				
-//			break;
-//			
-//			default:
-//				System.out.println("Server have send unknown message");
-//		}
-		
+	{	
 		String messageFromServer = ((MessageFromServer)serverCallback).getMessageString();
 		System.out.println(messageFromServer);
+	}
+	
+	private void handleLoginCallback(Message serverCallback)
+	{
+		if(((MessageFromServer) serverCallback).getWasSuccessful())
+		{
+			isLogedIn = true;
+		}
 	}
 	
 	public void sendToServer(Message message) throws IOException

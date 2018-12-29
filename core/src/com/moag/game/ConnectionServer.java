@@ -119,9 +119,28 @@ class ConnectionServer extends Thread
 			{
 				return new MessageFromServer(false, "Something went wrong!");
 			}	
+		
+		case QUIT:
+			//check whether this is enough
+			terminateConnection = true;
+			return new MessageFromServer(true, "Server disconnected");
+		
+		case MOVE:
 			
-			default:
-				return new MessageFromServer(false, "Unknown command");
+			if(hasLogedIn)
+			{
+				
+			}
+			
+		case ATTACK:
+			
+			if(hasLogedIn)
+			{
+				
+			}
+			
+		default:
+			return new MessageFromServer(false, "Unknown command");
 		}
 	}
 
