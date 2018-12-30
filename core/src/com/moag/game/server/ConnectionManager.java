@@ -4,47 +4,28 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
-import com.moag.game.networking.Message;
-
 public class ConnectionManager extends Thread
 {
-	private final String ip;
+	private final InetAddress address;
 	private final int port;
-	
-	private static Random random = new Random();
-	
-	private static Map<Long, ConnectionServer> connectionsToClients = new HashMap<>();
-	private static Queue<Message> messageQueue = new ConcurrentLinkedQueue<>();
-	
-	public ConnectionManager(String ip, int port)
+
+	public ConnectionManager(String ip, int port) throws UnknownHostException
 	{
-		this.ip = ip;
 		this.port = port;
+		this.address = InetAddress.getByName(ip);
+		
+		System.setProperty("javax.net.ssl.keyStore", "za.store");
+		System.setProperty("javax.net.ssl.keyStorePassword", "qazwsx123");
 	}
 
 	@Override
 	public void run()
 	{
-		System.setProperty("javax.net.ssl.keyStore", "za.store");
-		System.setProperty("javax.net.ssl.keyStorePassword", "qazwsx123");
-		
-		InetAddress address = null;
-		try
-		{
-			address = InetAddress.getByName(ip);
-		}
-		catch(UnknownHostException e)
-		{
-			e.printStackTrace();
-		}
+		MessageHandler messageHander = new MessageHandler();
+		messageHander.start();
 		
 		SSLServerSocketFactory sslserversocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 		try(ServerSocket serverSocket = sslserversocketfactory.createServerSocket(port, 0, address))
@@ -53,41 +34,15 @@ public class ConnectionManager extends Thread
 			System.out.println("ip: " + serverSocket.getInetAddress().getHostAddress());
 			System.out.println("port: " + serverSocket.getLocalPort());
 			
-			MessageManager messageManager = new MessageManager();
-			messageManager.start();
-		
 			while(true)
 			{
-				long newClientSessionID = random.nextLong();
-				ConnectionServer connectionToClient = new ConnectionServer(serverSocket.accept(), newClientSessionID);
-				System.out.println("New connection is open");       			
+				ServerConnection connectionToClient = new ServerConnection(serverSocket.accept(), messageHander);			     			
 				connectionToClient.start();
-				connectionsToClients.put(newClientSessionID, connectionToClient);
         	}
         }
 		catch(IOException e)
 		{
 			e.printStackTrace();
 		}
-	}	
-	
-	public static boolean queueIsNotEmpty()
-	{
-		return !messageQueue.isEmpty();
-	}
-	
-	public static Message getHeadMessage()
-	{
-		return messageQueue.poll();
-	}
-	
-	public static void addMessageToQueue(Message message)
-	{
-		messageQueue.offer(message);
-	}
-	
-	public static Map<Long, ConnectionServer> getConnectionsToClients()
-	{
-		return connectionsToClients;
 	}
 }

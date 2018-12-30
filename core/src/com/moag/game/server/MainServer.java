@@ -1,5 +1,7 @@
 package com.moag.game.server;
 
+import java.net.UnknownHostException;
+
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.ServerPropertiesLoader;
 
@@ -10,7 +12,17 @@ public class MainServer
 		ServerProperties serverProperties = new ServerProperties(new ServerPropertiesLoader());
 				
         Server server = new Server(serverProperties);
-        server.start();
+        try
+		{
+			server.start();
+		}
+		catch(UnknownHostException e)
+		{
+			System.out.println(e.getMessage());
+			server.stop();
+			e.printStackTrace();
+		}
+        
         server.loop();
         server.stop(); 
 	}

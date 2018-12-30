@@ -1,5 +1,7 @@
 package com.moag.game.server;
 
+import java.net.UnknownHostException;
+
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.Timer;
 
@@ -13,7 +15,7 @@ public class Server
 		this.serverProperties = serverProperties;
 	}
 	
-	public void start()
+	public void start() throws UnknownHostException
 	{
 		connectionManager = new ConnectionManager(serverProperties.getIP(), serverProperties.getPortNumber());
 		connectionManager.start();

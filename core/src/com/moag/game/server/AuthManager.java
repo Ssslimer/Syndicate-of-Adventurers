@@ -13,32 +13,17 @@ import de.mkammerer.argon2.Argon2Factory;
 
 public class AuthManager
 {
-	static boolean registerPlayer(String login, String password)
+	static void registerPlayer(String login, String password) throws IOException
 	{
 		Path pathToFolder = Paths.get("save", "auth");
 		Path pathToFile = Paths.get("save", "auth", login+".txt");
-		
-		try
-		{
-			Files.createDirectories(pathToFolder);
-		}
-		catch(IOException e)
-		{
-			System.out.println(e.getMessage());
-			return false;
-		}			
+
+		Files.createDirectories(pathToFolder);		
 	
 		try(PrintWriter writer = new PrintWriter(new FileWriter(pathToFile.toFile())))
 		{
 			writer.print(password);			
 		}
-		catch(IOException e)
-		{
-			System.out.println(e.getMessage());
-			return false;
-		}
-		
-	    return true;
 	}
 	
 	static boolean isPlayerRegistered(String login)
