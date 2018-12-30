@@ -1,17 +1,11 @@
 package com.moag.game.server;
 
 import java.io.EOFException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 import com.moag.game.networking.LoginMessage;
 import com.moag.game.networking.Message;
@@ -22,16 +16,18 @@ import com.moag.game.networking.RegisterMessage;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
+import static com.moag.game.server.AuthManager.*;
+
 public class ConnectionServer extends Thread
 {	
 	private Socket clientSocket;
 	private ObjectInputStream streamFromClient;
 	private ObjectOutputStream streamToClient;
 	
-	private boolean hasLogedIn = false; 
-	private boolean terminateConnection = false;
+	private boolean hasLogedIn; 
+	private boolean terminateConnection;
 	
-	private boolean canHandleMessage = false;
+	private boolean canHandleMessage;
 	private long sessionID;
 
 	public ConnectionServer(Socket clientSocket, long sessionID)
@@ -155,50 +151,6 @@ public class ConnectionServer extends Thread
 		default:
 			return new MessageFromServer(false, "Unknown command");
 		}
-	}
-
-	private boolean registerPlayer(String login, String password)
-	{
-		Path pathToFolder = Paths.get("save", "auth");
-		Path pathToFile = Paths.get("save", "auth", login+".txt");
-		
-		try
-		{
-			Files.createDirectories(pathToFolder);
-		}
-		catch(IOException e)
-		{
-			System.out.println(e.getMessage());
-			return false;
-		}			
-	
-		try(PrintWriter writer = new PrintWriter(new FileWriter(pathToFile.toFile())))
-		{
-			writer.print(password);			
-		}
-		catch(IOException e)
-		{
-			System.out.println(e.getMessage());
-			return false;
-		}
-		
-	    return true;
-	}
-	
-	private boolean isPlayerRegistered(String login)
-	{
-		return Files.exists(Paths.get("save", "auth", login+".txt"));
-	}
-	
-	private boolean checkPassword(String login, String password) throws IOException
-	{
-		Path pathToFile = Paths.get("save", "auth", login+".txt");
-		List<String> lines = Files.readAllLines(pathToFile);
-		if(lines.size() != 1) return false;
-		
-		Argon2 argon2 = Argon2Factory.create();
-		
-		return argon2.verify(lines.get(0), password);
 	}
 
 	public void canHandleMessage()

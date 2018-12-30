@@ -31,7 +31,7 @@ public class Server
 			update();
 			
 			long timeLeft = (long)Timer.getLogicDeltaTime() + timeBefore - Timer.getTime();	
-			Timer.updateTPS(timeLeft);
+			Timer.updateTPS();
 			
 			try
 			{

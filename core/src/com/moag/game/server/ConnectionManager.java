@@ -5,8 +5,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
@@ -21,9 +19,8 @@ public class ConnectionManager extends Thread
 	private final String ip;
 	private final int port;
 	
-	Random rand;
+	private static Random random = new Random();
 	
-	//private List<ConnectionServer> connectionsToClients = new LinkedList<>();
 	private static Map<Long, ConnectionServer> connectionsToClients = new HashMap<>();
 	private static Queue<Message> messageQueue = new ConcurrentLinkedQueue<>();
 	
@@ -31,8 +28,6 @@ public class ConnectionManager extends Thread
 	{
 		this.ip = ip;
 		this.port = port;
-		
-		rand = new Random();
 	}
 
 	@Override
@@ -63,25 +58,18 @@ public class ConnectionManager extends Thread
 		
 			while(true)
 			{
-				Long newClientSessionID = generateNewClientSessionID();
+				long newClientSessionID = random.nextLong();
 				ConnectionServer connectionToClient = new ConnectionServer(serverSocket.accept(), newClientSessionID);
 				System.out.println("New connection is open");       			
 				connectionToClient.start();
 				connectionsToClients.put(newClientSessionID, connectionToClient);
-				//connectionsToClients.add(newClientSessionID, connectionToClient);
         	}
         }
 		catch(IOException e)
 		{
 			e.printStackTrace();
 		}
-
-	}
-	
-	public Long generateNewClientSessionID()
-	{
-		return rand.nextLong();
-	}
+	}	
 	
 	public static boolean queueIsNotEmpty()
 	{
