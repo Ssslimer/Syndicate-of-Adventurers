@@ -11,5 +11,4 @@ public enum MessageStatus
 	
 	/**General statuses*/
 	STATUS_OK,
-	ERROR_OCCURED
 }

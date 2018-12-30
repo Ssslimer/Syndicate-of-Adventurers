@@ -51,11 +51,12 @@ public class TestCamera implements ApplicationListener
         model = modelBuilder.createBox(5f, 5f, 5f, new Material(ColorAttribute.createDiffuse(Color.GREEN)), Usage.Position | Usage.Normal);
         box = new ModelInstance(model);
         
+        Resources r = new Resources();
         Map map = new Map();
         List<TerrainTile> terrain = map.getTerrain();
         for(TerrainTile tile : terrain)
         {
-        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(tile.getMaterial()));
+        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(r.getTerrainMaterial(tile.getTerrainType())));
         	modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
         	modelInstance.transform.translate(tile.getPosition());
         	modelInstance.transform.scale(2.5f, 2.5f, 2.5f);
@@ -73,7 +74,6 @@ public class TestCamera implements ApplicationListener
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(cam);
-        //modelBatch.render(box, environment);
         modelBatch.render(terrainModels, environment);
         modelBatch.end();
 	}

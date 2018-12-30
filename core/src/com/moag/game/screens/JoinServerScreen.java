@@ -43,7 +43,6 @@ public class JoinServerScreen implements Screen
 		setupBackButton();
 	}
 	
-
 	@Override
 	public void show() {}
 
@@ -155,17 +154,9 @@ public class JoinServerScreen implements Screen
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 				SyndicateOfAdventurers.getClient().login(login, password);
-				//SyndicateOfAdventurers.getClient().loadMap();
 				
-//				try{Thread.sleep(5000);}
-//				catch(InterruptedException e){e.printStackTrace();}
-//				
-//				while(true)
-//				{
-//					SyndicateOfAdventurers.getClient().pingServer();
-//					try{Thread.sleep(1000);}
-//					catch(InterruptedException e){e.printStackTrace();}
-//				}
+				game.setScreen(new GameScreen(game));				
+
 			}
 	    });
 		

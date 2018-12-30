@@ -11,14 +11,15 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.badlogic.gdx.math.Vector3;
-import com.moag.game.networking.AttackMessage;
-import com.moag.game.networking.LoadMapMessage;
-import com.moag.game.networking.LoginMessage;
-import com.moag.game.networking.Message;
-import com.moag.game.networking.MessageFromServer;
-import com.moag.game.networking.MoveMessage;
-import com.moag.game.networking.PingMessage;
-import com.moag.game.networking.RegisterMessage;
+import com.moag.game.networking.messages.AttackMessage;
+import com.moag.game.networking.messages.LoadMapMessage;
+import com.moag.game.networking.messages.LoginMessage;
+import com.moag.game.networking.messages.Message;
+import com.moag.game.networking.messages.MessageFromServer;
+import com.moag.game.networking.messages.MoveMessage;
+import com.moag.game.networking.messages.PingMessage;
+import com.moag.game.networking.messages.RegisterMessage;
+import com.moag.game.networking.messages.SendMapMessage;
 
 public class ClientConnection extends Thread
 {
@@ -144,7 +145,7 @@ public class ClientConnection extends Thread
 	{
 	    try
 		{
-			sendToServer(new LoadMapMessage(login, sessionId));
+			sendToServer(new LoadMapMessage(sessionId));
 		}
 		catch(IOException e)
 		{
@@ -159,7 +160,7 @@ public class ClientConnection extends Thread
 		{
 			try 
 			{
-				sendToServer(new MoveMessage(translation, login, sessionId));
+				sendToServer(new MoveMessage(translation, sessionId));
 				
 				Message fromServer = getDataFromServer();
 				handleCallback(fromServer);
@@ -184,7 +185,7 @@ public class ClientConnection extends Thread
 		{
 			try 
 			{
-				sendToServer(new AttackMessage(login, sessionId));
+				sendToServer(new AttackMessage(sessionId));
 				
 				Message fromServer = getDataFromServer();
 				handleCallback(fromServer);
@@ -214,7 +215,17 @@ public class ClientConnection extends Thread
 			break;
 			
 			case LOGIN:
-				if(((MessageFromServer) serverCallback).getWasSuccessful()) isLogedIn = true;
+				/** TODO add missing code, maybe pop-ups */
+				switch(((MessageFromServer) serverCallback).getMessageStatus())
+				{
+					case STATUS_OK: isLogedIn = true; break;
+					case WRONG_PASSWORD: break;
+					case NOT_REGISTRED: break;
+				}
+			break;
+			
+			case LOAD_MAP:
+				SyndicateOfAdventurers.setGameMap(((SendMapMessage) serverCallback).getMap());
 			break;
 			
 			default:
@@ -236,7 +247,7 @@ public class ClientConnection extends Thread
 	{
 		try
 		{
-			sendToServer(new PingMessage(login, sessionId, System.currentTimeMillis()));
+			sendToServer(new PingMessage(sessionId, System.currentTimeMillis()));
 		}
 		catch(IOException e)
 		{

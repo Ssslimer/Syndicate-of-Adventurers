@@ -2,6 +2,7 @@ package com.moag.game.server;
 
 import java.net.UnknownHostException;
 
+import com.moag.game.entities.Map;
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.Timer;
 
@@ -9,6 +10,7 @@ public class Server
 {	
 	private final ServerProperties serverProperties;	
 	private ConnectionManager connectionManager;
+	private static Map map;
 	
 	public Server(ServerProperties serverProperties)
 	{
@@ -17,11 +19,13 @@ public class Server
 	
 	public void start() throws UnknownHostException
 	{
-		connectionManager = new ConnectionManager(serverProperties.getIP(), serverProperties.getPortNumber());
-		connectionManager.start();
-		
 		Thread.currentThread().setPriority(10);
 		Timer.setLogicFrequency(serverProperties.getTPS());
+		
+		map = new Map();
+		
+		connectionManager = new ConnectionManager(serverProperties.getIP(), serverProperties.getPortNumber());
+		connectionManager.start();
 	}
 
 	public void loop()
@@ -54,5 +58,10 @@ public class Server
 	public void stop()
 	{
 		
+	}
+	
+	public static Map getMap()
+	{
+		return map;
 	}
 }

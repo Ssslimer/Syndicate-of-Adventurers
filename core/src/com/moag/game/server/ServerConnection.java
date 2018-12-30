@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-import com.moag.game.networking.Message;
+import com.moag.game.networking.messages.Message;
 
 public class ServerConnection extends Thread
 {	
@@ -17,7 +17,9 @@ public class ServerConnection extends Thread
 	
 	private final MessageHandler messageHandler;
 	
-	private boolean hasLogedIn, isRunning=true;	
+	private boolean hasLogedIn, isRunning=true;
+	
+	private String login;
 
 	public ServerConnection(Socket clientSocket, MessageHandler messageHandler)
 	{
@@ -64,13 +66,14 @@ public class ServerConnection extends Thread
 	
 	public void sendMessageToClient(Message message) throws IOException
 	{
+		System.out.println("Sending: " + message.getMessageType());
 		streamToClient.writeObject(message);
 	}
 	
 	private Message getMessageFromClient() throws ClassNotFoundException, IOException
 	{
 		Message message = (Message) streamFromClient.readObject();
-		System.out.printf("Message from: %s Message content: %s \n", message.getClientLogin(), message.getMessageType());
+		System.out.printf("Message from: %s Message content: %s \n", login, message.getMessageType());
 		
 		return message;
 	}

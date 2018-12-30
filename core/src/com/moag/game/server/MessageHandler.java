@@ -10,11 +10,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.moag.game.networking.LoginMessage;
-import com.moag.game.networking.Message;
-import com.moag.game.networking.MessageFromServer;
+import com.moag.game.networking.MessageStatus;
 import com.moag.game.networking.MessageType;
-import com.moag.game.networking.RegisterMessage;
+import com.moag.game.networking.messages.LoginMessage;
+import com.moag.game.networking.messages.Message;
+import com.moag.game.networking.messages.MessageFromServer;
+import com.moag.game.networking.messages.RegisterMessage;
+import com.moag.game.networking.messages.SendMapMessage;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -23,19 +25,31 @@ import de.mkammerer.argon2.Argon2Factory;
 public class MessageHandler extends Thread
 {
 	private Queue<MessageTask> messages = new ConcurrentLinkedQueue<>();
+	private boolean shouldWait = true;
 	
 	@Override
 	public void run()
 	{
-		Executor executor = Executors.newFixedThreadPool(4);
+		Executor executor = Executors.newFixedThreadPool(1);
 		
 		while(true)
 		{
+			if(shouldWait)
+			{
+				synchronized(this)
+				{
+					try{wait();}
+					catch(InterruptedException e) {e.printStackTrace();}
+				}
+			}
+			
 			executor.execute(() ->
 			{
 				try
 				{
-					processMessage(messages.poll());
+					MessageTask task = messages.poll();
+					if(task == null) shouldWait = true;
+					else processMessage(task);
 				}
 				catch(IOException e)
 				{
@@ -48,12 +62,16 @@ public class MessageHandler extends Thread
 	void handleMessage(MessageTask task)
 	{
 		messages.add(task);
+		shouldWait = false;
+		
+		synchronized(this)
+		{
+			notify();
+		}
 	}
 	
 	private void processMessage(MessageTask task) throws IOException
-	{
-		if(task == null) return;
-		
+	{	
 		ServerConnection connectionWithClient = task.getMessageOwner();			
 		Message message = task.getMessage();
 		MessageType content = message.getMessageType();
@@ -93,8 +111,8 @@ public class MessageHandler extends Thread
 				}
 			break;
 				
-			default:
-				connectionWithClient.sendMessageToClient(new MessageFromServer(false, "Unknown command"));
+			default:/** TODO maybe delete message to client ? */
+				System.out.println("Client send wrong command!!");
 		}
 	}
 	
@@ -109,33 +127,32 @@ public class MessageHandler extends Thread
 			
 		if(isPlayerRegistered(login))
 		{
-			connectionWithClient.sendMessageToClient(new MessageFromServer(false, "User with such login already exist!"));	
+			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.GIVEN_LOGIN_EXISTS));	
 		}
 		else
 		{
 			registerPlayer(login, hashedPassword);
-			connectionWithClient.sendMessageToClient(new MessageFromServer(true, "Successfuly registered!"));	
+			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.STATUS_OK));	
 		}
 	}
 	
 	private void processLogin(ServerConnection connectionWithClient, LoginMessage message) throws IOException
 	{
-		connectionWithClient.stopCommunication();
 		String login = message.getLogin();
 		String password = message.getPassword();
 			
 		if(!isPlayerRegistered(login))
 		{
-			connectionWithClient.sendMessageToClient(new MessageFromServer(false, "User with such login does not exist!"));
+			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.NOT_REGISTRED));
 		}
 		else
 		{
 			if(checkPassword(login, password))
 			{
 				connectionWithClient.login();
-				connectionWithClient.sendMessageToClient(new MessageFromServer(true, "Successfuly logged in!"));
+				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			}
-			else connectionWithClient.sendMessageToClient(new MessageFromServer(false, "Given password is wrong!"));
+			else connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.WRONG_PASSWORD));
 		}
 	}
 }

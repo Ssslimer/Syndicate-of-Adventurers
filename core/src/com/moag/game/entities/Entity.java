@@ -1,9 +1,13 @@
 package com.moag.game.entities;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.math.Vector3;
 
-public class Entity
+public class Entity implements Serializable
 {
+	private static final long serialVersionUID = -2948009979518301886L;
+	
 	protected Vector3 position;
 	protected float rotation;
 

@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector3;
 
 public class EntityEnemy extends Entity
 {
+	private static final long serialVersionUID = -8463316271178712082L;
+	
 	private static final int BASE_ENEMY_ATTACK = 5;
 	private static final int BASE_ENEMY_DEFENCE = 5;
 	private static final int BASE_ENEMY_HP = 50;

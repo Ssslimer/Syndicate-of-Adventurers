@@ -1,6 +1,6 @@
 package com.moag.game.server;
 
-import com.moag.game.networking.Message;
+import com.moag.game.networking.messages.Message;
 
 /** Wrapper class for processing the clients messages. Links connection with the send request */
 public class MessageTask

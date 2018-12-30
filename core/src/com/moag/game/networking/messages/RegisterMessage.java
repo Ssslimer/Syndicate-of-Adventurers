@@ -1,15 +1,16 @@
-package com.moag.game.networking;
+package com.moag.game.networking.messages;
 
-public class RegisterMessage extends Message
+import com.moag.game.networking.MessageType;
+
+public class RegisterMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -2615994729186676330L;
 	
-	private String password;
+	private String login, password;
 	
 	public RegisterMessage(String login, String password)
 	{
-		this.messageType = MessageType.REGISTER;
-		
+		super(MessageType.REGISTER, -1);
 		this.login = login;
 		this.password = password;
 	}
@@ -23,5 +24,4 @@ public class RegisterMessage extends Message
 	{
 		return password;
 	}
-
 }

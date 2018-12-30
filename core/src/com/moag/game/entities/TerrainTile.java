@@ -1,17 +1,20 @@
 package com.moag.game.entities;
 
-import com.badlogic.gdx.graphics.g3d.Material;
+import java.io.Serializable;
+
 import com.badlogic.gdx.math.Vector3;
 
-public class TerrainTile
+public class TerrainTile implements Serializable
 {
-	private final Vector3 position;
-	private final Material material;
+	private static final long serialVersionUID = -8892348832832660314L;
 	
-	public TerrainTile(Vector3 position, Material material)
+	private final Vector3 position;
+	private final int terrainType;
+	
+	public TerrainTile(Vector3 position, int terrainType)
 	{
 		this.position = position;
-		this.material = material;
+		this.terrainType = terrainType;
 	}
 
 	public Vector3 getPosition()
@@ -19,8 +22,8 @@ public class TerrainTile
 		return position;
 	}
 
-	public Material getMaterial()
+	public int getTerrainType()
 	{
-		return material;
+		return terrainType;
 	}
 }
