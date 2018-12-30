@@ -60,6 +60,10 @@ public class MessageHandler extends Thread
 		
 		switch(content)
 		{			
+			case PING:
+				connectionWithClient.sendMessageToClient(message);
+			break;
+			
 			case REGISTER:
 				processRegister(connectionWithClient, (RegisterMessage) message);
 			break;

@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.moag.game.Client;
+import com.moag.game.ClientConnection;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.util.GdxUtils;
 
@@ -172,7 +172,7 @@ public class MainMenuScreen implements Screen
 					return;
 				}
 		    	
-		    	Client client = new Client(ip, port);
+		    	ClientConnection client = new ClientConnection(ip, port);
 		    	game.setScreen(new JoinServerScreen(game, client));
 		    }
 

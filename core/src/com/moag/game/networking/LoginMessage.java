@@ -10,13 +10,13 @@ public class LoginMessage extends Message
 	{
 		this.messageType = MessageType.LOGIN;
 		
-		this.clientID = login;
+		this.login = login;
 		this.password = password;
 	}
 	
 	public String getLogin()
 	{
-		return clientID;
+		return login;
 	}
 	
 	public String getPassword()

@@ -70,7 +70,7 @@ public class ServerConnection extends Thread
 	private Message getMessageFromClient() throws ClassNotFoundException, IOException
 	{
 		Message message = (Message) streamFromClient.readObject();
-		System.out.println("Message from: " + message.toString());
+		System.out.printf("Message from: %s Message content: %s \n", message.getClientLogin(), message.getMessageType());
 		
 		return message;
 	}

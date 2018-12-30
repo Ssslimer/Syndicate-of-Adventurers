@@ -5,6 +5,8 @@ public enum MessageType
 	REGISTER, 
 	LOGIN,
 	QUIT,
+	LOAD_MAP,
+	PING,
 	
 	MOVE,
 	ATTACK,

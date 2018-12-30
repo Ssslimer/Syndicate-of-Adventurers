@@ -7,8 +7,8 @@ public class QuitMessage extends Message
 	public QuitMessage(String clientID, long sessionID)
 	{
 		this.messageType = MessageType.QUIT;
-		this.clientID = clientID;
-		this.sessionID = sessionID;
+		this.login = clientID;
+		this.sessionId = sessionID;
 	}
 
 }

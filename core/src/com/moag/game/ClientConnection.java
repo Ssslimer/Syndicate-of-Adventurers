@@ -1,22 +1,26 @@
 package com.moag.game;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.badlogic.gdx.math.Vector3;
 import com.moag.game.networking.AttackMessage;
+import com.moag.game.networking.LoadMapMessage;
 import com.moag.game.networking.LoginMessage;
 import com.moag.game.networking.Message;
 import com.moag.game.networking.MessageFromServer;
 import com.moag.game.networking.MoveMessage;
+import com.moag.game.networking.PingMessage;
 import com.moag.game.networking.RegisterMessage;
 
-public class Client
+public class ClientConnection extends Thread
 {
 	private Socket clientSocket;
 	private ObjectOutputStream streamToServer;
@@ -27,12 +31,41 @@ public class Client
 	
 	private boolean isLogedIn;
 	private String login;
-	private long sessionID;
+	private long sessionId;
 
-	public Client(String ip, int port)
+	public ClientConnection(String ip, int port)
 	{
 		this.ip = ip;
 		this.port = port;
+	}
+	
+	@Override
+	public void run()
+	{
+		while(true)
+		{
+	    	Message fromServer = null;
+			try
+			{
+				fromServer = getDataFromServer();
+			}
+			catch(SocketException e)
+			{
+				e.printStackTrace();
+			}			
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			
+	    	handleCallback(fromServer);
+		}
 	}
 	
 	public boolean register(String login, String password)
@@ -85,12 +118,8 @@ public class Client
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
 
+	    	start();
 	    	sendToServer(new LoginMessage(login, password));
-	    	
-	    	Message fromServer = getDataFromServer();
-	    	handleCallback(fromServer);
-	    	handleLoginCallback(fromServer);
-	    	System.out.println("Message from server: " + fromServer.toString());
     	}
     	catch(Exception e)
     	{  		
@@ -111,13 +140,26 @@ public class Client
     	return true;
 	}
 	
+	public void loadMap()
+	{
+	    try
+		{
+			sendToServer(new LoadMapMessage(login, sessionId));
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/** TODO REMAKE */
 	public boolean move(Vector3 translation)
 	{
 		if(isLogedIn)
 		{
 			try 
 			{
-				sendToServer(new MoveMessage(translation, login, sessionID));
+				sendToServer(new MoveMessage(translation, login, sessionId));
 				
 				Message fromServer = getDataFromServer();
 				handleCallback(fromServer);
@@ -128,7 +170,6 @@ public class Client
 			} 
 			catch (ClassNotFoundException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -136,13 +177,14 @@ public class Client
 		return false;
 	}
 	
+	/** TODO REMAKE */
 	public boolean attack()
 	{
 		if(isLogedIn)
 		{
 			try 
 			{
-				sendToServer(new AttackMessage(login, sessionID));
+				sendToServer(new AttackMessage(login, sessionId));
 				
 				Message fromServer = getDataFromServer();
 				handleCallback(fromServer);
@@ -162,15 +204,21 @@ public class Client
 
 	private void handleCallback(Message serverCallback)
 	{	
-		String messageFromServer = ((MessageFromServer)serverCallback).getMessageString();
-		System.out.println(messageFromServer);
-	}
-	
-	private void handleLoginCallback(Message serverCallback)
-	{
-		if(((MessageFromServer) serverCallback).getWasSuccessful())
+		System.out.println(serverCallback);
+		
+		switch(serverCallback.getMessageType())
 		{
-			isLogedIn = true;
+			case PING:
+				long ping = System.currentTimeMillis() - ((PingMessage) serverCallback).getTime();
+				System.out.println("PING " + ping);
+			break;
+			
+			case LOGIN:
+				if(((MessageFromServer) serverCallback).getWasSuccessful()) isLogedIn = true;
+			break;
+			
+			default:
+				System.out.println("Unknown command");
 		}
 	}
 	
@@ -179,9 +227,21 @@ public class Client
 		streamToServer.writeObject(message);
 	}
 	
-	private Message getDataFromServer() throws ClassNotFoundException, IOException
+	private Message getDataFromServer() throws ClassNotFoundException, IOException, EOFException
 	{
 		return (Message) streamFromServer.readObject();	
+	}
+
+	public void pingServer()
+	{
+		try
+		{
+			sendToServer(new PingMessage(login, sessionId, System.currentTimeMillis()));
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

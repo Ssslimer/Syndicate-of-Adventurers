@@ -12,8 +12,8 @@ public class MoveMessage extends Message
 	{
 		this.messageType = MessageType.MOVE;
 		
-		this.clientID = clientID;
-		this.sessionID = sessionID;
+		this.login = clientID;
+		this.sessionId = sessionID;
 		
 		this.translation = translation;
 	}

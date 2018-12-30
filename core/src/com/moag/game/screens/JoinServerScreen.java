@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.moag.game.Client;
+import com.moag.game.ClientConnection;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.util.GdxUtils;
 
@@ -27,7 +27,7 @@ public class JoinServerScreen implements Screen
 	private TextField playerNameField, passwordField;
 	private TextButton loginButton, registerButton, backButton;
 	
-	public JoinServerScreen(SyndicateOfAdventurers game, Client client)
+	public JoinServerScreen(SyndicateOfAdventurers game, ClientConnection client)
 	{	
 		this.game = game;
 		SyndicateOfAdventurers.setClient(client);
@@ -155,6 +155,17 @@ public class JoinServerScreen implements Screen
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 				SyndicateOfAdventurers.getClient().login(login, password);
+				//SyndicateOfAdventurers.getClient().loadMap();
+				
+//				try{Thread.sleep(5000);}
+//				catch(InterruptedException e){e.printStackTrace();}
+//				
+//				while(true)
+//				{
+//					SyndicateOfAdventurers.getClient().pingServer();
+//					try{Thread.sleep(1000);}
+//					catch(InterruptedException e){e.printStackTrace();}
+//				}
 			}
 	    });
 		

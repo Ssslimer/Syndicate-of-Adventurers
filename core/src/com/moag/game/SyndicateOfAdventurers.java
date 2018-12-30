@@ -8,7 +8,7 @@ import com.moag.game.screens.MainMenuScreen;
 public class SyndicateOfAdventurers extends Game
 {	 
 	private AssetManager assetManager;
-	private static Client client;
+	private static ClientConnection client;
 	private static Resources resources;
 	private static Map gameMap;
 
@@ -31,12 +31,12 @@ public class SyndicateOfAdventurers extends Game
 		return assetManager; 
 	}
 
-	public static Client getClient()
+	public static ClientConnection getClient()
 	{
 		return client;
 	}
 	
-	public static void setClient(Client client)
+	public static void setClient(ClientConnection client)
 	{
 		SyndicateOfAdventurers.client = client;
 	}

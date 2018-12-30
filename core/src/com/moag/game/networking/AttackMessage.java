@@ -7,7 +7,7 @@ public class AttackMessage extends Message
 	public AttackMessage(String clientID, long sessionID)
 	{
 		this.messageType = MessageType.ATTACK;
-		this.clientID = clientID;
-		this.sessionID = sessionID;
+		this.login = clientID;
+		this.sessionId = sessionID;
 	}
 }

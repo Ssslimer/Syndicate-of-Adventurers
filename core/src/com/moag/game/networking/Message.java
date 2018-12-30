@@ -7,23 +7,23 @@ public abstract class Message implements Serializable
 	private static final long serialVersionUID = -5885736425999483646L;
 	
 	protected MessageType messageType;
-	
-	protected long sessionID;
-	protected String clientID;
+
+	protected String login;
+	protected long sessionId;
 
 	public MessageType getMessageType()
 	{
 		return messageType;
 	}
 	
-	public String getClientID()
+	public String getClientLogin()
 	{
-		return clientID;
+		return login;
 	}
 	
-	public long getSessionID()
+	public long getSessionId()
 	{
-		return sessionID;
+		return sessionId;
 	}
 	
 	@Override

@@ -13,6 +13,8 @@ import de.mkammerer.argon2.Argon2Factory;
 
 public class AuthManager
 {
+	private static final Argon2 ARGON2 = Argon2Factory.create();
+	
 	static void registerPlayer(String login, String password) throws IOException
 	{
 		Path pathToFolder = Paths.get("save", "auth");
@@ -36,9 +38,6 @@ public class AuthManager
 		Path pathToFile = Paths.get("save", "auth", login+".txt");
 		List<String> lines = Files.readAllLines(pathToFile);
 		if(lines.size() != 1) return false;
-		
-		Argon2 argon2 = Argon2Factory.create();
-		
-		return argon2.verify(lines.get(0), password);
+		return ARGON2.verify(lines.get(0), password);
 	}
 }
