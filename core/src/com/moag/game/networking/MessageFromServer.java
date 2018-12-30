@@ -6,6 +6,7 @@ public class MessageFromServer extends Message
 
 	private boolean wasSuccessful;
 	private String messageString;
+	private MessageStatus status;
 	
 	public MessageFromServer(boolean wasSuccessful, String messageString)
 	{
@@ -13,6 +14,14 @@ public class MessageFromServer extends Message
 		
 		this.wasSuccessful = wasSuccessful;
 		this.messageString = messageString;
+	}
+	
+	public MessageFromServer(boolean wasSuccessful, MessageStatus status)
+	{
+		this.messageType = MessageType.FROM_SERVER;
+		
+		this.wasSuccessful = wasSuccessful;
+		this.status = status;
 	}
 	
 	public boolean getWasSuccessful()
@@ -23,5 +32,10 @@ public class MessageFromServer extends Message
 	public String getMessageString()
 	{
 		return messageString;
+	}
+	
+	public MessageStatus getMessageStatus()
+	{
+		return status;
 	}
 }
