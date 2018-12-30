@@ -30,10 +30,14 @@ public class ConnectionServer extends Thread
 	
 	private boolean hasLogedIn = false; 
 	private boolean terminateConnection = false;
+	
+	private boolean canHandleMessage = false;
+	private long sessionID;
 
-	public ConnectionServer(Socket clientSocket)
+	public ConnectionServer(Socket clientSocket, long sessionID)
 	{
 		this.clientSocket = clientSocket;
+		this.sessionID = sessionID;
 	}
 	
 	@Override
@@ -49,9 +53,13 @@ public class ConnectionServer extends Thread
 				Message fromClient = (Message) streamFromClient.readObject();	
 		    	System.out.println("Message from: " + fromClient.toString());
 		    		
+		    	waitForHandlingPermission();
 		    	Message toClient = handleMessage(fromClient);
 		    		
 		    	streamToClient.writeObject(toClient);
+		    	
+		    	canHandleMessage = false; // restoring original value;
+		    	MessageManager.messageHandled();
 			}    	
 	    }
 	    catch(SocketException e)
@@ -71,6 +79,11 @@ public class ConnectionServer extends Thread
 			return;
 		}
     }
+	
+	private void waitForHandlingPermission()
+	{
+		while(!canHandleMessage) {}
+	}
 
 	private Message handleMessage(Message message)
 	{
@@ -188,4 +201,8 @@ public class ConnectionServer extends Thread
 		return argon2.verify(lines.get(0), password);
 	}
 
+	public void canHandleMessage()
+	{
+		this.canHandleMessage = true;
+	}
 }
