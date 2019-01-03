@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.moag.game.ClientConnection;
@@ -113,6 +114,7 @@ public class JoinServerScreen implements Screen
 		
 		passwordField = new TextField("", style);
 		passwordField.setText("Password...");
+		passwordField.setPasswordCharacter('*');
 		passwordField.setWidth(200);
 		passwordField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-passwordField.getWidth()) / 2f;
@@ -131,6 +133,15 @@ public class JoinServerScreen implements Screen
 			public void clicked(InputEvent event, float x, float y)
 		    {
 				passwordField.setText("");
+		    }
+		});
+
+		passwordField.setTextFieldListener(new TextFieldListener()
+		{
+		    @Override
+		    public void keyTyped(TextField textField, char key)
+		    {
+		    	passwordField.setPasswordMode(true);
 		    }
 		});
 		
