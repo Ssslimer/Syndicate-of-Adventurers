@@ -13,31 +13,50 @@ import de.mkammerer.argon2.Argon2Factory;
 
 public class AuthManager
 {
-	private static final Argon2 ARGON2 = Argon2Factory.create();
+	private static final Path DEFAULT_PATH = Paths.get("save", "auth");
 	
-	static void registerPlayer(String login, String password) throws IOException
+	private final Argon2 argon2 = Argon2Factory.create();	
+	private final Path path;
+	
+	private int hashingIterations = 10, hashingMemory = 65536, hashingParallelism = 1;
+	
+	public AuthManager()
 	{
-		Path pathToFolder = Paths.get("save", "auth");
-		Path pathToFile = Paths.get("save", "auth", login+".txt");
+		this(DEFAULT_PATH);
+	}
+	
+	public AuthManager(Path path)
+	{
+		this.path = path;
+	}
 
-		Files.createDirectories(pathToFolder);		
+	public void registerPlayerIfNotRegistered(String login, String hashedPassword) throws IOException
+	{
+		Path pathToFile = path.resolve(login + ".txt");
+
+		Files.createDirectories(path);		
 	
 		try(PrintWriter writer = new PrintWriter(new FileWriter(pathToFile.toFile())))
 		{
-			writer.print(password);			
+			writer.print(hashedPassword);			
 		}
 	}
 	
-	static boolean isPlayerRegistered(String login)
+	public boolean isPlayerRegistered(String login)
 	{
-		return Files.exists(Paths.get("save", "auth", login+".txt"));
+		return Files.exists(path.resolve(login+".txt"));
 	}
 	
-	static boolean checkPassword(String login, String password) throws IOException
+	public boolean checkPassword(String login, String password) throws IOException
 	{
-		Path pathToFile = Paths.get("save", "auth", login+".txt");
+		Path pathToFile = path.resolve(login+".txt");
 		List<String> lines = Files.readAllLines(pathToFile);
 		if(lines.size() != 1) return false;
-		return ARGON2.verify(lines.get(0), password);
+		return argon2.verify(lines.get(0), password);
+	}
+	
+	public String hashPassword(char[] password)
+	{
+		return argon2.hash(hashingIterations, hashingMemory, hashingParallelism, password);
 	}
 }

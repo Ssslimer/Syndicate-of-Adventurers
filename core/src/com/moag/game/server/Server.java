@@ -10,6 +10,7 @@ public class Server
 {	
 	private final ServerProperties serverProperties;	
 	private ConnectionManager connectionManager;
+	private AuthManager authManager;
 	private static Map map;
 	
 	public Server(ServerProperties serverProperties)
@@ -23,9 +24,10 @@ public class Server
 		Timer.setLogicFrequency(serverProperties.getTPS());
 		
 		map = new Map();
+		authManager = new AuthManager();
 		
-		connectionManager = new ConnectionManager(serverProperties.getIP(), serverProperties.getPortNumber());
-		connectionManager.start();
+		connectionManager = new ConnectionManager(this, serverProperties.getIP(), serverProperties.getPortNumber());
+		connectionManager.start();	
 	}
 
 	public void loop()
@@ -63,5 +65,10 @@ public class Server
 	public static Map getMap()
 	{
 		return map;
+	}
+
+	public AuthManager getAuthManager()
+	{
+		return authManager;
 	}
 }

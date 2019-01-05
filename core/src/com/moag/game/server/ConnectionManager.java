@@ -9,11 +9,13 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 public class ConnectionManager extends Thread
 {
+	private final Server server;
 	private final InetAddress address;
 	private final int port;
 
-	public ConnectionManager(String ip, int port) throws UnknownHostException
+	public ConnectionManager(Server server, String ip, int port) throws UnknownHostException
 	{
+		this.server = server;
 		this.port = port;
 		this.address = InetAddress.getByName(ip);
 		
@@ -24,7 +26,7 @@ public class ConnectionManager extends Thread
 	@Override
 	public void run()
 	{
-		MessageHandler messageHander = new MessageHandler();
+		MessageHandler messageHander = new MessageHandler(server);
 		messageHander.start();
 		
 		SSLServerSocketFactory sslserversocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();

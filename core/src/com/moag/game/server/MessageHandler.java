@@ -1,8 +1,5 @@
 package com.moag.game.server;
 
-import static com.moag.game.server.AuthManager.checkPassword;
-import static com.moag.game.server.AuthManager.isPlayerRegistered;
-import static com.moag.game.server.AuthManager.registerPlayer;
 
 import java.io.IOException;
 import java.util.Queue;
@@ -24,8 +21,15 @@ import de.mkammerer.argon2.Argon2Factory;
 /** Thread for processing messages from clients */
 public class MessageHandler extends Thread
 {
+	private final Server server;
+	
 	private Queue<MessageTask> messages = new ConcurrentLinkedQueue<>();
 	private boolean shouldWait = true;
+	
+	public MessageHandler(Server server)
+	{
+		this.server = server;
+	}
 	
 	@Override
 	public void run()
@@ -122,16 +126,15 @@ public class MessageHandler extends Thread
 		
 		String login = message.getLogin();
 		char[] password = message.getPassword().toCharArray();
-		Argon2 argon2 = Argon2Factory.create();
-		String hashedPassword = argon2.hash(10, 65536, 1, password);
+		String hashedPassword = server.getAuthManager().hashPassword(password);
 			
-		if(isPlayerRegistered(login))
+		if(server.getAuthManager().isPlayerRegistered(login))
 		{
 			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.GIVEN_LOGIN_EXISTS));	
 		}
 		else
 		{
-			registerPlayer(login, hashedPassword);
+			server.getAuthManager().registerPlayerIfNotRegistered(login, hashedPassword);
 			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.OK));	
 		}
 	}
@@ -141,13 +144,13 @@ public class MessageHandler extends Thread
 		String login = message.getLogin();
 		String password = message.getPassword();
 			
-		if(!isPlayerRegistered(login))
+		if(!server.getAuthManager().isPlayerRegistered(login))
 		{
 			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.NOT_REGISTRED));
 		}
 		else
 		{
-			if(checkPassword(login, password))
+			if(server.getAuthManager().checkPassword(login, password))
 			{
 				connectionWithClient.login();
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
