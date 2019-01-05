@@ -59,9 +59,9 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	void handleMessage(MessageTask task)
+	void handleMessage(ServerConnection source, Message message)
 	{
-		messages.add(task);
+		messages.add(new MessageTask(source, message));
 		shouldWait = false;
 		
 		synchronized(this)
@@ -132,7 +132,7 @@ public class MessageHandler extends Thread
 		else
 		{
 			registerPlayer(login, hashedPassword);
-			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.STATUS_OK));	
+			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.OK));	
 		}
 	}
 	
@@ -153,6 +153,28 @@ public class MessageHandler extends Thread
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			}
 			else connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.WRONG_PASSWORD));
+		}
+	}
+	
+	private class MessageTask
+	{
+		private final ServerConnection messageOwner;
+		private final Message message;
+		
+		private MessageTask(ServerConnection messageOwner, Message message)
+		{
+			this.messageOwner = messageOwner;
+			this.message = message;
+		}
+
+		private ServerConnection getMessageOwner()
+		{
+			return messageOwner;
+		}
+
+		private Message getMessage()
+		{
+			return message;
 		}
 	}
 }

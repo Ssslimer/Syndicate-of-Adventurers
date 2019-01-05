@@ -10,5 +10,6 @@ public enum MessageStatus
 	GIVEN_LOGIN_EXISTS,
 	
 	/**General statuses*/
-	STATUS_OK,
+	OK,	
+	ERROR
 }

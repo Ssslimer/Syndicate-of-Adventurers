@@ -41,7 +41,7 @@ public class ServerConnection extends Thread
 			while(isRunning)
 			{
 				Message message = getMessageFromClient();
-				messageHandler.handleMessage(new MessageTask(this, message));
+				messageHandler.handleMessage(this, message);
 			}
 			
 			/** TODO send player a disconnect info? */

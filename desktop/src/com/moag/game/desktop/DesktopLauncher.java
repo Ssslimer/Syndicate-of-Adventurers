@@ -24,6 +24,5 @@ public class DesktopLauncher
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
 		new LwjglApplication(new SyndicateOfAdventurers(), config);
-		//new LwjglApplication(new TestCamera(), config);
 	}
 }

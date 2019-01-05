@@ -20,4 +20,10 @@ public class MessageFromServer extends Message
 	{
 		return status;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "MessageFromServer: " + status.toString();
+	}
 }

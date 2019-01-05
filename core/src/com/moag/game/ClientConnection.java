@@ -10,13 +10,11 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
-import com.badlogic.gdx.math.Vector3;
-import com.moag.game.networking.messages.AttackMessage;
+import com.moag.game.networking.MessageStatus;
 import com.moag.game.networking.messages.LoadMapMessage;
 import com.moag.game.networking.messages.LoginMessage;
 import com.moag.game.networking.messages.Message;
 import com.moag.game.networking.messages.MessageFromServer;
-import com.moag.game.networking.messages.MoveMessage;
 import com.moag.game.networking.messages.PingMessage;
 import com.moag.game.networking.messages.RegisterMessage;
 import com.moag.game.networking.messages.SendMapMessage;
@@ -69,10 +67,10 @@ public class ClientConnection extends Thread
 		}
 	}
 	
-	public boolean register(String login, String password)
+	public MessageStatus register(String login, String password)
 	{
 		try
-    	{	
+    	{
 			System.setProperty("javax.net.ssl.trustStore", "za.store");
 			SocketFactory sslsocketfactory = SSLSocketFactory.getDefault();
 			clientSocket = sslsocketfactory.createSocket(ip, port);
@@ -81,33 +79,26 @@ public class ClientConnection extends Thread
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
 	    	
-	    	sendToServer(new RegisterMessage(login, password));
-	    	
-	    	Message fromServer = getDataFromServer();
-	    	handleCallback(fromServer);
+	    	sendToServer(new RegisterMessage(login, password));	    	
+	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
+
 	    	System.out.println("Message from server: " + fromServer.toString());
 
-	    	return true;
+	    	MessageStatus status = fromServer.getMessageStatus();
+	    	System.out.println(status);
+	    	
+	    	return status;
     	}
-    	catch(IOException e)
+    	catch(IOException | ClassNotFoundException e)
     	{  		
-    		System.out.println(e.getMessage());   		   		
+    		System.out.println(e.getMessage());
+    		
+    		stopConnection();
+    		return MessageStatus.ERROR;
     	}
-		finally
-		{
-    		try
-			{
-				clientSocket.close();
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-    		return false;
-		}
 	}
 	
-	public boolean login(String login, String password)
+	public MessageStatus login(String login, String password)
 	{
 		try
     	{	
@@ -118,27 +109,20 @@ public class ClientConnection extends Thread
 	
     		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
-
-	    	start();
+    	
 	    	sendToServer(new LoginMessage(login, password));
+	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
+	    	if(fromServer.getMessageStatus() == MessageStatus.OK) start();
+	    	
+	    	return fromServer.getMessageStatus();
     	}
     	catch(Exception e)
     	{  		
-    		System.out.println(e.getMessage());   	
-
-			try
-			{
-				clientSocket.close();
-			}
-			catch(IOException e2)
-			{
-				System.out.println(e2.getMessage());
-			}
-
-			return false;
+    		System.out.println(e.getMessage());
+    		
+    		stopConnection();
+    		return MessageStatus.ERROR;
     	}
-		
-    	return true;
 	}
 	
 	public void loadMap()
@@ -151,56 +135,6 @@ public class ClientConnection extends Thread
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	/** TODO REMAKE */
-	public boolean move(Vector3 translation)
-	{
-		if(isLogedIn)
-		{
-			try 
-			{
-				sendToServer(new MoveMessage(translation, sessionId));
-				
-				Message fromServer = getDataFromServer();
-				handleCallback(fromServer);
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			} 
-			catch (ClassNotFoundException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		return false;
-	}
-	
-	/** TODO REMAKE */
-	public boolean attack()
-	{
-		if(isLogedIn)
-		{
-			try 
-			{
-				sendToServer(new AttackMessage(sessionId));
-				
-				Message fromServer = getDataFromServer();
-				handleCallback(fromServer);
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			} 
-			catch (ClassNotFoundException e) 
-			{
-				e.printStackTrace();
-			}
-			
-		}
-		return false;
 	}
 
 	private void handleCallback(Message serverCallback)
@@ -218,7 +152,7 @@ public class ClientConnection extends Thread
 				/** TODO add missing code, maybe pop-ups */
 				switch(((MessageFromServer) serverCallback).getMessageStatus())
 				{
-					case STATUS_OK: isLogedIn = true; break;
+					case OK: isLogedIn = true; break;
 					case WRONG_PASSWORD: break;
 					case NOT_REGISTRED: break;
 				}
@@ -252,6 +186,18 @@ public class ClientConnection extends Thread
 		catch(IOException e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	private void stopConnection()
+	{
+		try
+		{
+			clientSocket.close();
+		}
+		catch(IOException e) 
+		{
+			System.out.println(e.getMessage());
 		}
 	}
 

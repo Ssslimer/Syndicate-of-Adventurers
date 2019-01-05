@@ -1,8 +1,7 @@
 package com.moag.game.screens;
 
-import java.util.regex.Pattern;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,9 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.moag.game.ClientConnection;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.util.GdxUtils;
+import com.moag.game.util.ServerAddressValidator;
 
 public class MainMenuScreen implements Screen
 {
@@ -62,6 +62,7 @@ public class MainMenuScreen implements Screen
 	public void render(float delta) 
 	{
 		GdxUtils.clearScreen(Color.WHITE);
+		stage.act();
 		stage.draw();
 		Gdx.input.setInputProcessor(stage);		
 	}
@@ -148,53 +149,36 @@ public class MainMenuScreen implements Screen
 		
 		joinServerButton.addListener(new ClickListener()
 	    {
-			/** TODO add popup messages when strings are incorrect */
 		    @Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
 		    	String ip = serverIPField.getText();
-		    	/** ADD POPUP */
-		    	if(!isIPValid(ip)) return;
+		    	if(!ServerAddressValidator.isIPAddressCorrect(ip))
+		    	{
+					Dialog dialog = new Dialog("Wrong IP address", skin, "dialog");	
+					dialog.button("OK");
+					dialog.key(Keys.ENTER, null);
+					dialog.setMovable(false);
+					dialog.text("Incorrect IP address format"); /** TODO add translations? */
+					dialog.show(stage);
+					
+		    		return;
+		    	}
 		    	
-		    	int port = -1;		    	
-				try
-				{
-					port = getPort(serverPortField.getText());
-				}
-				catch(NumberFormatException e)
-				{
-					/** ADD POPUP */
+		    	if(!ServerAddressValidator.isPortCorrect(serverPortField.getText()))
+		    	{
+					Dialog dialog = new Dialog("Wrong port", skin, "dialog");	
+					dialog.button("OK");
+					dialog.key(Keys.ENTER, null);
+					dialog.setMovable(false);
+					dialog.text("Port must be a number from range 0 to 65535"); /** TODO add translations? */
+					dialog.show(stage);
 					return;
-				}
-				catch(PortFormatException e)
-				{
-					/** ADD POPUP */
-					return;
-				}
+		    	}
 		    	
-		    	ClientConnection client = new ClientConnection(ip, port);
-		    	game.setScreen(new JoinServerScreen(game, client));
-		    }
-
-		    // https://www.mkyong.com/regular-expressions/how-to-validate-ip-address-with-regular-expression/
-		    private static final String IPADDRESS_PATTERN = 
-		    		"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-		    		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-		    		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-		    		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-		    
-		    private boolean isIPValid(String ip)
-		    {
-		    	return Pattern.matches(IPADDRESS_PATTERN, ip);
-		    }
-		    
-		    private int getPort(String s) throws NumberFormatException, PortFormatException
-		    {
-		    	int port = Integer.parseInt(s);
-		    	
-		    	if(port < 0 || port > 65535) throw new PortFormatException();
-		    	
-		    	return port;
+		    	int port = Integer.parseInt(serverPortField.getText());	
+	    	
+		    	game.setScreen(new JoinServerScreen(game, ip, port));
 		    }
 	    });
 		stage.addActor(joinServerButton);

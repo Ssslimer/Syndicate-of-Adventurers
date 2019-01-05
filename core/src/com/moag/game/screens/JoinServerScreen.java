@@ -1,6 +1,7 @@
 package com.moag.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.moag.game.ClientConnection;
 import com.moag.game.SyndicateOfAdventurers;
+import com.moag.game.networking.MessageStatus;
 import com.moag.game.util.GdxUtils;
 
 public class JoinServerScreen implements Screen
@@ -28,10 +31,14 @@ public class JoinServerScreen implements Screen
 	private TextField playerNameField, passwordField;
 	private TextButton loginButton, registerButton, backButton;
 	
-	public JoinServerScreen(SyndicateOfAdventurers game, ClientConnection client)
+	private final String ip;
+	private final int port;
+	
+	public JoinServerScreen(SyndicateOfAdventurers game, String ip, int port)
 	{	
 		this.game = game;
-		SyndicateOfAdventurers.setClient(client);
+		this.ip = ip;
+		this.port = port;
 		
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -51,6 +58,7 @@ public class JoinServerScreen implements Screen
 	public void render(float delta) 
 	{
 		GdxUtils.clearScreen(Color.WHITE);
+		stage.act();
 		stage.draw();
 		Gdx.input.setInputProcessor(stage);		
 	}
@@ -157,6 +165,11 @@ public class JoinServerScreen implements Screen
 		float posY = (Gdx.graphics.getHeight()-loginButton.getHeight()) / 2f - 60;
 		loginButton.setPosition(posX, posY);
 		
+		Dialog dialog = new Dialog("Login error", skin, "dialog");	
+		dialog.button("OK");
+		dialog.key(Keys.ENTER, null);
+		dialog.setMovable(false);
+		
 		loginButton.addListener(new ClickListener()
 	    {
 			@Override
@@ -164,10 +177,18 @@ public class JoinServerScreen implements Screen
 			{
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
-				SyndicateOfAdventurers.getClient().login(login, password);
 				
-				game.setScreen(new GameScreen(game));				
-
+				SyndicateOfAdventurers.setClient(new ClientConnection(ip, port));
+				MessageStatus status = SyndicateOfAdventurers.getClient().login(login, password);
+				if(status == MessageStatus.OK)
+				{
+					game.setScreen(new GameScreen(game));	
+				}
+				else
+				{
+					dialog.text(status.name()); /** TODO add translations? */
+					dialog.show(stage);
+				}			
 			}
 	    });
 		
@@ -182,7 +203,12 @@ public class JoinServerScreen implements Screen
 		float posX = (Gdx.graphics.getWidth()-registerButton.getWidth()) / 2f;
 		float posY = (Gdx.graphics.getHeight()-registerButton.getHeight()) / 2f - 130;
 		registerButton.setPosition(posX, posY);
-
+		
+		Dialog dialog = new Dialog("Registration error", skin, "dialog");	
+		dialog.button("OK");
+		dialog.key(Keys.ENTER, null);
+		dialog.setMovable(false);
+		
 		registerButton.addListener(new ClickListener()
 	    {
 			@Override
@@ -190,11 +216,17 @@ public class JoinServerScreen implements Screen
 			{
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
-				SyndicateOfAdventurers.getClient().register(login, password);
+	
+				SyndicateOfAdventurers.setClient(new ClientConnection(ip, port));
+				MessageStatus status = SyndicateOfAdventurers.getClient().register(login, password);
+				if(status == MessageStatus.OK) return;
+				
+				dialog.text(status.name()); /** TODO add translations? */
+				dialog.show(stage);
 			}
 	    });
 		
-		stage.addActor(registerButton);
+		stage.addActor(registerButton);		
 	}
 	
 	private void setupBackButton()

@@ -1,7 +1,8 @@
 package com.moag.game.util;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,17 +15,27 @@ import org.xml.sax.SAXException;
 
 public class ServerPropertiesLoader 
 {
-	private static final String XML_FILE_PATH= "server_properties.xml";
+	private static final Path XML_DEFAULT_FILE_PATH = Paths.get("server_properties.xml");
 	
 	private Element server_info;
 	
+	public ServerPropertiesLoader(Path path)
+	{	
+		load(path);
+	}
+	
 	public ServerPropertiesLoader()
 	{	
+		load(XML_DEFAULT_FILE_PATH);
+	}
+	
+	private void load(Path path)
+	{
 		try 
 		{
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-			Document doc = docBuilder.parse(new File(XML_FILE_PATH));
+			Document doc = docBuilder.parse(path.toFile());
 			doc.getDocumentElement().normalize();
 
 			NodeList list = doc.getElementsByTagName("server-info");
