@@ -153,6 +153,7 @@ public class MessageHandler extends Thread
 			if(server.getAuthManager().checkPassword(login, password))
 			{
 				connectionWithClient.login();
+				connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.OK));
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			}
 			else connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.WRONG_PASSWORD));
