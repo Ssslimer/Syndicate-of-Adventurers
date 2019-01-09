@@ -1,12 +1,15 @@
 package com.moag.game.server;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 import com.moag.game.entities.Entity;
 import com.moag.game.entities.World;
+import com.moag.game.networking.messages.fromserver.UpdateEntityMessage;
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.Timer;
 
@@ -49,9 +52,13 @@ public class Server
 			{
 				Thread.sleep(timeLeft);
 			}
+			catch(IllegalArgumentException e)
+			{
+				System.out.println(e.getLocalizedMessage());
+			}
 			catch(InterruptedException e)
 			{
-				e.printStackTrace();
+				System.out.println(e.getLocalizedMessage());
 			}
 		}
 	}
@@ -59,7 +66,7 @@ public class Server
 	private void update()
 	{	
 		long id = -1;
-		
+		world.spawnEntity(new Entity(new Vector3()));
 		Map<Long, Entity> entities = world.getEntities();
 		for(Entity entity : entities.values())
 		{
@@ -68,7 +75,30 @@ public class Server
 		}
 		
 		Random random = new Random();
-		world.updateEntityPos(id, new Vector3(random.nextInt(10), 0, random.nextInt(10)), new Vector3(random.nextInt(10), 0, random.nextInt(10)));
+		Vector3 position = new Vector3(random.nextInt(10), 0, random.nextInt(10));
+		Vector3 velocity = new Vector3(new Vector3(random.nextInt(10), 0, random.nextInt(10)));
+		world.updateEntityPos(id, position, velocity);
+		
+		try
+		{
+			Thread.sleep(5000);
+		}
+		catch(InterruptedException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		for(ServerConnection connection : connectionManager.getAllConnections())
+		{
+			try
+			{
+				if(connection.isLogedIn()) connection.sendMessageToClient(new UpdateEntityMessage(id, position, velocity));
+			}
+			catch(IOException e)
+			{
+				System.out.println(e);
+			}
+		}
 	}
 
 	public void stop()
