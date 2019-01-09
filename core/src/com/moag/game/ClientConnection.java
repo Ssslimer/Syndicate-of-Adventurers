@@ -11,7 +11,10 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.moag.game.networking.MessageStatus;
+import com.moag.game.networking.MoveDirection;
+import com.moag.game.networking.messages.AttackMessage;
 import com.moag.game.networking.messages.Message;
+import com.moag.game.networking.messages.MoveMessage;
 import com.moag.game.networking.messages.fromclient.LoginMessage;
 import com.moag.game.networking.messages.fromclient.PingMessage;
 import com.moag.game.networking.messages.fromclient.RegisterMessage;
@@ -64,6 +67,32 @@ public class ClientConnection extends Thread
 			}
 			
 	    	handleCallback(fromServer);
+		}
+	}
+	
+	public void move(MoveDirection direction, boolean toStop)
+	{
+		try 
+		{
+			sendToServer(new MoveMessage(sessionId, direction, toStop));
+
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void attack()
+	{
+		try 
+		{
+			sendToServer(new AttackMessage(sessionId));
+
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
 		}
 	}
 	

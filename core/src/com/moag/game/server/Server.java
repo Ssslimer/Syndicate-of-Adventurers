@@ -1,7 +1,11 @@
 package com.moag.game.server;
 
 import java.net.UnknownHostException;
+import java.util.Map;
+import java.util.Random;
 
+import com.badlogic.gdx.math.Vector3;
+import com.moag.game.entities.Entity;
 import com.moag.game.entities.World;
 import com.moag.game.util.ServerProperties;
 import com.moag.game.util.Timer;
@@ -11,7 +15,7 @@ public class Server
 	private final ServerProperties serverProperties;	
 	private ConnectionManager connectionManager;
 	private AuthManager authManager;
-	private static World map;
+	private static World world;
 	
 	public Server(ServerProperties serverProperties)
 	{
@@ -23,7 +27,7 @@ public class Server
 		Thread.currentThread().setPriority(10);
 		Timer.setLogicFrequency(serverProperties.getTPS());
 		
-		map = new World();
+		world = new World();
 		authManager = new AuthManager();
 		
 		connectionManager = new ConnectionManager(this, serverProperties.getIP(), serverProperties.getPortNumber());
@@ -54,7 +58,17 @@ public class Server
 	
 	private void update()
 	{	
+		long id = -1;
 		
+		Map<Long, Entity> entities = world.getEntities();
+		for(Entity entity : entities.values())
+		{
+			id = entity.getId();
+			break;
+		}
+		
+		Random random = new Random();
+		world.updateEntityPos(id, new Vector3(random.nextInt(10), 0, random.nextInt(10)), new Vector3(random.nextInt(10), 0, random.nextInt(10)));
 	}
 
 	public void stop()
@@ -64,7 +78,7 @@ public class Server
 	
 	public static World getMap()
 	{
-		return map;
+		return world;
 	}
 
 	public AuthManager getAuthManager()
