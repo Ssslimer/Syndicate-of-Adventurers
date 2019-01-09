@@ -10,11 +10,15 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.badlogic.gdx.math.Vector3;
 import com.moag.game.networking.MessageStatus;
+import com.moag.game.networking.MoveDirection;
+import com.moag.game.networking.messages.AttackMessage;
 import com.moag.game.networking.messages.LoadMapMessage;
 import com.moag.game.networking.messages.LoginMessage;
 import com.moag.game.networking.messages.Message;
 import com.moag.game.networking.messages.MessageFromServer;
+import com.moag.game.networking.messages.MoveMessage;
 import com.moag.game.networking.messages.PingMessage;
 import com.moag.game.networking.messages.RegisterMessage;
 import com.moag.game.networking.messages.SendMapMessage;
@@ -123,6 +127,32 @@ public class ClientConnection extends Thread
     		stopConnection();
     		return MessageStatus.ERROR;
     	}
+	}
+	
+	public void move(MoveDirection direction, boolean toStop)
+	{
+		try 
+		{
+			sendToServer(new MoveMessage(sessionId, direction, toStop));
+			
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void attack()
+	{
+		try 
+		{
+			sendToServer(new AttackMessage(sessionId));
+			
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadMap()
