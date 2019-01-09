@@ -3,6 +3,7 @@ package com.moag.game.entities;
 import java.io.Serializable;
 
 import com.badlogic.gdx.math.Vector3;
+import com.moag.game.networking.MoveDirection;
 
 public class Entity implements Serializable
 {
@@ -13,7 +14,8 @@ public class Entity implements Serializable
 	
 	protected Vector3 position;
 	protected Vector3 velocity = new Vector3();
-	protected float rotation;
+	//protected float rotation;
+	protected MoveDirection direction;
 
 	public Entity(Vector3 position)
 	{
@@ -22,6 +24,8 @@ public class Entity implements Serializable
 		
 		this.position = position;
 	}
+	
+	public void update() {}
 	
 	public Vector3 getPosition()
 	{
@@ -33,14 +37,24 @@ public class Entity implements Serializable
 		this.position = position;
 	}
 
-	public float getRotation()
+//	public float getRotation()
+//	{
+//		return rotation;
+//	}
+//
+//	public void setRotation(float rotation)
+//	{
+//		this.rotation = rotation;
+//	}
+	
+	public MoveDirection getDirection()
 	{
-		return rotation;
+		return this.direction;
 	}
-
-	public void setRotation(float rotation)
+	
+	public void setDirection(MoveDirection direction)
 	{
-		this.rotation = rotation;
+		this.direction = direction;
 	}
 	
 	public long getId() 

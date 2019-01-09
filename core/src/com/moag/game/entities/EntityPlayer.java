@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
+import com.moag.game.networking.MoveDirection;
+import com.moag.game.server.Server;
 
 public class EntityPlayer extends Entity
 {
@@ -19,7 +21,12 @@ public class EntityPlayer extends Entity
 	private int attackPower;
 	private int defencePower;
 	
-	private List<Item> eqList = new ArrayList<>(); 
+	private List<Item> eqList = new ArrayList<>();
+	
+	boolean moveUp;
+	boolean moveDown;
+	boolean moveLeft;
+	boolean moveRight;
 	
 	public EntityPlayer(Vector3 position) {
 		super(position);
@@ -37,6 +44,34 @@ public class EntityPlayer extends Entity
 		
 		eqList = player.getEqList();
 		determinePlayerStats();
+	}
+	
+	@Override
+	public void update()
+	{
+		if(moveUp)
+		{
+			position.y++;
+			this.direction = MoveDirection.UP;
+		}
+		
+		if(moveDown)
+		{
+			position.y--;
+			this.direction = MoveDirection.DOWN;
+		}
+		
+		if(moveRight)
+		{
+			position.x++;
+			this.direction = MoveDirection.RIGHT;
+		}
+		
+		if(moveLeft)
+		{
+			position.x--;
+			this.direction = MoveDirection.LEFT;
+		}
 	}
 	
 	public long getPlayerID()
@@ -108,5 +143,30 @@ public class EntityPlayer extends Entity
 		{
 			HP -= damageAttack;
 		}
+	}
+	
+	public void move(MoveDirection direction, boolean ifToStop)
+	{
+		if(direction == MoveDirection.UP)
+		{
+			moveUp = !ifToStop;
+		}
+		else if(direction == MoveDirection.DOWN)
+		{
+			moveDown = !ifToStop;
+		}
+		else if(direction == MoveDirection.LEFT)
+		{
+			moveLeft = !ifToStop;
+		}
+		else if(direction == MoveDirection.RIGHT)
+		{
+			moveRight = !ifToStop;
+		}
+	}
+	
+	public void attack()
+	{
+		Server.getMap().attackIfEnemyInFront(attackPower, position, direction);
 	}
 }

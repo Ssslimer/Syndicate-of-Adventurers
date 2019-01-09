@@ -7,7 +7,7 @@ public class ClientMessage extends Message
 {
 	private static final long serialVersionUID = -8860359814688077896L;
 
-	protected long sessionId;
+	protected final long sessionId;
 	
 	public ClientMessage(MessageType messageType, long sessionId)
 	{
