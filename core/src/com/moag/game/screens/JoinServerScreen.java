@@ -1,8 +1,12 @@
 package com.moag.game.screens;
 
+import java.nio.file.Paths;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,6 +38,8 @@ public class JoinServerScreen implements Screen
 	private final String ip;
 	private final int port;
 	
+	private Sound CLANG;
+	
 	public JoinServerScreen(SyndicateOfAdventurers game, String ip, int port)
 	{	
 		this.game = game;
@@ -42,6 +48,8 @@ public class JoinServerScreen implements Screen
 		
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		
+		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 		
 		setupPlayerNameTextField();
 		setupPasswordTextField();
@@ -175,6 +183,7 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				CLANG .play(1.0f);
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 				
@@ -214,6 +223,7 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				CLANG .play(1.0f);
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 	
@@ -243,6 +253,7 @@ public class JoinServerScreen implements Screen
 			@Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
+				CLANG .play(1.0f);
 		    	game.setScreen(new MainMenuScreen(game));
 		    }
 	    });

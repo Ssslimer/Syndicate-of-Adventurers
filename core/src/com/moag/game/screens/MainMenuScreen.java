@@ -1,8 +1,12 @@
 package com.moag.game.screens;
 
+import java.nio.file.Paths;
+
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,13 +33,17 @@ public class MainMenuScreen implements Screen
 	private Skin skin;
 	private TextField serverIPField, serverPortField;
 	private TextButton joinServerButton, quitButton;
-
+		
+	private Sound CLANG;
+	
 	public MainMenuScreen(SyndicateOfAdventurers game)
 	{
 		this.game = game;
 		stage = new Stage(new ScreenViewport());
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		
+		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 		
 		setupServerIPField();
 		setupServerPortField();
@@ -152,6 +160,7 @@ public class MainMenuScreen implements Screen
 		    @Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
+		    	CLANG.play(1.0f);
 		    	String ip = serverIPField.getText();
 		    	if(!ServerAddressValidator.isIPAddressCorrect(ip))
 		    	{
@@ -198,6 +207,16 @@ public class MainMenuScreen implements Screen
 		    @Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
+		    	CLANG.play(1.0f);
+		    	
+		    	try 
+		    	{
+					Thread.sleep(1000);
+				} 
+		    	catch (InterruptedException e) 
+		    	{
+					e.printStackTrace();
+				}
 		    	Gdx.app.exit();
 		    }
 	    });
