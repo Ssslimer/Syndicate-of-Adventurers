@@ -1,6 +1,7 @@
 package com.moag.game.networking.messages;
 
 import com.moag.game.networking.MessageType;
+import com.moag.game.networking.messages.fromclient.ClientMessage;
 
 public class AttackMessage extends ClientMessage
 {

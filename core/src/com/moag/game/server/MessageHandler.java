@@ -9,11 +9,11 @@ import java.util.concurrent.Executors;
 
 import com.moag.game.networking.MessageStatus;
 import com.moag.game.networking.MessageType;
-import com.moag.game.networking.messages.LoginMessage;
 import com.moag.game.networking.messages.Message;
-import com.moag.game.networking.messages.MessageFromServer;
-import com.moag.game.networking.messages.RegisterMessage;
-import com.moag.game.networking.messages.SendMapMessage;
+import com.moag.game.networking.messages.fromclient.LoginMessage;
+import com.moag.game.networking.messages.fromclient.RegisterMessage;
+import com.moag.game.networking.messages.fromserver.MessageFromServer;
+import com.moag.game.networking.messages.fromserver.SendMapMessage;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;

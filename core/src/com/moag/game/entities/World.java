@@ -2,25 +2,39 @@ package com.moag.game.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Vector3;
 
-public class Map implements Serializable
+public class World implements Serializable
 {	
 	private static final long serialVersionUID = -787730389424356815L;
 	
-	private List<Entity> entities = new ArrayList<>();
+	private Map<Long, Entity> entities = new HashMap<>();
 	private List<TerrainTile> terrain = new ArrayList<>();
 	
-	public Map()
+	public World()
 	{
 		generateMap();
 	}
 	
 	public void spawnEntity(Entity entity)
 	{
-		entities.add(entity);
+		entities.put(entity.getId(), entity);
+	}
+	
+	public Entity getEntity(long id)
+	{
+		return entities.get(id);
+	}
+	
+	public void updateEntityPos(long id, Vector3 position, Vector3 velocity)
+	{
+		Entity entity = entities.get(id);
+		entity.position = position;
+		entity.velocity = velocity;
 	}
 	
 	private void generateMap()
@@ -35,7 +49,7 @@ public class Map implements Serializable
 		}
 	}
 
-	public List<Entity> getEntities()
+	public Map<Long, Entity> getEntities()
 	{
 		return entities;
 	}

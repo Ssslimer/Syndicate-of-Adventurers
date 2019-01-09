@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.moag.game.Resources;
 import com.moag.game.SyndicateOfAdventurers;
-import com.moag.game.entities.Map;
+import com.moag.game.entities.World;
 import com.moag.game.entities.TerrainTile;
 
 public class GameScreen implements Screen 
@@ -51,7 +51,7 @@ public class GameScreen implements Screen
     	this.cam.update();
         
         Resources r = new Resources();
-        Map map = new Map();
+        World map = new World();
         List<TerrainTile> terrain = map.getTerrain();
         for(TerrainTile tile : terrain)
         {

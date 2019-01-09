@@ -2,6 +2,7 @@ package com.moag.game.networking.messages;
 
 import com.badlogic.gdx.math.Vector3;
 import com.moag.game.networking.MessageType;
+import com.moag.game.networking.messages.fromclient.ClientMessage;
 
 public class MoveMessage extends ClientMessage
 {

@@ -2,7 +2,7 @@ package com.moag.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
-import com.moag.game.entities.Map;
+import com.moag.game.entities.World;
 import com.moag.game.screens.MainMenuScreen;
 
 public class SyndicateOfAdventurers extends Game
@@ -10,7 +10,7 @@ public class SyndicateOfAdventurers extends Game
 	private AssetManager assetManager;
 	private static ClientConnection client;
 	private static Resources resources;
-	private static Map gameMap;
+	private static World gameMap;
 
 	@Override
 	public void create()
@@ -46,12 +46,12 @@ public class SyndicateOfAdventurers extends Game
 		return resources;
 	}
 	
-	public static Map getGameMap()
+	public static World getGameMap()
 	{
 		return gameMap;
 	}
 	
-	public static void setGameMap(Map map)
+	public static void setGameMap(World map)
 	{
 		gameMap = map;
 	}

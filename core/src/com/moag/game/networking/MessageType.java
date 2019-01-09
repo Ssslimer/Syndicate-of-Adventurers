@@ -11,5 +11,6 @@ public enum MessageType
 	MOVE,
 	ATTACK,
 	
-	FROM_SERVER
+	FROM_SERVER, 
+	UPDATE_ENTITY
 }

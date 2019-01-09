@@ -1,4 +1,4 @@
-package com.moag.game.networking.messages;
+package com.moag.game.networking.messages.fromclient;
 
 import com.moag.game.networking.MessageType;
 

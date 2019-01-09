@@ -6,13 +6,20 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Entity implements Serializable
 {
-	private static final long serialVersionUID = -2948009979518301886L;
+	private static final long serialVersionUID = 9193370594513812803L;
+	
+	private static long lastId = 0;
+	protected final long id;
 	
 	protected Vector3 position;
+	protected Vector3 velocity = new Vector3();
 	protected float rotation;
 
 	public Entity(Vector3 position)
 	{
+		this.id = lastId;
+		lastId++;
+		
 		this.position = position;
 	}
 	
@@ -34,5 +41,10 @@ public class Entity implements Serializable
 	public void setRotation(float rotation)
 	{
 		this.rotation = rotation;
+	}
+	
+	public long getId() 
+	{
+		return id;
 	}
 }

@@ -11,13 +11,13 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.moag.game.networking.MessageStatus;
-import com.moag.game.networking.messages.LoadMapMessage;
-import com.moag.game.networking.messages.LoginMessage;
 import com.moag.game.networking.messages.Message;
-import com.moag.game.networking.messages.MessageFromServer;
-import com.moag.game.networking.messages.PingMessage;
-import com.moag.game.networking.messages.RegisterMessage;
-import com.moag.game.networking.messages.SendMapMessage;
+import com.moag.game.networking.messages.fromclient.LoginMessage;
+import com.moag.game.networking.messages.fromclient.PingMessage;
+import com.moag.game.networking.messages.fromclient.RegisterMessage;
+import com.moag.game.networking.messages.fromserver.MessageFromServer;
+import com.moag.game.networking.messages.fromserver.SendMapMessage;
+import com.moag.game.networking.messages.fromserver.UpdateEntityMessage;
 
 public class ClientConnection extends Thread
 {
@@ -124,18 +124,6 @@ public class ClientConnection extends Thread
     		return MessageStatus.ERROR;
     	}
 	}
-	
-	public void loadMap()
-	{
-	    try
-		{
-			sendToServer(new LoadMapMessage(sessionId));
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
 
 	private void handleCallback(Message serverCallback)
 	{	
@@ -160,6 +148,11 @@ public class ClientConnection extends Thread
 			
 			case LOAD_MAP:
 				SyndicateOfAdventurers.setGameMap(((SendMapMessage) serverCallback).getMap());
+			break;
+
+			case UPDATE_ENTITY:
+				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
+				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
 			break;
 			
 			default:
