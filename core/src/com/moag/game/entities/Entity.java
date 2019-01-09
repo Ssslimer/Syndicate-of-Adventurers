@@ -23,6 +23,8 @@ public class Entity implements Serializable
 		this.position = position;
 	}
 	
+	public void update() {}
+	
 	public Vector3 getPosition()
 	{
 		return position;

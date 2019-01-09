@@ -29,6 +29,7 @@ public class EntityEnemy extends Entity
 		defencePower = BASE_ENEMY_DEFENCE;		
 	}
 	
+	@Override
 	public void update()
 	{
 		double xTranslationProbability = rand.nextDouble();

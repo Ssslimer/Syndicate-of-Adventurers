@@ -7,9 +7,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.moag.game.entities.EntityPlayer;
 import com.moag.game.networking.MessageStatus;
 import com.moag.game.networking.MessageType;
+import com.moag.game.networking.MoveDirection;
 import com.moag.game.networking.messages.Message;
+import com.moag.game.networking.messages.MoveMessage;
 import com.moag.game.networking.messages.fromclient.LoginMessage;
 import com.moag.game.networking.messages.fromclient.RegisterMessage;
 import com.moag.game.networking.messages.fromserver.MessageFromServer;
@@ -103,7 +106,9 @@ public class MessageHandler extends Thread
 				
 				if(connectionWithClient.isLogedIn())
 				{
-					
+					MoveDirection direction = ((MoveMessage)task.getMessage()).getDirection();
+					boolean ifStop = ((MoveMessage)task.getMessage()).getIfToStop();
+					((EntityPlayer)Server.getMap().getEntities().get(((MoveMessage)task.getMessage()).getSessionId())).move(direction, ifStop);
 				}
 			break;
 				

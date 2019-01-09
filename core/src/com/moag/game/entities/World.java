@@ -58,4 +58,12 @@ public class World implements Serializable
 	{
 		return terrain;
 	}
+	
+	public void update()
+	{
+		for(Entity e : entities.values())
+		{
+			e.update();
+		}
+	}
 }

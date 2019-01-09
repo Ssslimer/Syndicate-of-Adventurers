@@ -69,6 +69,7 @@ public class Server
 		
 		Random random = new Random();
 		world.updateEntityPos(id, new Vector3(random.nextInt(10), 0, random.nextInt(10)), new Vector3(random.nextInt(10), 0, random.nextInt(10)));
+		world.update();
 	}
 
 	public void stop()
