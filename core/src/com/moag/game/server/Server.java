@@ -75,7 +75,6 @@ public class Server
 		}
 		
 		Random random = new Random();
-<<<<<<< HEAD
 		Vector3 position = new Vector3(random.nextInt(10), 0, random.nextInt(10));
 		Vector3 velocity = new Vector3(new Vector3(random.nextInt(10), 0, random.nextInt(10)));
 		world.updateEntityPos(id, position, velocity);
@@ -100,10 +99,6 @@ public class Server
 				System.out.println(e);
 			}
 		}
-=======
-		world.updateEntityPos(id, new Vector3(random.nextInt(10), 0, random.nextInt(10)), new Vector3(random.nextInt(10), 0, random.nextInt(10)));
-		world.update();
->>>>>>> branch 'master' of https://github.com/Ssslimer/Syndicate-of-Adventurers.git
 	}
 
 	public void stop()

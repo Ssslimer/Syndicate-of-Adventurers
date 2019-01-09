@@ -13,6 +13,8 @@ eclipse.project
 dependencies
 {
 	compile 'de.mkammerer:argon2-jvm:2.5'
+	compile 'org.apache.commons:commons-lang3:3.8.1'
+	
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
   	compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"

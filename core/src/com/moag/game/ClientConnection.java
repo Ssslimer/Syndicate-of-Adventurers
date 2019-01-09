@@ -181,6 +181,7 @@ public class ClientConnection extends Thread
 
 			case UPDATE_ENTITY:
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
+				System.out.println(message);
 				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
 			break;
 			
