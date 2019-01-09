@@ -3,6 +3,8 @@ package com.moag.game.entities;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
+import com.moag.game.networking.MoveDirection;
+import com.moag.game.server.Server;
 
 public class EntityEnemy extends Entity
 {
@@ -34,23 +36,33 @@ public class EntityEnemy extends Entity
 	{
 		double xTranslationProbability = rand.nextDouble();
 		double yTranslationProbability = rand.nextDouble();
+		double attackProbability = rand.nextDouble();
 		
 		if(xTranslationProbability <= 0.33d)
 		{
 			position.x++;
+			this.direction = MoveDirection.RIGHT;
 		}
 		else if(xTranslationProbability <= 0.67d)
 		{
 			position.x--;
+			this.direction = MoveDirection.LEFT;
 		}
 		
 		if(yTranslationProbability <= 0.33d)
 		{
 			position.y++;
+			this.direction = MoveDirection.UP;
 		}
 		else if(yTranslationProbability <= 0.67d)
 		{
 			position.y--;
+			this.direction = MoveDirection.DOWN;
+		}
+		
+		if(attackProbability <= 0.5d)
+		{
+			attack();
 		}
 	}
 	
@@ -78,4 +90,10 @@ public class EntityEnemy extends Entity
 			HP -= damageAttack;
 		}
 	}
+	
+	private void attack()
+	{
+		Server.getMap().attackIfPlayerInFront(attackPower, position, direction);
+	}
+	
 }

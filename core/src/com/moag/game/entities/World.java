@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.math.Vector3;
+import com.moag.game.networking.MoveDirection;
 
 public class World implements Serializable
 {	
@@ -64,6 +65,76 @@ public class World implements Serializable
 		for(Entity e : entities.values())
 		{
 			e.update();
+		}
+	}
+	
+	public void attackIfEnemyInFront(int damageAttack, Vector3 attackerPosition, MoveDirection attackDirection)
+	{
+		for(Entity e : entities.values())
+		{
+			if(attackDirection == MoveDirection.UP)
+			{
+				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.DOWN)
+			{
+				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.RIGHT)
+			{
+				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.LEFT)
+			{
+				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+		}
+	}
+	
+	public void attackIfPlayerInFront(int damageAttack, Vector3 attackerPosition, MoveDirection attackDirection)
+	{
+		for(Entity e : entities.values())
+		{
+			if(attackDirection == MoveDirection.UP)
+			{
+				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.DOWN)
+			{
+				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.RIGHT)
+			{
+				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.LEFT)
+			{
+				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 import com.moag.game.networking.MoveDirection;
+import com.moag.game.server.Server;
 
 public class EntityPlayer extends Entity
 {
@@ -51,21 +52,25 @@ public class EntityPlayer extends Entity
 		if(moveUp)
 		{
 			position.y++;
+			this.direction = MoveDirection.UP;
 		}
 		
 		if(moveDown)
 		{
 			position.y--;
+			this.direction = MoveDirection.DOWN;
 		}
 		
 		if(moveRight)
 		{
 			position.x++;
+			this.direction = MoveDirection.RIGHT;
 		}
 		
 		if(moveLeft)
 		{
 			position.x--;
+			this.direction = MoveDirection.LEFT;
 		}
 	}
 	
@@ -158,5 +163,10 @@ public class EntityPlayer extends Entity
 		{
 			moveRight = !ifToStop;
 		}
+	}
+	
+	public void attack()
+	{
+		Server.getMap().attackIfEnemyInFront(attackPower, position, direction);
 	}
 }

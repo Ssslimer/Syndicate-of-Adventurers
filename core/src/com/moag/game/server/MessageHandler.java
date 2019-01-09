@@ -116,7 +116,7 @@ public class MessageHandler extends Thread
 				
 				if(connectionWithClient.isLogedIn())
 				{
-					
+					((EntityPlayer)Server.getMap().getEntities().get(((MoveMessage)task.getMessage()).getSessionId())).attack();
 				}
 			break;
 				
