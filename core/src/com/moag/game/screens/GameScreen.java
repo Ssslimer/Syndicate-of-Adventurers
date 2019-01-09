@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -17,12 +19,14 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
 import com.moag.game.Resources;
 import com.moag.game.SyndicateOfAdventurers;
 import com.moag.game.entities.World;
 import com.moag.game.entities.TerrainTile;
+import com.moag.game.networking.MoveDirection;
 
-public class GameScreen implements Screen 
+public class GameScreen implements Screen, InputProcessor 
 {
 	private SyndicateOfAdventurers game;
 	
@@ -120,4 +124,76 @@ public class GameScreen implements Screen
 	
 	    return (modelBuilder.end());
     }
+
+	@Override
+	public boolean keyDown(int keycode) 
+	{ 
+		switch(keycode)
+		{
+		case Input.Keys.W:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.UP, false);
+		break;
+		
+		case Input.Keys.S:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, false);
+		break;
+			
+		case Input.Keys.A:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, false);
+		break;
+			
+		case Input.Keys.D:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, false);
+		break;
+		
+		}
+		return false; 
+	}
+
+	@Override
+	public boolean keyUp(int keycode) 
+	{ 
+		switch(keycode)
+		{
+		case Input.Keys.W:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.UP, true);
+		break;
+		
+		case Input.Keys.S:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, true);
+		break;
+			
+		case Input.Keys.A:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, true);
+		break;
+			
+		case Input.Keys.D:
+			SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, true);
+		break;
+		
+		}
+		return false; 
+	}
+
+	@Override
+	public boolean keyTyped(char character) { return false; }
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
+	{
+		SyndicateOfAdventurers.getClient().attack();	
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) { return false; }
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) { return false; }
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) { return false; }
+
+	@Override
+	public boolean scrolled(int amount) { return false; }
 }
