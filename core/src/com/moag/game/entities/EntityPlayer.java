@@ -50,28 +50,55 @@ public class EntityPlayer extends Entity
 	@Override
 	public void update()
 	{
-		if(moveUp)
-		{
-			position.y++;
-			this.direction = MoveDirection.UP;
-		}
-		
-		if(moveDown)
-		{
-			position.y--;
-			this.direction = MoveDirection.DOWN;
-		}
-		
-		if(moveRight)
+		if(moveUp && moveRight)
 		{
 			position.x++;
-			this.direction = MoveDirection.RIGHT;
+			position.y++;
+			this.direction = MoveDirection.UP_AND_RIGHT;
 		}
-		
-		if(moveLeft)
+		else if(moveUp && moveLeft)
 		{
 			position.x--;
-			this.direction = MoveDirection.LEFT;
+			position.y++;
+			this.direction = MoveDirection.UP_AND_LEFT;
+		}
+		else if(moveDown && moveRight)
+		{
+			position.x++;
+			position.y--;
+			this.direction = MoveDirection.DOWN_AND_RIGHT;
+		}
+		else if(moveDown && moveLeft)
+		{
+			position.x--;
+			position.y--;
+			this.direction = MoveDirection.DOWN_AND_LEFT;
+		}
+		else
+		{
+			if(moveUp)
+			{
+				position.y++;
+				this.direction = MoveDirection.UP;
+			}
+			
+			if(moveDown)
+			{
+				position.y--;
+				this.direction = MoveDirection.DOWN;
+			}
+			
+			if(moveRight)
+			{
+				position.x++;
+				this.direction = MoveDirection.RIGHT;
+			}
+			
+			if(moveLeft)
+			{
+				position.x--;
+				this.direction = MoveDirection.LEFT;
+			}
 		}
 	}
 	
