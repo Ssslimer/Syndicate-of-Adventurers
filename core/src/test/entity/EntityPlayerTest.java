@@ -73,7 +73,7 @@ class EntityPlayerTest
 		e.move(MoveDirection.RIGHT, false);	
 		e.update();
 		
-		assertTrue(e.getPosition().x == 1); // after update it should move in x axis by 1
+		assertTrue(e.getPosition().x == 6); // after update it should move in x axis by 1
 		assertTrue(e.getPosition().y == 7); // after update it should move in y axis by 1
 		assertTrue(e.getPosition().z == 5);
 		
@@ -83,7 +83,7 @@ class EntityPlayerTest
 		e.update();
 		
 		// we expect that it won't move after update
-		assertTrue(e.getPosition().x == 1);
+		assertTrue(e.getPosition().x == 6);
 		assertTrue(e.getPosition().y == 7);
 		assertTrue(e.getPosition().z == 5);
 	}
@@ -106,17 +106,18 @@ class EntityPlayerTest
 		assertTrue(e.getDefencePower() == BASE_PLAYER_DEFENCE + itemDefencePower);
 		assertTrue(e.getHP() == BASE_PLAYER_HP + itemHPPower);
 		
+		int hpBeforeDamage = e.getHP();
 		e.getDamage(damage);
 		
 		int realDamage = Clamp.clampInt(damage - e.getDefencePower(), 0, damage);
 		
-		assertTrue(e.getHP() == e.getHP() - realDamage);
+		assertTrue(e.getHP() == hpBeforeDamage - realDamage);
 		
 		e.removeItem(item);
 		
 		assertTrue(e.getAttackPower() == BASE_PLAYER_ATTACK);
 		assertTrue(e.getDefencePower() == BASE_PLAYER_DEFENCE);
-		assertTrue(e.getHP() == BASE_PLAYER_HP);
+		assertTrue(e.getHP() == BASE_PLAYER_HP - realDamage);
 	}
 
 }

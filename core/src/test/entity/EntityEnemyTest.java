@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
 import com.moag.game.entities.EntityEnemy;
+import com.moag.game.util.Clamp;
 
 class EntityEnemyTest 
 {
@@ -57,25 +58,16 @@ class EntityEnemyTest
 	}
 	
 	@Test
-	void entityEnemyMovementTest()
-	{
-		EntityEnemy e = new EntityEnemy(new Vector3(5, 1, 3));		
-		e.update();
-		
-		assertTrue(e.getPosition().x != 5 || e.getPosition().y != 1);
-		assertNotNull(e.getDirection());
-	}
-	
-	@Test
 	void entityGetDamage()
 	{
 		EntityEnemy e = new EntityEnemy(new Vector3(5, 1, 3));
 		int damage = 20;
 		
+		int realDamage = Clamp.clampInt(damage - e.getDefence(), 0, damage);
 		e.getDamage(damage);
 		
 		assertTrue(e.getHP() != BASE_ENEMY_HP);
-		assertTrue(e.getHP() == BASE_ENEMY_HP - damage);
+		assertTrue(e.getHP() == BASE_ENEMY_HP - realDamage);
 	}
 
 }
