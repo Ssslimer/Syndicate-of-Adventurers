@@ -2,6 +2,8 @@ package com.moag.game.server;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -19,6 +21,7 @@ public class Server
 	private ConnectionManager connectionManager;
 	private AuthManager authManager;
 	private static World world;
+	private static Map<Long, String> chat = Collections.synchronizedMap(new HashMap<>());
 	
 	public Server(ServerProperties serverProperties)
 	{
@@ -114,5 +117,15 @@ public class Server
 	public AuthManager getAuthManager()
 	{
 		return authManager;
+	}
+	
+	public static void addChatMessage(long userId, String chatMessageString)
+	{
+		chat.put(userId, chatMessageString);
+	}
+	
+	public static Map<Long, String> getChat()
+	{
+		return chat;
 	}
 }
