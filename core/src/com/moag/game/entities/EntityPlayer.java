@@ -28,7 +28,8 @@ public class EntityPlayer extends Entity
 	boolean moveLeft;
 	boolean moveRight;
 	
-	public EntityPlayer(Vector3 position) {
+	public EntityPlayer(Vector3 position) 
+	{
 		super(position);
 		
 		HP = BASE_PLAYER_HP;
@@ -118,11 +119,6 @@ public class EntityPlayer extends Entity
 			attackPower -= item.getAttack();
 			defencePower -= item.getDefence();
 		}
-	}
-	
-	public void move(Vector3 translation)
-	{
-		this.position.add(translation);
 	}
 	
 	private void determinePlayerStats()

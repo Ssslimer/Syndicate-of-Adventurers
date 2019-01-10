@@ -65,8 +65,7 @@ public class EntityEnemy extends Entity
 				position.y--;
 				this.direction = MoveDirection.DOWN_AND_RIGHT;
 			}
-		}
-		
+		}		
 		else
 		{
 			if(xTranslationProbability <= 0.33d)

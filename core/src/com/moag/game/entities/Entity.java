@@ -14,7 +14,6 @@ public class Entity implements Serializable
 	
 	protected Vector3 position;
 	protected Vector3 velocity = new Vector3();
-	//protected float rotation;
 	protected MoveDirection direction;
 
 	public Entity(Vector3 position)
@@ -36,16 +35,6 @@ public class Entity implements Serializable
 	{
 		this.position = position;
 	}
-
-//	public float getRotation()
-//	{
-//		return rotation;
-//	}
-//
-//	public void setRotation(float rotation)
-//	{
-//		this.rotation = rotation;
-//	}
 	
 	public MoveDirection getDirection()
 	{
