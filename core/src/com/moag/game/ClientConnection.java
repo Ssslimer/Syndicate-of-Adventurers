@@ -15,6 +15,7 @@ import com.moag.game.networking.MoveDirection;
 import com.moag.game.networking.messages.AttackMessage;
 import com.moag.game.networking.messages.Message;
 import com.moag.game.networking.messages.MoveMessage;
+import com.moag.game.networking.messages.fromclient.ChatMessage;
 import com.moag.game.networking.messages.fromclient.LoginMessage;
 import com.moag.game.networking.messages.fromclient.PingMessage;
 import com.moag.game.networking.messages.fromclient.RegisterMessage;
@@ -88,6 +89,19 @@ public class ClientConnection extends Thread
 		try 
 		{
 			sendToServer(new AttackMessage(sessionId));
+
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void sentChatMessage(String chatMessageString)
+	{
+		try 
+		{
+			sendToServer(new ChatMessage(chatMessageString));
 
 		} 
 		catch (IOException e) 

@@ -10,6 +10,7 @@ public enum MessageType
 	
 	MOVE,
 	ATTACK,
+	CHAT_MESSAGE,
 	
 	FROM_SERVER, 
 	UPDATE_ENTITY
