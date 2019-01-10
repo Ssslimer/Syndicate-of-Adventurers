@@ -72,7 +72,35 @@ public class World implements Serializable
 	{
 		for(Entity e : entities.values())
 		{
-			if(attackDirection == MoveDirection.UP)
+			if(attackDirection == MoveDirection.UP_AND_RIGHT)
+			{
+				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.UP_AND_LEFT)
+			{
+				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
+			{
+				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
+			{
+				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
+				{
+					((EntityEnemy)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.UP)
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityEnemy)
 				{
@@ -107,7 +135,35 @@ public class World implements Serializable
 	{
 		for(Entity e : entities.values())
 		{
-			if(attackDirection == MoveDirection.UP)
+			if(attackDirection == MoveDirection.UP_AND_RIGHT)
+			{
+				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.UP_AND_LEFT)
+			{
+				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
+			{
+				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
+			{
+				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
+				{
+					((EntityPlayer)e).getDamage(damageAttack);
+				}
+			}
+			else if(attackDirection == MoveDirection.UP)
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityPlayer)
 				{

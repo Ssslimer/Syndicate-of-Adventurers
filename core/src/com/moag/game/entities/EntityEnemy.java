@@ -34,32 +34,64 @@ public class EntityEnemy extends Entity
 	@Override
 	public void update()
 	{
+		double xAndYTranslationProbability = rand.nextDouble();
 		double xTranslationProbability = rand.nextDouble();
 		double yTranslationProbability = rand.nextDouble();
 		double attackProbability = rand.nextDouble();
 		
-		if(xTranslationProbability <= 0.33d)
+		if(xAndYTranslationProbability <= 0.5d)
 		{
-			position.x++;
-			this.direction = MoveDirection.RIGHT;
-		}
-		else if(xTranslationProbability <= 0.67d)
-		{
-			position.x--;
-			this.direction = MoveDirection.LEFT;
+			if(xTranslationProbability <= 0.5d && yTranslationProbability <= 0.5d)
+			{
+				position.x++;
+				position.y++;
+				this.direction = MoveDirection.UP_AND_RIGHT;
+			}
+			else if(xTranslationProbability > 0.5d && yTranslationProbability <= 0.5d)
+			{
+				position.x--;
+				position.y++;
+				this.direction = MoveDirection.UP_AND_LEFT;
+			}
+			else if(xTranslationProbability <= 0.5d && yTranslationProbability > 0.5d)
+			{
+				position.x++;
+				position.y--;
+				this.direction = MoveDirection.DOWN_AND_LEFT;
+			}
+			else if(xTranslationProbability > 0.5d && yTranslationProbability > 0.5d)
+			{
+				position.x--;
+				position.y--;
+				this.direction = MoveDirection.DOWN_AND_RIGHT;
+			}
 		}
 		
-		if(yTranslationProbability <= 0.33d)
+		else
 		{
-			position.y++;
-			this.direction = MoveDirection.UP;
+			if(xTranslationProbability <= 0.33d)
+			{
+				position.x++;
+				this.direction = MoveDirection.RIGHT;
+			}
+			else if(xTranslationProbability <= 0.67d)
+			{
+				position.x--;
+				this.direction = MoveDirection.LEFT;
+			}
+			
+			if(yTranslationProbability <= 0.33d)
+			{
+				position.y++;
+				this.direction = MoveDirection.UP;
+			}
+			else if(yTranslationProbability <= 0.67d)
+			{
+				position.y--;
+				this.direction = MoveDirection.DOWN;
+			}
 		}
-		else if(yTranslationProbability <= 0.67d)
-		{
-			position.y--;
-			this.direction = MoveDirection.DOWN;
-		}
-		
+
 		if(attackProbability <= 0.5d)
 		{
 			attack();
