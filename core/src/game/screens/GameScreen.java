@@ -1,15 +1,24 @@
 package screens;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -19,12 +28,21 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import entities.TerrainTile;
 import entities.World;
 import networking.MoveDirection;
 import other.Resources;
 import other.SyndicateOfAdventurers;
+import util.ConfigConstants;
 
 public class GameScreen implements Screen, InputProcessor 
 {
@@ -32,13 +50,29 @@ public class GameScreen implements Screen, InputProcessor
 	
 	private PerspectiveCamera cam;
     private ModelBatch modelBatch;
+    
     private List<ModelInstance> terrainModels = new ArrayList<>();
     private Environment environment;
     private ModelBuilder modelBuilder;
+    
+    private SpriteBatch spriteBatch;
+    private Texture chatTexture;
+    
+    private Stage stage;
+    
+    private Skin skin;
+    private TextField chatText;
+    private TextButton chatSendText;
+    
+    private Sound CLANG;
+    
+    private boolean usingChat;
 	
 	public GameScreen(SyndicateOfAdventurers game)
 	{	
 		this.game = game;
+		
+		stage = new Stage();
 		
     	this.environment = new Environment();
     	this.environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -53,6 +87,15 @@ public class GameScreen implements Screen, InputProcessor
     	this.cam.near = 1f;
     	this.cam.far = 300f;
     	this.cam.update();
+    	
+    	spriteBatch = new SpriteBatch();
+    	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "chatbackground.jpg").toString(), FileType.Internal));
+    	
+    	skin = new Skin(Gdx.files.internal("uiskin.json"));
+    	setupChatTextField();
+    	setupChatSendTextButton();
+    	
+    	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
         
         Resources r = new Resources();
         World map = new World();
@@ -69,30 +112,52 @@ public class GameScreen implements Screen, InputProcessor
 		try{Thread.sleep(5000);}
 		catch(InterruptedException e){e.printStackTrace();}
 		
-		while(true)
-		{
-			SyndicateOfAdventurers.getClient().pingServer();
-			try{Thread.sleep(1000);}
-			catch(InterruptedException e){e.printStackTrace();}
-		}
+		Gdx.input.setInputProcessor(this);
+		
+		
+//		while(true)
+//		{
+//			SyndicateOfAdventurers.getClient().pingServer();
+//			try{Thread.sleep(1000);}
+//			catch(InterruptedException e){e.printStackTrace();}
+//		}
 	}
-	
+
 	@Override
 	public void show() {}
 
 	@Override
 	public void render(float delta)
 	{
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        modelBatch.begin(cam);
+        renderGameplay();
+        renderChat();
+	}
+	
+	private void renderGameplay()
+	{
+		modelBatch.begin(cam);
         modelBatch.render(terrainModels, environment);
-        modelBatch.end();        
+        modelBatch.end();
+	}
+	
+	private void renderChat()
+	{
+		spriteBatch.begin();
+		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - chatTexture.getWidth(), 0);
+		spriteBatch.end();
+		
+		stage.act();
+		stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) {}
+	public void resize(int width, int height) 
+	{
+		Gdx.gl.glViewport(0, 0, width, height);
+	}
 
 	@Override
 	public void pause() {}
@@ -153,25 +218,29 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean keyUp(int keycode) 
 	{ 
-		switch(keycode)
+		if(!usingChat)
 		{
-		case Input.Keys.W:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.UP, true);
-		break;
-		
-		case Input.Keys.S:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, true);
-		break;
+			switch(keycode)
+			{
+			case Input.Keys.W:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.UP, true);
+			break;
 			
-		case Input.Keys.A:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, true);
-		break;
+			case Input.Keys.S:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, true);
+			break;
+				
+			case Input.Keys.A:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, true);
+			break;
+				
+			case Input.Keys.D:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, true);
+			break;
 			
-		case Input.Keys.D:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, true);
-		break;
-		
+			}
 		}
+		
 		return false; 
 	}
 
@@ -181,7 +250,19 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
-		SyndicateOfAdventurers.getClient().attack();	
+		if(screenX >= ConfigConstants.WIDTH - chatTexture.getWidth() &&
+				screenY >= ConfigConstants.HEIGHT - chatTexture.getHeight())
+		{
+			usingChat = true;
+		}		
+		else
+		{
+			usingChat = false;
+			
+			CLANG.play(1.0f);
+			SyndicateOfAdventurers.getClient().attack();
+			
+		}
 		return false;
 	}
 
@@ -196,4 +277,67 @@ public class GameScreen implements Screen, InputProcessor
 
 	@Override
 	public boolean scrolled(int amount) { return false; }
+	
+	private void setupChatTextField() 
+	{
+		TextFieldStyle style = new TextFieldStyle();
+		style.fontColor = Color.BLACK;
+		style.font = new BitmapFont();
+		
+		chatText = new TextField("", style);
+		chatText.setText("Type message...");
+		
+		chatText.setWidth((chatTexture.getWidth()/10f)*8f);
+		chatText.setHeight(chatTexture.getWidth() / 10f);
+		
+		float posX = ConfigConstants.WIDTH - chatTexture.getWidth() + 10f;
+		float posY = 10f;
+		
+		chatText.setPosition(posX, posY);
+		
+		Pixmap background = new Pixmap((int)posX, (int)posY, Pixmap.Format.RGB888);
+		background.setColor(Color.GRAY);
+		background.fill();
+		
+		chatText.getStyle().background = new Image(new Texture(background)).getDrawable();
+
+		chatText.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+		    {
+				chatText.setText("");
+		    }
+		});
+		
+		stage.addActor(chatText);
+	}
+	
+	private void setupChatSendTextButton() 
+	{
+		chatSendText = new TextButton("Send", skin);
+		chatSendText.setWidth(chatTexture.getWidth()/10f);
+		chatSendText.setHeight(chatText.getHeight());
+
+		float posX = ConfigConstants.WIDTH - 50f;
+//		float posY = ConfigConstants.HEIGHT - 10f;
+		
+		float posY = 10f;
+		chatSendText.setPosition(posX, posY);
+		
+		chatSendText.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
+				{
+					SyndicateOfAdventurers.getClient().sentChatMessage(chatText.getText());
+				}
+			}
+		});
+		
+		stage.addActor(chatSendText);
+	}
+
 }

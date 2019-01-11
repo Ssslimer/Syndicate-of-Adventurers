@@ -189,6 +189,7 @@ public class MainMenuScreen implements Screen
 		    	int port = Integer.parseInt(serverPortField.getText());	
 	    	
 		    	game.setScreen(new JoinServerScreen(game, ip, port));
+		    	dispose();
 		    }
 	    });
 		stage.addActor(joinServerButton);

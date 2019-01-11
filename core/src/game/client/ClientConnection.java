@@ -1,4 +1,4 @@
-package other;
+package client;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,11 +21,12 @@ import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.MessageFromServer;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import other.SyndicateOfAdventurers;
 
 public class ClientConnection extends Thread
 {
 	private Socket clientSocket;
-	private ObjectOutputStream streamToServer;
+	//private ObjectOutputStream streamToServer;
 	private ObjectInputStream streamFromServer;
 	
 	private final String ip;
@@ -34,6 +35,8 @@ public class ClientConnection extends Thread
 	private boolean isLogedIn;
 	private String login;
 	private long sessionId;
+	
+	private MessageSender sender;
 
 	public ClientConnection(String ip, int port)
 	{
@@ -43,9 +46,11 @@ public class ClientConnection extends Thread
 	
 	@Override
 	public void run()
-	{
+	{	
 		while(true)
 		{
+//			sender.start();
+			
 	    	Message fromServer = null;
 			try
 			{
@@ -72,41 +77,17 @@ public class ClientConnection extends Thread
 	
 	public void move(MoveDirection direction, boolean toStop)
 	{
-		try 
-		{
-			sendToServer(new MoveMessage(sessionId, direction, toStop));
-
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+		sender.addMessage(new MoveMessage(sessionId, direction, toStop));
 	}
 
 	public void attack()
 	{
-		try 
-		{
-			sendToServer(new AttackMessage(sessionId));
-
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+		sender.addMessage(new AttackMessage(sessionId));
 	}
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		try 
-		{
-			sendToServer(new ChatMessage(chatMessageString));
-
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+		sender.addMessage(new ChatMessage(chatMessageString));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -117,11 +98,16 @@ public class ClientConnection extends Thread
 			SocketFactory sslsocketfactory = SSLSocketFactory.getDefault();
 			clientSocket = sslsocketfactory.createSocket(ip, port);
 			System.out.println("Connected to server IP: " + ip + " Port: " + clientSocket.getPort());
+			
+			sender = new MessageSender(clientSocket);
+			sender.start();
 	
-    		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
+    		//streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
 	    	
-	    	sendToServer(new RegisterMessage(login, password));	    	
+	    	//sendToServer(new RegisterMessage(login, password));	
+	    	sender.addMessage(new RegisterMessage(login, password));
+	    	
 	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
 
 	    	System.out.println("Message from server: " + fromServer.toString());
@@ -149,10 +135,15 @@ public class ClientConnection extends Thread
 			clientSocket = sslsocketfactory.createSocket(ip, port);
 			System.out.println("Connected to server IP: " + ip + " Port: " + clientSocket.getPort());
 	
-    		streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
+			sender = new MessageSender(clientSocket);
+			sender.start();
+			
+    		//streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
     	
-	    	sendToServer(new LoginMessage(login, password));
+	    	//sendToServer(new LoginMessage(login, password));
+	    	sender.addMessage(new LoginMessage(login, password));
+	    	
 	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) start();
 	    	
@@ -203,10 +194,10 @@ public class ClientConnection extends Thread
 		}
 	}
 	
-	public void sendToServer(Message message) throws IOException
-	{
-		streamToServer.writeObject(message);
-	}
+//	public void sendToServer(Message message) throws IOException
+//	{
+//		streamToServer.writeObject(message);
+//	}
 	
 	private Message getDataFromServer() throws ClassNotFoundException, IOException, EOFException
 	{
@@ -215,14 +206,15 @@ public class ClientConnection extends Thread
 
 	public void pingServer()
 	{
-		try
-		{
-			sendToServer(new PingMessage(sessionId, System.currentTimeMillis()));
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
+		sender.addMessage(new PingMessage(sessionId, System.currentTimeMillis()));
+//		try
+//		{
+//			sendToServer(new PingMessage(sessionId, System.currentTimeMillis()));
+//		}
+//		catch(IOException e)
+//		{
+//			e.printStackTrace();
+//		}
 	}
 	
 	private void stopConnection()
