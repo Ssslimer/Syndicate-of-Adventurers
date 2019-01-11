@@ -91,7 +91,7 @@ public class GameScreen implements Screen, InputProcessor
     	this.cam.update();
     	
     	spriteBatch = new SpriteBatch();
-    	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "chatbackground.jpg").toString(), FileType.Internal));
+    	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
     	
     	skin = new Skin(Gdx.files.internal("uiskin.json"));
     	setupChatTextField();
