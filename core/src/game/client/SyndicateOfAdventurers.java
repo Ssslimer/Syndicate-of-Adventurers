@@ -1,10 +1,8 @@
-package other;
+package client;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 
-import client.ClientConnection;
-import client.Resources;
 import entities.World;
 import screens.MainMenuScreen;
 

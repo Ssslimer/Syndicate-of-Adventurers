@@ -23,8 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.ClientConnection;
+import client.SyndicateOfAdventurers;
 import networking.MessageStatus;
-import other.SyndicateOfAdventurers;
 import util.GdxUtils;
 
 public class JoinServerScreen implements Screen

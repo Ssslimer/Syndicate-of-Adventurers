@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import other.SyndicateOfAdventurers;
+import client.SyndicateOfAdventurers;
 import util.GdxUtils;
 import util.ServerAddressValidator;
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 
-import other.SyndicateOfAdventurers;
+import client.SyndicateOfAdventurers;
 import util.ConfigConstants;
 
 public class DesktopLauncher

@@ -22,7 +22,6 @@ public class Resources
 		final int grassTextures = 8;
 		for(int i = 1; i <= grassTextures; i++)
 		{
-			System.out.println(Paths.get("assets", "textures", "terrain", "grass_"+i+".png").toString());
 			Texture texTile = new Texture(Paths.get("assets", "textures", "terrain", "grass_"+i+".png").toString());
 			texTile.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 			terrainMaterials.add(new Material(TextureAttribute.createDiffuse(texTile)));

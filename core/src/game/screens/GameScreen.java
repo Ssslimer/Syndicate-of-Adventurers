@@ -38,10 +38,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.Resources;
+import client.SyndicateOfAdventurers;
 import entities.TerrainTile;
 import entities.World;
 import networking.MoveDirection;
-import other.SyndicateOfAdventurers;
 import util.ConfigConstants;
 
 public class GameScreen implements Screen, InputProcessor 
