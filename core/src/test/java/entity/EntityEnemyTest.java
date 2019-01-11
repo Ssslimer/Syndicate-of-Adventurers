@@ -1,15 +1,13 @@
-package entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+package test.entity;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
-
-import entities.EntityEnemy;
+import com.moag.game.entities.EntityEnemy;
+import com.moag.game.util.Clamp;
 
 class EntityEnemyTest 
 {
@@ -18,7 +16,7 @@ class EntityEnemyTest
 	private static final int BASE_ENEMY_HP = 50;
 	
 	@Test
-	public void entityEnemyConstructurTest() 
+	void entityEnemyConstructurTest() 
 	{
 		int x1 = 0;
 		int y1 = 0;
@@ -61,25 +59,16 @@ class EntityEnemyTest
 	}
 	
 	@Test
-	public void entityEnemyMovementTest()
-	{
-		EntityEnemy e = new EntityEnemy(new Vector3(5, 1, 3));		
-		e.update();
-		
-		assertTrue(e.getPosition().x != 5 || e.getPosition().y != 1);
-		assertNotNull(e.getDirection());
-	}
-	
-	@Test
-	public void entityGetDamage()
+	void entityGetDamage()
 	{
 		EntityEnemy e = new EntityEnemy(new Vector3(5, 1, 3));
 		int damage = 20;
 		
+		int realDamage = Clamp.clampInt(damage - e.getDefence(), 0, damage);
 		e.getDamage(damage);
 		
 		assertTrue(e.getHP() != BASE_ENEMY_HP);
-		assertTrue(e.getHP() == BASE_ENEMY_HP - damage);
+		assertTrue(e.getHP() == BASE_ENEMY_HP - realDamage);
 	}
 
 }

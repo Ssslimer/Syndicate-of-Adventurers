@@ -1,18 +1,15 @@
-package entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+package test.entity;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
-
-import entities.EntityPlayer;
-import entities.Item;
-import networking.MoveDirection;
-import util.Clamp;
+import com.moag.game.entities.EntityPlayer;
+import com.moag.game.entities.Item;
+import com.moag.game.networking.MoveDirection;
+import com.moag.game.util.Clamp;
 
 class EntityPlayerTest 
 {
@@ -21,7 +18,7 @@ class EntityPlayerTest
 	private static final int BASE_PLAYER_HP = 100;
 	
 	@Test
-	public void test() 
+	void test() 
 	{
 		int x1 = 0;
 		int y1 = 0;
@@ -64,7 +61,7 @@ class EntityPlayerTest
 	}
 	
 	@Test
-	public void entityPlayerMoveTest()
+	void entityPlayerMoveTest()
 	{
 		EntityPlayer e = new EntityPlayer(new Vector3(5, 5, 5));
 		e.move(MoveDirection.UP, false);	
@@ -77,7 +74,7 @@ class EntityPlayerTest
 		e.move(MoveDirection.RIGHT, false);	
 		e.update();
 		
-		assertTrue(e.getPosition().x == 1); // after update it should move in x axis by 1
+		assertTrue(e.getPosition().x == 6); // after update it should move in x axis by 1
 		assertTrue(e.getPosition().y == 7); // after update it should move in y axis by 1
 		assertTrue(e.getPosition().z == 5);
 		
@@ -87,13 +84,13 @@ class EntityPlayerTest
 		e.update();
 		
 		// we expect that it won't move after update
-		assertTrue(e.getPosition().x == 1);
+		assertTrue(e.getPosition().x == 6);
 		assertTrue(e.getPosition().y == 7);
 		assertTrue(e.getPosition().z == 5);
 	}
 
 	@Test
-	public void getStatsAndDamageTest()
+	void getStatsAndDamageTest()
 	{
 		int itemAttackPower = 25;
 		int itemDefencePower = 10;
@@ -110,17 +107,18 @@ class EntityPlayerTest
 		assertTrue(e.getDefencePower() == BASE_PLAYER_DEFENCE + itemDefencePower);
 		assertTrue(e.getHP() == BASE_PLAYER_HP + itemHPPower);
 		
+		int hpBeforeDamage = e.getHP();
 		e.getDamage(damage);
 		
 		int realDamage = Clamp.clampInt(damage - e.getDefencePower(), 0, damage);
 		
-		assertTrue(e.getHP() == e.getHP() - realDamage);
+		assertTrue(e.getHP() == hpBeforeDamage - realDamage);
 		
 		e.removeItem(item);
 		
 		assertTrue(e.getAttackPower() == BASE_PLAYER_ATTACK);
 		assertTrue(e.getDefencePower() == BASE_PLAYER_DEFENCE);
-		assertTrue(e.getHP() == BASE_PLAYER_HP);
+		assertTrue(e.getHP() == BASE_PLAYER_HP - realDamage);
 	}
 
 }
