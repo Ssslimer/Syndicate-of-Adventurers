@@ -174,10 +174,7 @@ public class GameScreen implements Screen, InputProcessor
 	public void hide() {}
 
 	@Override
-	public void dispose()
-	{
-        modelBatch.dispose();
-	}
+	public void dispose(){ modelBatch.dispose(); }
 	
 	private Model createTerrainTile(Material material)
 	{	
@@ -280,13 +277,13 @@ public class GameScreen implements Screen, InputProcessor
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) { return !usingChat; }
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) { return false; }
+	public boolean touchDragged(int screenX, int screenY, int pointer) { return !usingChat; }
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) { return false; }
+	public boolean mouseMoved(int screenX, int screenY) { return !usingChat; }
 
 	@Override
-	public boolean scrolled(int amount) { return false; }
+	public boolean scrolled(int amount) { return !usingChat; }
 	
 	private void setupChatTextField() 
 	{
@@ -329,10 +326,9 @@ public class GameScreen implements Screen, InputProcessor
 		chatSendText.setWidth(chatTexture.getWidth()/10f);
 		chatSendText.setHeight(chatText.getHeight());
 
-		float posX = ConfigConstants.WIDTH - 50f;
-//		float posY = ConfigConstants.HEIGHT - 10f;
-		
+		float posX = ConfigConstants.WIDTH - 50f;	
 		float posY = 10f;
+		
 		chatSendText.setPosition(posX, posY);
 		
 		chatSendText.addListener(new ClickListener()
