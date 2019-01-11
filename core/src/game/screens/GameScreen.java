@@ -1,5 +1,6 @@
 package screens;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -35,6 +38,8 @@ public class GameScreen implements Screen, InputProcessor
     private List<ModelInstance> terrainModels = new ArrayList<>();
     private Environment environment;
     private ModelBuilder modelBuilder;
+    
+    private Sound CLANG;
 	
 	public GameScreen(SyndicateOfAdventurers game)
 	{	
@@ -53,6 +58,8 @@ public class GameScreen implements Screen, InputProcessor
     	this.cam.near = 1f;
     	this.cam.far = 300f;
     	this.cam.update();
+    	
+    	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
         
         Resources r = new Resources();
         World map = new World();
@@ -181,6 +188,7 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
+		CLANG.play(1.0f);
 		SyndicateOfAdventurers.getClient().attack();	
 		return false;
 	}
