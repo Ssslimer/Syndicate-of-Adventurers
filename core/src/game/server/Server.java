@@ -21,7 +21,7 @@ public class Server
 	private ConnectionManager connectionManager;
 	private AuthManager authManager;
 	private static World world;
-	private static Map<Long, String> chat = Collections.synchronizedMap(new HashMap<>());
+	private static Map<String, String> chat = Collections.synchronizedMap(new HashMap<>());
 	
 	public Server(ServerProperties serverProperties)
 	{
@@ -119,12 +119,12 @@ public class Server
 		return authManager;
 	}
 	
-	public static void addChatMessage(long userId, String chatMessageString)
+	public static void addChatMessage(String nick, String chatMessageString)
 	{
-		chat.put(userId, chatMessageString);
+		chat.put(nick, chatMessageString);
 	}
 	
-	public static Map<Long, String> getChat()
+	public static Map<String, String> getChat()
 	{
 		return chat;
 	}
