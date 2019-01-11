@@ -1,37 +1,29 @@
 package client;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.assets.AssetManager;
 
 import entities.World;
 import screens.MainMenuScreen;
 
 public class SyndicateOfAdventurers extends Game
 {	 
-	private AssetManager assetManager;
 	private static ClientConnection client;
-	private static Resources resources;
+	private static final Resources resources = new Resources();
 	private static World gameMap;
 
 	@Override
 	public void create()
-	{
-		assetManager = new AssetManager();
-		resources = new Resources();
+	{		
+		resources.loadAll();
 		setScreen(new MainMenuScreen(this));
 	}
 	
 	@Override
 	public void dispose() 
 	{ 
-		assetManager.dispose(); 
+		resources.unload();
 	}
 	
-	public AssetManager getAssetManager() 
-	{
-		return assetManager; 
-	}
-
 	public static ClientConnection getClient()
 	{
 		return client;

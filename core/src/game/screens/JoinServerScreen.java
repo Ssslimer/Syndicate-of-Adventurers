@@ -54,7 +54,7 @@ public class JoinServerScreen implements Screen
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		background = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "menu.png").toString(), FileType.Internal));
+		background = SyndicateOfAdventurers.getResources().getTexture("GUI_BACKGROUND");
 		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 		
 		setupPlayerNameTextField();
