@@ -1,5 +1,7 @@
 package networking.messages;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageType;
 import networking.MoveDirection;
 import networking.messages.fromclient.ClientMessage;
@@ -28,4 +30,13 @@ public class MoveMessage extends ClientMessage
 		return toStop;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("direction", direction)
+				.append("toStop", toStop)
+				.toString();
+	}	
 }

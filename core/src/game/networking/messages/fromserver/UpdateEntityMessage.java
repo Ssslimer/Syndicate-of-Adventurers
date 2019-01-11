@@ -1,5 +1,7 @@
 package networking.messages.fromserver;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.badlogic.gdx.math.Vector3;
 
 import networking.MessageType;
@@ -36,14 +38,14 @@ public class UpdateEntityMessage extends Message
 		return entityId;
 	}
 
-//	@Override
-//	public String toString()
-//	{
-//		ToStringBuilder builder = new ToStringBuilder(this);
-//		builder.append(entityId);
-//		builder.append(velocity);
-//		builder.append(position);
-//		
-//		return builder.build();
-//	}
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+			.appendSuper(super.toString())
+			.append("entityId", entityId)
+			.append("velocity", velocity)
+			.append("position", position)
+			.toString();
+	}
 }

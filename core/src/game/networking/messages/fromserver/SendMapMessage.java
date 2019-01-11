@@ -1,5 +1,7 @@
 package networking.messages.fromserver;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import entities.World;
 import networking.MessageType;
 import networking.messages.Message;
@@ -21,12 +23,12 @@ public class SendMapMessage extends Message
 		return map;
 	}
 
-//	@Override
-//	public String toString()
-//	{
-//		ToStringBuilder builder = new ToStringBuilder(this);
-//		builder.append(map);
-//		
-//		return builder.build();
-//	}
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+			.appendSuper(super.toString())
+			.append("map", map)
+			.toString();
+	}
 }

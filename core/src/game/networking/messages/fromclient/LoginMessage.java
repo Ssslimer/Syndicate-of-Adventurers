@@ -1,5 +1,7 @@
 package networking.messages.fromclient;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageType;
 
 public class LoginMessage extends ClientMessage
@@ -24,5 +26,15 @@ public class LoginMessage extends ClientMessage
 	public String getPassword()
 	{
 		return password;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("login", login)
+				.append("password not printed")
+				.toString();
 	}
 }

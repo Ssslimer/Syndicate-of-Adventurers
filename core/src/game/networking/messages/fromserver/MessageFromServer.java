@@ -1,5 +1,7 @@
 package networking.messages.fromserver;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageStatus;
 import networking.MessageType;
 import networking.messages.Message;
@@ -25,6 +27,9 @@ public class MessageFromServer extends Message
 	@Override
 	public String toString()
 	{
-		return "MessageFromServer: " + status.toString();
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("status", status)
+				.toString();
 	}
 }

@@ -1,5 +1,7 @@
 package networking.messages.fromclient;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageType;
 
 public class PingMessage extends ClientMessage
@@ -17,5 +19,14 @@ public class PingMessage extends ClientMessage
 	public long getTime()
 	{
 		return time;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("time", time)
+				.toString();
 	}
 }

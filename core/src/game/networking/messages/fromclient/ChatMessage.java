@@ -1,5 +1,7 @@
 package networking.messages.fromclient;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageType;
 import networking.messages.Message;
 
@@ -7,23 +9,25 @@ public class ChatMessage extends Message
 {
 	private static final long serialVersionUID = -7376195247283240087L;
 
-	private String chatMessageString;
+	private String text;
 	
 	public ChatMessage(String chatMessageString) 
 	{
 		super(MessageType.CHAT_MESSAGE);
-		this.chatMessageString = chatMessageString;
+		this.text = chatMessageString;
 	}
 	
 	public String getMessageString()
 	{
-		return this.chatMessageString;
+		return this.text;
 	}
 
 	@Override
 	public String toString()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("text", text)
+				.toString();
 	}
 }

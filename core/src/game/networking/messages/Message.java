@@ -2,6 +2,8 @@ package networking.messages;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageType;
 
 public abstract class Message implements Serializable
@@ -20,6 +22,11 @@ public abstract class Message implements Serializable
 		return messageType;
 	}
 	
-//	@Override
-//	public abstract String toString();
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+				.append("messageType", messageType)
+				.toString();
+	}
 }

@@ -1,5 +1,7 @@
 package networking.messages.fromclient;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import networking.MessageType;
 import networking.messages.Message;
 
@@ -20,12 +22,12 @@ public class ClientMessage extends Message
 		return sessionId;
 	}
 	
-//	@Override
-//	public String toString()
-//	{
-//		ToStringBuilder builder = new ToStringBuilder(this);
-//		builder.append(sessionId);
-//		
-//		return builder.build();
-//	}
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("sessionId", sessionId)
+				.toString();
+	}
 }
