@@ -9,6 +9,7 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import client.chat.Chat;
 import networking.MessageStatus;
 import networking.MoveDirection;
 import networking.messages.AttackMessage;

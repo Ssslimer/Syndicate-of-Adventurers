@@ -38,9 +38,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import client.Chat;
 import client.Resources;
 import client.SyndicateOfAdventurers;
+import client.chat.Chat;
+import client.chat.ChatLabelGenerator;
 import entities.TerrainTile;
 import entities.World;
 import networking.MoveDirection;
