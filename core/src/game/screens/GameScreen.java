@@ -47,6 +47,9 @@ public class GameScreen implements Screen, InputProcessor
 {
 	private SyndicateOfAdventurers game;
 	
+	private InputMultiplexer inputMultiplexer;
+	private Stage stage;
+	
 	private PerspectiveCamera cam;
     private ModelBatch modelBatch;
     
@@ -56,8 +59,6 @@ public class GameScreen implements Screen, InputProcessor
     
     private SpriteBatch spriteBatch;
     private Texture chatTexture;
-    
-    private Stage stage;
     
     private Skin skin;
     private TextField chatText;
@@ -72,6 +73,7 @@ public class GameScreen implements Screen, InputProcessor
 		this.game = game;
 		
 		stage = new Stage();
+		inputMultiplexer = new InputMultiplexer();
 		
     	this.environment = new Environment();
     	this.environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -111,7 +113,10 @@ public class GameScreen implements Screen, InputProcessor
 		try{Thread.sleep(5000);}
 		catch(InterruptedException e){e.printStackTrace();}
 		
-		Gdx.input.setInputProcessor(this);
+		
+		inputMultiplexer.addProcessor(this);
+		inputMultiplexer.addProcessor(stage);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 		
 //		while(true)
@@ -168,10 +173,7 @@ public class GameScreen implements Screen, InputProcessor
 	public void hide() {}
 
 	@Override
-	public void dispose()
-	{
-        modelBatch.dispose();
-	}
+	public void dispose(){ modelBatch.dispose(); }
 	
 	private Model createTerrainTile(Material material)
 	{	
@@ -192,26 +194,30 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean keyDown(int keycode) 
 	{ 
-		switch(keycode)
+		if(!usingChat)
 		{
-		case Input.Keys.W:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.UP, false);
-		break;
-		
-		case Input.Keys.S:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, false);
-		break;
+			switch(keycode)
+			{
+			case Input.Keys.W:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.UP, false);
+			break;
 			
-		case Input.Keys.A:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, false);
-		break;
+			case Input.Keys.S:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, false);
+			break;
+				
+			case Input.Keys.A:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, false);
+			break;
+				
+			case Input.Keys.D:
+				SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, false);
+			break;
 			
-		case Input.Keys.D:
-			SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, false);
-		break;
-		
+			}
 		}
-		return false; 
+
+		return !usingChat; 
 	}
 
 	@Override
@@ -240,11 +246,11 @@ public class GameScreen implements Screen, InputProcessor
 			}
 		}
 		
-		return false; 
+		return !usingChat; 
 	}
 
 	@Override
-	public boolean keyTyped(char character) { return false; }
+	public boolean keyTyped(char character) { return !usingChat; }
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
@@ -253,29 +259,30 @@ public class GameScreen implements Screen, InputProcessor
 				screenY >= ConfigConstants.HEIGHT - chatTexture.getHeight())
 		{
 			usingChat = true;
+			stage.setKeyboardFocus(null);
 		}		
 		else
 		{
 			usingChat = false;
 			
 			CLANG.play(1.0f);
-			SyndicateOfAdventurers.getClient().attack();
-			
+			SyndicateOfAdventurers.getClient().attack();	
 		}
-		return false;
+		
+		return !usingChat;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) { return false; }
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) { return !usingChat; }
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) { return false; }
+	public boolean touchDragged(int screenX, int screenY, int pointer) { return !usingChat; }
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) { return false; }
+	public boolean mouseMoved(int screenX, int screenY) { return !usingChat; }
 
 	@Override
-	public boolean scrolled(int amount) { return false; }
+	public boolean scrolled(int amount) { return !usingChat; }
 	
 	private void setupChatTextField() 
 	{
@@ -318,10 +325,9 @@ public class GameScreen implements Screen, InputProcessor
 		chatSendText.setWidth(chatTexture.getWidth()/10f);
 		chatSendText.setHeight(chatText.getHeight());
 
-		float posX = ConfigConstants.WIDTH - 50f;
-//		float posY = ConfigConstants.HEIGHT - 10f;
-		
+		float posX = ConfigConstants.WIDTH - 50f;	
 		float posY = 10f;
+		
 		chatSendText.setPosition(posX, posY);
 		
 		chatSendText.addListener(new ClickListener()
