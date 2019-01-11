@@ -49,7 +49,7 @@ public class ClientConnection extends Thread
 	{	
 		while(true)
 		{
-			sender.start();
+//			sender.start();
 			
 	    	Message fromServer = null;
 			try

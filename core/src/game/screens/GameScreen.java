@@ -76,12 +76,12 @@ public class GameScreen implements Screen, InputProcessor
 		try{Thread.sleep(5000);}
 		catch(InterruptedException e){e.printStackTrace();}
 		
-		while(true)
-		{
-			SyndicateOfAdventurers.getClient().pingServer();
-			try{Thread.sleep(1000);}
-			catch(InterruptedException e){e.printStackTrace();}
-		}
+//		while(true)
+//		{
+//			SyndicateOfAdventurers.getClient().pingServer();
+//			try{Thread.sleep(1000);}
+//			catch(InterruptedException e){e.printStackTrace();}
+//		}
 	}
 	
 	@Override

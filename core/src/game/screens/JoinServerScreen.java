@@ -192,7 +192,8 @@ public class JoinServerScreen implements Screen
 				MessageStatus status = SyndicateOfAdventurers.getClient().login(login, password);
 				if(status == MessageStatus.OK)
 				{
-					game.setScreen(new GameScreen(game));	
+					game.setScreen(new GameScreen(game));
+					dispose();
 				}
 				else
 				{
@@ -256,6 +257,7 @@ public class JoinServerScreen implements Screen
 		    {
 				CLANG .play(1.0f);
 		    	game.setScreen(new MainMenuScreen(game));
+		    	dispose();
 		    }
 	    });
 

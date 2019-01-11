@@ -79,6 +79,7 @@ public class MessageHandler extends Thread
 		Message message = task.getMessage();
 		MessageType content = message.getMessageType();
 		
+		System.out.println("NEW MESSAGE: " + message.getMessageType().toString());
 		switch(content)
 		{			
 			case PING:
