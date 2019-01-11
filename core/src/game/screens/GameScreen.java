@@ -76,6 +76,8 @@ public class GameScreen implements Screen, InputProcessor
 		try{Thread.sleep(5000);}
 		catch(InterruptedException e){e.printStackTrace();}
 		
+		Gdx.input.setInputProcessor(this);
+		
 //		while(true)
 //		{
 //			SyndicateOfAdventurers.getClient().pingServer();
@@ -95,7 +97,12 @@ public class GameScreen implements Screen, InputProcessor
 
         modelBatch.begin(cam);
         modelBatch.render(terrainModels, environment);
-        modelBatch.end();        
+        modelBatch.end();
+        
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+        {
+        	System.out.println("LEFT CLICKED");
+        }
 	}
 
 	@Override
