@@ -2,6 +2,7 @@ package other;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 
+import client.ClientConnection;
 import entities.World;
 import screens.MainMenuScreen;
 
