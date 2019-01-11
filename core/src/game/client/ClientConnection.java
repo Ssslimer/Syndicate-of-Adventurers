@@ -86,7 +86,7 @@ public class ClientConnection extends Thread
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		sender.addMessage(new ChatMessage(chatMessageString));
+		sender.addMessage(new ChatMessage(login + ":" + " " + chatMessageString));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -186,6 +186,7 @@ public class ClientConnection extends Thread
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
 				System.out.println(message);
 				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
+				Chat.updateChat(message.getChat());
 			break;
 			
 			default:
