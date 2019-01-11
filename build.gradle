@@ -19,7 +19,6 @@ buildscript
 allprojects 
 {
     apply plugin: "eclipse"
-    apply plugin: "idea"
 
     version = '1.0'
     ext 
@@ -30,6 +29,9 @@ allprojects
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+        junitVersion = '5.3.1'
+        junitPlatformVersion = '1.1.0'
+        apacheLangVersion = '3.8.1';
     }
 
     repositories 
@@ -58,16 +60,20 @@ project(":desktop")
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"  
-        
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    
-	    testRuntime(
-	    	'org.junit.jupiter:junit-jupiter-engine:5.3.1',
-	    	'org.junit.vintage:junit-vintage-engine:5.3.1',
-	    	'org.junit.platform:junit-platform-launcher:1.1.0',
-	    	'org.junit.platform:junit-platform-runner:1.1.0'
-	    )     
+
+		testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+	    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+	    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
     }
+    
+    test 
+	{
+		useJUnitPlatform()
+		testLogging 
+		{
+			events "passed", "skipped", "failed"
+		}
+	}
 }
 
 tasks.eclipse.doLast
