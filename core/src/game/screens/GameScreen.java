@@ -4,12 +4,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,10 +36,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import client.Resources;
 import entities.TerrainTile;
 import entities.World;
 import networking.MoveDirection;
-import other.Resources;
 import other.SyndicateOfAdventurers;
 import util.ConfigConstants;
 
@@ -89,7 +88,7 @@ public class GameScreen implements Screen, InputProcessor
     	this.cam.update();
     	
     	spriteBatch = new SpriteBatch();
-    	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "chatbackground.jpg").toString(), FileType.Internal));
+    	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "chatbackground.jpg").toString(), FileType.Internal));
     	
     	skin = new Skin(Gdx.files.internal("uiskin.json"));
     	setupChatTextField();

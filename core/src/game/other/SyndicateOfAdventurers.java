@@ -1,10 +1,11 @@
 package other;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 
 import client.ClientConnection;
+import client.Resources;
 import entities.World;
-import networking.messages.fromclient.PingMessage;
 import screens.MainMenuScreen;
 
 public class SyndicateOfAdventurers extends Game

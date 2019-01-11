@@ -1,4 +1,5 @@
-package other;
+package client;
+
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,8 @@ public class Resources
 		final int grassTextures = 8;
 		for(int i = 1; i <= grassTextures; i++)
 		{
-			Texture texTile = new Texture(Paths.get("assets", "terrain", "grass_"+i+".png").toString());
+			System.out.println(Paths.get("assets", "textures", "terrain", "grass_"+i+".png").toString());
+			Texture texTile = new Texture(Paths.get("assets", "textures", "terrain", "grass_"+i+".png").toString());
 			texTile.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 			terrainMaterials.add(new Material(TextureAttribute.createDiffuse(texTile)));
 		}

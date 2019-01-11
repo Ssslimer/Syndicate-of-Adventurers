@@ -19,9 +19,9 @@ public class DesktopLauncher
 		config.vSyncEnabled = true;
 		config.title = "Syndicate of Adventurers";
 		config.initialBackgroundColor = Color.BLACK;
-		config.addIcon(Paths.get("assets", "icon128x.png").toString(), FileType.Internal);
-		config.addIcon(Paths.get("assets", "icon32x.png").toString(), FileType.Internal);
-		config.addIcon(Paths.get("assets", "icon16x.png").toString(), FileType.Internal);
+		config.addIcon(Paths.get("assets", "textures", "icons", "icon128x.png").toString(), FileType.Internal);
+		config.addIcon(Paths.get("assets", "textures", "icons", "icon32x.png").toString(), FileType.Internal);
+		config.addIcon(Paths.get("assets", "textures", "icons", "icon16x.png").toString(), FileType.Internal);
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
 		new LwjglApplication(new SyndicateOfAdventurers(), config);
