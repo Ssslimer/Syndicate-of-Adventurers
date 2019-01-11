@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -39,6 +40,9 @@ public class JoinServerScreen implements Screen
 	private final String ip;
 	private final int port;
 	
+	private final Texture background;
+	private final SpriteBatch spriteBatch = new SpriteBatch();
+	
 	private Sound CLANG;
 	
 	public JoinServerScreen(SyndicateOfAdventurers game, String ip, int port)
@@ -50,6 +54,7 @@ public class JoinServerScreen implements Screen
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
+		background = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "menu.png").toString(), FileType.Internal));
 		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 		
 		setupPlayerNameTextField();
@@ -67,6 +72,9 @@ public class JoinServerScreen implements Screen
 	public void render(float delta) 
 	{
 		GdxUtils.clearScreen(Color.WHITE);
+		spriteBatch.begin();
+		spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		spriteBatch.end();
 		stage.act();
 		stage.draw();
 		Gdx.input.setInputProcessor(stage);		
