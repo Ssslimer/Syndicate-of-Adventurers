@@ -98,11 +98,6 @@ public class GameScreen implements Screen, InputProcessor
         modelBatch.begin(cam);
         modelBatch.render(terrainModels, environment);
         modelBatch.end();
-        
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-        {
-        	System.out.println("LEFT CLICKED");
-        }
 	}
 
 	@Override
