@@ -1,15 +1,18 @@
+package entity;
 
-package test.entity;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
-import com.moag.game.entities.EntityPlayer;
-import com.moag.game.entities.Item;
-import com.moag.game.networking.MoveDirection;
-import com.moag.game.util.Clamp;
+
+import entities.EntityPlayer;
+import entities.Item;
+import networking.MoveDirection;
+import util.Clamp;
 
 class EntityPlayerTest 
 {

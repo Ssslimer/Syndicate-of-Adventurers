@@ -1,13 +1,16 @@
+package entity;
 
-package test.entity;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
-import com.moag.game.entities.EntityEnemy;
-import com.moag.game.util.Clamp;
+
+import entities.EntityEnemy;
+import util.Clamp;
 
 class EntityEnemyTest 
 {
