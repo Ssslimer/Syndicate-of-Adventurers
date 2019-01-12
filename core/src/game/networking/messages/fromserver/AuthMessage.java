@@ -11,24 +11,17 @@ public class AuthMessage extends Message
 	private static final long serialVersionUID = 2431956245233772488L;
 
 	private MessageStatus status;
-	private long sessionID;
 	
-	public AuthMessage(MessageStatus status, long sessionID)
+	public AuthMessage(MessageStatus status)
 	{
 		super(MessageType.FROM_SERVER);
 
 		this.status = status;
-		this.sessionID = sessionID;
 	}
 
 	public MessageStatus getMessageStatus()
 	{
 		return status;
-	}
-	
-	public long getSessionID()
-	{
-		return sessionID;
 	}
 	
 	@Override

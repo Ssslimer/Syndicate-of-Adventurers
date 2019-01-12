@@ -19,6 +19,7 @@ import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
+import networking.messages.fromserver.AuthLoginMessage;
 import networking.messages.fromserver.AuthMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
@@ -139,7 +140,13 @@ public class ClientConnection extends Thread
 	    	sender.addMessage(new LoginMessage(login, password));
 	    	
 	    	AuthMessage fromServer = (AuthMessage) getDataFromServer();
-	    	if(fromServer.getMessageStatus() == MessageStatus.OK) start();
+	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
+	    	{
+	    		isLogedIn = true;
+	    		this.sessionId = ((AuthLoginMessage) fromServer).getSessionID(); 
+	    		
+	    		start();
+	    	}
 	    	
 	    	return fromServer.getMessageStatus();
     	}
@@ -163,19 +170,19 @@ public class ClientConnection extends Thread
 				System.out.println("PING " + ping);
 			break;
 			
-			case LOGIN:
-				/** TODO add missing code, maybe pop-ups */
-				switch(((AuthMessage) serverCallback).getMessageStatus())
-				{
-					case OK: 
-						isLogedIn = true; 
-						sessionId = ((AuthMessage) serverCallback).getSessionID(); 
-						break;
-						
-					case WRONG_PASSWORD: break;
-					case NOT_REGISTRED: break;
-				}
-			break;
+//			case LOGIN:
+//				/** TODO add missing code, maybe pop-ups */
+//				switch(((AuthMessage) serverCallback).getMessageStatus())
+//				{
+//					case OK: 
+//						isLogedIn = true; 
+////						this.sessionId = ((AuthMessage) serverCallback).getSessionID(); 
+//						break;
+//						
+//					case WRONG_PASSWORD: break;
+//					case NOT_REGISTRED: break;
+//				}
+//			break;
 			
 			case LOAD_MAP:
 				SyndicateOfAdventurers.setGameMap(((SendMapMessage) serverCallback).getMap());

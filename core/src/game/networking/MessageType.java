@@ -12,7 +12,7 @@ public enum MessageType
 	ATTACK,
 	CHAT_MESSAGE,
 	
-	FROM_SERVER, 
+	FROM_SERVER,
 	UPDATE_ENTITY,
 	UPDATE_CHAT
 }
