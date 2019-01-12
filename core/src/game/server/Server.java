@@ -4,6 +4,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import entities.World;
 import util.ServerProperties;
@@ -16,6 +18,7 @@ public class Server
 	private AuthManager authManager;
 	private static World world;
 	private static List<String> chat = Collections.synchronizedList(new ArrayList<>());
+	private static Map<Long, String> clientIDs = Collections.synchronizedMap(new HashMap<>());
 	
 	public Server(ServerProperties serverProperties)
 	{
@@ -88,5 +91,20 @@ public class Server
 	public ConnectionManager getConnectionManager()
 	{
 		return connectionManager;
+	}
+	
+	public static String getLogin(long sessionID)
+	{
+		return clientIDs.get(sessionID);
+	}
+	
+	public static void addClient(long sessionID, String login)
+	{
+		clientIDs.put(sessionID, login);
+	}
+	
+	public static boolean IdNotOccupied(long sessionID)
+	{
+		return !clientIDs.containsKey(sessionID);
 	}
 }

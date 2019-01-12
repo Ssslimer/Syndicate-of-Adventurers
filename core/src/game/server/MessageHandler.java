@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -28,9 +29,12 @@ public class MessageHandler extends Thread
 	private Queue<MessageTask> messages = new ConcurrentLinkedQueue<>();
 	private boolean shouldWait = true;
 	
+	private Random rand;
+	
 	public MessageHandler(Server server)
 	{
 		this.server = server;
+		rand = new Random();
 	}
 	
 	@Override
@@ -166,6 +170,8 @@ public class MessageHandler extends Thread
 		{
 			if(server.getAuthManager().checkPassword(login, password))
 			{
+				long sessionID = generateSessionID();
+				Server.addClient(sessionID, login);
 				connectionWithClient.login();
 				connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.OK));
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
@@ -174,6 +180,19 @@ public class MessageHandler extends Thread
 		}
 	}
 	
+	private long generateSessionID() 
+	{
+		long sessionID;
+		
+		do
+		{
+			sessionID = rand.nextLong();
+			
+		}while(!Server.IdNotOccupied(sessionID));
+		
+		return sessionID;
+	}
+
 	private class MessageTask
 	{
 		private final ServerConnection messageOwner;
