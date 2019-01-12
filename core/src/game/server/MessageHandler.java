@@ -67,12 +67,8 @@ public class MessageHandler extends Thread
 	void handleMessage(ServerConnection source, Message message)
 	{
 		messages.add(new MessageTask(source, message));
-		shouldWait = false;
-		
-		synchronized(this)
-		{
-			notify();
-		}
+		shouldWait = false;		
+		synchronized(this){notify();}
 	}
 	
 	private void processMessage(MessageTask task) throws IOException

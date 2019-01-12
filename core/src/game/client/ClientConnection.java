@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
@@ -27,7 +26,6 @@ import networking.messages.fromserver.UpdateEntityMessage;
 public class ClientConnection extends Thread
 {
 	private Socket clientSocket;
-	//private ObjectOutputStream streamToServer;
 	private ObjectInputStream streamFromServer;
 	
 	private final String ip;
@@ -50,8 +48,6 @@ public class ClientConnection extends Thread
 	{	
 		while(true)
 		{
-//			sender.start();
-			
 	    	Message fromServer = null;
 			try
 			{
@@ -104,10 +100,8 @@ public class ClientConnection extends Thread
 			sender = new MessageSender(clientSocket);
 			sender.start();
 	
-    		//streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
 	    	
-	    	//sendToServer(new RegisterMessage(login, password));	
 	    	sender.addMessage(new RegisterMessage(login, password));
 	    	
 	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
@@ -140,10 +134,8 @@ public class ClientConnection extends Thread
 			sender = new MessageSender(clientSocket);
 			sender.start();
 			
-    		//streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 	    	streamFromServer = new ObjectInputStream(clientSocket.getInputStream());
     	
-	    	//sendToServer(new LoginMessage(login, password));
 	    	sender.addMessage(new LoginMessage(login, password));
 	    	
 	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
@@ -206,11 +198,6 @@ public class ClientConnection extends Thread
 		}
 	}
 	
-//	public void sendToServer(Message message) throws IOException
-//	{
-//		streamToServer.writeObject(message);
-//	}
-	
 	private Message getDataFromServer() throws ClassNotFoundException, IOException, EOFException
 	{
 		return (Message) streamFromServer.readObject();	
@@ -219,14 +206,6 @@ public class ClientConnection extends Thread
 	public void pingServer()
 	{
 		sender.addMessage(new PingMessage(sessionId, System.currentTimeMillis()));
-//		try
-//		{
-//			sendToServer(new PingMessage(sessionId, System.currentTimeMillis()));
-//		}
-//		catch(IOException e)
-//		{
-//			e.printStackTrace();
-//		}
 	}
 	
 	public void stopConnection()
@@ -245,15 +224,16 @@ public class ClientConnection extends Thread
 	{
 		System.setProperty("javax.net.ssl.trustStore", "za.store");
 		SocketFactory sslsocketfactory = SSLSocketFactory.getDefault();
-		try
+		
+		try(Socket socket = sslsocketfactory.createSocket(ip, port))
 		{
-			clientSocket = sslsocketfactory.createSocket(ip, port);
+			socket.close();
 		}
 		catch(Exception e)
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
 }

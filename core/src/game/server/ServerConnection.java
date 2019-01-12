@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.net.ssl.SSLHandshakeException;
+
 import networking.messages.Message;
 
 public class ServerConnection extends Thread
@@ -32,7 +34,6 @@ public class ServerConnection extends Thread
 	public void run()
 	{
 		System.out.println("New connection is open");
-		
 	    try
 	    {
 			streamToClient = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -45,6 +46,10 @@ public class ServerConnection extends Thread
 			}
 			
 			/** TODO send player a disconnect info? */
+	    }
+	    catch(SSLHandshakeException e)
+	    {
+	    	System.out.println(e);
 	    }
 	    catch(SocketException e)
 	    {

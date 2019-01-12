@@ -8,18 +8,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import networking.messages.Message;
 
-
 public class MessageSender extends Thread
 {
 	private Queue<Message> messages = new ConcurrentLinkedQueue<>();
+	private boolean shouldWait = true;
 	
 	private Socket clientSocket;
 	private ObjectOutputStream streamToServer;
 	
 	public MessageSender(Socket clientSocket)
 	{
-		this.clientSocket = clientSocket;
-		
+		this.clientSocket = clientSocket;		
 	}
 	
 	@Override
@@ -33,19 +32,27 @@ public class MessageSender extends Thread
 		
 		while(true)
 		{
-			Message message = messages.poll();
-			
-			if(message != null)
+			if(shouldWait)
 			{
-				try { sendToServer(message);} 
-				catch (IOException e) {e.printStackTrace();}
+				synchronized(this)
+				{
+					try{wait();}
+					catch(InterruptedException e) {e.printStackTrace();}
+				}
 			}
+			
+			Message message = messages.poll();
+			if(messages.isEmpty()) shouldWait = true;
+			try { sendToServer(message);} 
+			catch (IOException e) {e.printStackTrace();}
 		}
 	}
 	
 	public void addMessage(Message message)
 	{
 		messages.add(message);
+		shouldWait = false;
+		synchronized(this){notify();}
 	}
 	
 	private void sendToServer(Message message) throws IOException

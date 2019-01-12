@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -26,6 +25,7 @@ public class ConnectionManager extends Thread
 		
 		System.setProperty("javax.net.ssl.keyStore", "za.store");
 		System.setProperty("javax.net.ssl.keyStorePassword", "qazwsx123");
+		System.getProperty("javax.net.ssl.keyStore");
 	}
 
 	@Override

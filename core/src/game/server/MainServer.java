@@ -18,7 +18,6 @@ public class MainServer
 		}
 		catch(UnknownHostException e)
 		{
-			System.out.println(e.getMessage());
 			server.stop();
 			e.printStackTrace();
 		}
