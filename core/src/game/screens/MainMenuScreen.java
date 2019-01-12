@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import client.ClientConnection;
 import client.SyndicateOfAdventurers;
 import util.GdxUtils;
 import util.ServerAddressValidator;
@@ -195,6 +196,18 @@ public class MainMenuScreen implements Screen
 		    	}
 		    	
 		    	int port = Integer.parseInt(serverPortField.getText());	
+		    	
+		    	ClientConnection connection = new ClientConnection(ip, port);
+		    	if(!connection.isServerOnline())
+		    	{
+					Dialog dialog = new Dialog("Connection error", skin, "dialog");	
+					dialog.button("OK");
+					dialog.key(Keys.ENTER, null);
+					dialog.setMovable(false);
+					dialog.text("Server offline"); /** TODO add translations? */
+					dialog.show(stage);
+					return;
+		    	}
 	    	
 		    	game.setScreen(new JoinServerScreen(game, ip, port));
 		    	dispose();
@@ -211,25 +224,6 @@ public class MainMenuScreen implements Screen
 		float posX = (Gdx.graphics.getWidth()-quitButton.getWidth()) / 2f;
 		float posY = (Gdx.graphics.getHeight()-quitButton.getHeight()) / 2f - 200;
 		quitButton.setPosition(posX, posY);
-		
-		quitButton.addListener(new ClickListener()
-	    {
-		    @Override
-		    public void clicked(InputEvent event, float x, float y)
-		    {
-		    	CLANG.play(1.0f);
-		    	
-		    	try 
-		    	{
-					Thread.sleep(1000);
-				} 
-		    	catch (InterruptedException e) 
-		    	{
-					e.printStackTrace();
-				}
-		    	Gdx.app.exit();
-		    }
-	    });
 		stage.addActor(quitButton);
 	}
 }

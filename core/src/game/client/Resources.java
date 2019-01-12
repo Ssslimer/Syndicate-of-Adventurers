@@ -26,6 +26,7 @@ public class Resources
 		addTexture("GUI_BACKGROUND", Paths.get("assets", "textures", "gui", "menu.png"));
 		
 		assetManager.finishLoading();
+		System.out.println(terrainMaterials.size());
 	}
 	
 	private void generateTerrainMaterials()

@@ -37,10 +37,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import client.Resources;
 import client.SyndicateOfAdventurers;
 import entities.TerrainTile;
-import entities.World;
 import networking.MoveDirection;
 import util.ConfigConstants;
 
@@ -99,12 +97,10 @@ public class GameScreen implements Screen, InputProcessor
     	
     	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
         
-        Resources r = new Resources();
-        World map = new World();
-        List<TerrainTile> terrain = map.getTerrain();
+        List<TerrainTile> terrain = SyndicateOfAdventurers.getGameMap().getTerrain();
         for(TerrainTile tile : terrain)
         {
-        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(r.getTerrainMaterial(tile.getTerrainType())));
+        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(SyndicateOfAdventurers.getResources().getTerrainMaterial(tile.getTerrainType())));
         	modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
         	modelInstance.transform.translate(tile.getPosition());
         	modelInstance.transform.scale(2.5f, 2.5f, 2.5f);
@@ -113,13 +109,11 @@ public class GameScreen implements Screen, InputProcessor
 
 		try{Thread.sleep(5000);}
 		catch(InterruptedException e){e.printStackTrace();}
-		
-		
+				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
-		
+				
 //		while(true)
 //		{
 //			SyndicateOfAdventurers.getClient().pingServer();

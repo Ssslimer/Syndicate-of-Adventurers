@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
@@ -132,7 +133,7 @@ public class ClientConnection extends Thread
 			System.setProperty("javax.net.ssl.trustStore", "za.store");
 			SocketFactory sslsocketfactory = SSLSocketFactory.getDefault();
 			clientSocket = sslsocketfactory.createSocket(ip, port);
-			System.out.println("Connected to server IP: " + ip + " Port: " + clientSocket.getPort());
+			System.out.println("Connected to server IP: " + ip + " Port: " + port);
 	
 			sender = new MessageSender(clientSocket);
 			sender.start();
@@ -184,7 +185,6 @@ public class ClientConnection extends Thread
 
 			case UPDATE_ENTITY:
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
-				System.out.println(message);
 				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
 			break;
 			
@@ -216,7 +216,7 @@ public class ClientConnection extends Thread
 //		}
 	}
 	
-	private void stopConnection()
+	public void stopConnection()
 	{
 		try
 		{
@@ -226,5 +226,21 @@ public class ClientConnection extends Thread
 		{
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public boolean isServerOnline()
+	{
+		System.setProperty("javax.net.ssl.trustStore", "za.store");
+		SocketFactory sslsocketfactory = SSLSocketFactory.getDefault();
+		try
+		{
+			clientSocket = sslsocketfactory.createSocket(ip, port);
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 }
