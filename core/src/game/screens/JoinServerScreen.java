@@ -213,7 +213,8 @@ public class JoinServerScreen implements Screen
 				MessageStatus status = client.login(login, password);
 				if(status == MessageStatus.OK)
 				{
-					game.setScreen(new GameScreen(game));
+					//game.setScreen(new GameScreen(game));
+					game.setScreen(new LoadingScreen(game));
 					dispose();
 				}
 				else
