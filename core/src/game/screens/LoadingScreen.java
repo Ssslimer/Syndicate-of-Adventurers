@@ -10,24 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
-import client.SyndicateOfAdventurers;
+import client.MyGame;
 import util.GdxUtils;
 
 public class LoadingScreen implements Screen
 {
-	private SyndicateOfAdventurers game;
+	private MyGame game;
 	private Stage stage;
 	
 	private final SpriteBatch spriteBatch = new SpriteBatch();
 	private Texture background;
 	private Label label;
 	
-	public LoadingScreen(SyndicateOfAdventurers game)
+	public LoadingScreen(MyGame game)
 	{
 		this.game = game;
 		stage = new Stage();
 		
-		background = SyndicateOfAdventurers.getResources().getTexture("GUI_BACKGROUND");
+		background = MyGame.getResources().getTexture("GUI_BACKGROUND");
 		setupLabel();
 	}
 
@@ -55,7 +55,7 @@ public class LoadingScreen implements Screen
 
 	private boolean finishedLoading() 
 	{
-		return SyndicateOfAdventurers.getGameMap() != null;
+		return MyGame.getGameMap() != null;
 	}
 
 	@Override

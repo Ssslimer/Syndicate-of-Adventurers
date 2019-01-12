@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 
-import client.SyndicateOfAdventurers;
+import client.MyGame;
 import util.ConfigConstants;
 
 public class DesktopLauncher
@@ -24,6 +24,6 @@ public class DesktopLauncher
 		config.addIcon(Paths.get("assets", "textures", "icons", "icon16x.png").toString(), FileType.Internal);
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
-		new LwjglApplication(new SyndicateOfAdventurers(), config);
+		new LwjglApplication(new MyGame(), config);
 	}
 }

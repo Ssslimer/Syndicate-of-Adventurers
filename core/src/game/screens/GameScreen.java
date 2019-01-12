@@ -28,6 +28,8 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Sphere;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -38,16 +40,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import client.SyndicateOfAdventurers;
+import client.MyGame;
 import client.chat.Chat;
 import client.chat.ChatLabelGenerator;
 import entities.TerrainTile;
+import javafx.scene.transform.Transform;
 import networking.MoveDirection;
 import util.ConfigConstants;
 
 public class GameScreen implements Screen, InputProcessor 
 {
-	private SyndicateOfAdventurers game;
+	private MyGame game;
 	
 	private InputMultiplexer inputMultiplexer;
 	private Stage stage;
@@ -70,8 +73,11 @@ public class GameScreen implements Screen, InputProcessor
     private Sound CLANG;
     
     private boolean usingChat;
+    
+    private Model model;
+    private ModelInstance instance;
 	
-	public GameScreen(SyndicateOfAdventurers game)
+	public GameScreen(MyGame game)
 	{	
 		this.game = game;
 		
@@ -84,6 +90,10 @@ public class GameScreen implements Screen, InputProcessor
     	
     	this.modelBatch = new ModelBatch();
     	this.modelBuilder = new ModelBuilder();
+    	
+    	model = modelBuilder.createBox(5, 5, 5, new Material(ColorAttribute.createDiffuse(Color.GREEN)), Usage.Position);
+    	instance = new ModelInstance(model);
+    	instance.transform.translate(new Vector3(0, 5, 0));
     	
     	this.cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     	this.cam.position.set(-10f, 10f, -10f);
@@ -102,10 +112,10 @@ public class GameScreen implements Screen, InputProcessor
     	
     	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
         
-        List<TerrainTile> terrain = SyndicateOfAdventurers.getGameMap().getTerrain();
+        List<TerrainTile> terrain = MyGame.getGameMap().getTerrain();
         for(TerrainTile tile : terrain)
         {
-        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(SyndicateOfAdventurers.getResources().getTerrainMaterial(tile.getTerrainType())));
+        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(MyGame.getResources().getTerrainMaterial(tile.getTerrainType())));
         	modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
         	modelInstance.transform.translate(tile.getPosition());
         	modelInstance.transform.scale(2.5f, 2.5f, 2.5f);
@@ -144,6 +154,7 @@ public class GameScreen implements Screen, InputProcessor
 	{
 		modelBatch.begin(cam);
         modelBatch.render(terrainModels, environment);
+        modelBatch.render(instance, environment);
         modelBatch.end();
 	}
 	
@@ -213,19 +224,19 @@ public class GameScreen implements Screen, InputProcessor
 			switch(keycode)
 			{
 			case Input.Keys.W:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.UP, false);
+				MyGame.getClient().move(MoveDirection.UP, false);
 			break;
 			
 			case Input.Keys.S:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, false);
+				MyGame.getClient().move(MoveDirection.DOWN, false);
 			break;
 				
 			case Input.Keys.A:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, false);
+				MyGame.getClient().move(MoveDirection.LEFT, false);
 			break;
 				
 			case Input.Keys.D:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, false);
+				MyGame.getClient().move(MoveDirection.RIGHT, false);
 			break;
 			
 			}
@@ -242,19 +253,19 @@ public class GameScreen implements Screen, InputProcessor
 			switch(keycode)
 			{
 			case Input.Keys.W:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.UP, true);
+				MyGame.getClient().move(MoveDirection.UP, true);
 			break;
 			
 			case Input.Keys.S:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.DOWN, true);
+				MyGame.getClient().move(MoveDirection.DOWN, true);
 			break;
 				
 			case Input.Keys.A:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.LEFT, true);
+				MyGame.getClient().move(MoveDirection.LEFT, true);
 			break;
 				
 			case Input.Keys.D:
-				SyndicateOfAdventurers.getClient().move(MoveDirection.RIGHT, true);
+				MyGame.getClient().move(MoveDirection.RIGHT, true);
 			break;
 			
 			}
@@ -280,7 +291,7 @@ public class GameScreen implements Screen, InputProcessor
 			usingChat = false;
 			
 			CLANG.play(1.0f);
-			SyndicateOfAdventurers.getClient().attack();	
+			MyGame.getClient().attack();	
 		}
 		
 		return !usingChat;
@@ -351,7 +362,7 @@ public class GameScreen implements Screen, InputProcessor
 			{
 				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
 				{
-					SyndicateOfAdventurers.getClient().sentChatMessage(chatText.getText());
+					MyGame.getClient().sentChatMessage(chatText.getText());
 					chatText.setText("Type message...");
 				}
 			}

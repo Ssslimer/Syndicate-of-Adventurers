@@ -32,6 +32,22 @@ public class World implements Serializable
 		return entities.get(id);
 	}
 	
+	public Entity getPlayer(String login)
+	{
+		for(Map.Entry<Long, Entity> entity : entities.entrySet())
+		{
+			if(entity.getValue() instanceof EntityPlayer)
+			{
+				if(((EntityPlayer)entity).getLogin().compareTo(login) == 0)
+				{
+					return entity.getValue();
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	public void updateEntityPos(long id, Vector3 position, Vector3 velocity)
 	{
 		Entity entity = entities.get(id);

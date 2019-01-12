@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.badlogic.gdx.math.Vector3;
+
 import entities.EntityPlayer;
 import networking.MessageStatus;
 import networking.MessageType;
@@ -177,6 +179,7 @@ public class MessageHandler extends Thread
 				Server.addClient(sessionID, login);
 				connectionWithClient.login();
 				connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.OK, sessionID));
+				Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 5, 0), login));
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			}
 			else connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.WRONG_PASSWORD, -1));

@@ -24,13 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import client.ClientConnection;
-import client.SyndicateOfAdventurers;
+import client.MyGame;
 import util.GdxUtils;
 import util.ServerAddressValidator;
 
 public class MainMenuScreen implements Screen
 {
-	private SyndicateOfAdventurers game;	
+	private MyGame game;	
 	private Stage stage;
 	
 	private Skin skin;
@@ -42,14 +42,14 @@ public class MainMenuScreen implements Screen
 		
 	private Sound CLANG;
 	
-	public MainMenuScreen(SyndicateOfAdventurers game)
+	public MainMenuScreen(MyGame game)
 	{
 		this.game = game;
 		stage = new Stage(new ScreenViewport());
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		background = SyndicateOfAdventurers.getResources().getTexture("GUI_BACKGROUND");
+		background = MyGame.getResources().getTexture("GUI_BACKGROUND");
 		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 		
 		setupServerIPField();

@@ -34,8 +34,8 @@ class EntityPlayerTest
 		Vector3 v1 = new Vector3(x1, y1, z1);
 		Vector3 v2 = new Vector3(x2, y2, z2);
 		
-		EntityPlayer e1 = new EntityPlayer(v1);
-		EntityPlayer e2 = new EntityPlayer(v2);
+		EntityPlayer e1 = new EntityPlayer(v1, "test1");
+		EntityPlayer e2 = new EntityPlayer(v2, "test2");
 		
 		assertNotNull(e1);
 		assertNotNull(e2);
@@ -66,7 +66,7 @@ class EntityPlayerTest
 	@Test
 	void entityPlayerMoveTest()
 	{
-		EntityPlayer e = new EntityPlayer(new Vector3(5, 5, 5));
+		EntityPlayer e = new EntityPlayer(new Vector3(5, 5, 5), "test");
 		e.move(MoveDirection.UP, false);	
 		e.update();
 		
@@ -101,7 +101,7 @@ class EntityPlayerTest
 		
 		int damage = 25;
 		
-		EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 0));
+		EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 0), "test");
 		Item item = new Item(itemAttackPower, itemDefencePower, itemHPPower);
 		
 		e.addItem(item);

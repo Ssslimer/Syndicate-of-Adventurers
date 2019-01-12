@@ -5,7 +5,7 @@ import com.badlogic.gdx.Game;
 import entities.World;
 import screens.MainMenuScreen;
 
-public class SyndicateOfAdventurers extends Game
+public class MyGame extends Game
 {	 
 	private static ClientConnection client;
 	private static final Resources resources = new Resources();
@@ -31,7 +31,7 @@ public class SyndicateOfAdventurers extends Game
 	
 	public static void setClient(ClientConnection client)
 	{
-		SyndicateOfAdventurers.client = client;
+		MyGame.client = client;
 	}
 
 	public static Resources getResources()

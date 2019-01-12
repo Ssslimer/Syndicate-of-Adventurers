@@ -185,12 +185,12 @@ public class ClientConnection extends Thread
 //			break;
 			
 			case LOAD_MAP:
-				SyndicateOfAdventurers.setGameMap(((SendMapMessage) serverCallback).getMap());
+				MyGame.setGameMap(((SendMapMessage) serverCallback).getMap());
 			break;
 
 			case UPDATE_ENTITY:
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
-				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
+				MyGame.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
 			break;
 			
 			case UPDATE_CHAT:
@@ -240,5 +240,10 @@ public class ClientConnection extends Thread
 		}
 
 		return true;
+	}
+	
+	public String getLogin()
+	{
+		return login;
 	}
 }

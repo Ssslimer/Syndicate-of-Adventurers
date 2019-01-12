@@ -18,6 +18,8 @@ public class EntityPlayer extends Entity
 	
 	private long playerID; // equal to sessionID ?
 	
+	private String login;
+	
 	private int HP;
 	private int attackPower;
 	private int defencePower;
@@ -29,9 +31,11 @@ public class EntityPlayer extends Entity
 	boolean moveLeft;
 	boolean moveRight;
 	
-	public EntityPlayer(Vector3 position) 
+	public EntityPlayer(Vector3 position, String login) 
 	{
 		super(position);
+		
+		this.login = login;
 		
 		HP = BASE_PLAYER_HP;
 		attackPower = BASE_PLAYER_ATTACK;
@@ -101,6 +105,11 @@ public class EntityPlayer extends Entity
 				this.direction = MoveDirection.LEFT;
 			}
 		}
+	}
+	
+	public String getLogin()
+	{
+		return login;
 	}
 	
 	public long getPlayerID()

@@ -24,13 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.ClientConnection;
-import client.SyndicateOfAdventurers;
+import client.MyGame;
 import networking.MessageStatus;
 import util.GdxUtils;
 
 public class JoinServerScreen implements Screen
 {
-	private SyndicateOfAdventurers game;
+	private MyGame game;
 	private Stage stage;
 	
 	private Skin skin;
@@ -45,7 +45,7 @@ public class JoinServerScreen implements Screen
 	
 	private Sound CLANG;
 	
-	public JoinServerScreen(SyndicateOfAdventurers game, String ip, int port)
+	public JoinServerScreen(MyGame game, String ip, int port)
 	{	
 		this.game = game;
 		this.ip = ip;
@@ -54,7 +54,7 @@ public class JoinServerScreen implements Screen
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		background = SyndicateOfAdventurers.getResources().getTexture("GUI_BACKGROUND");
+		background = MyGame.getResources().getTexture("GUI_BACKGROUND");
 		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 		
 		setupPlayerNameTextField();
@@ -197,7 +197,7 @@ public class JoinServerScreen implements Screen
 				String password = passwordField.getText();
 				
 				ClientConnection client = new ClientConnection(ip, port);
-				SyndicateOfAdventurers.setClient(client);
+				MyGame.setClient(client);
 				
 		    	if(!client.isServerOnline())
 		    	{
@@ -250,8 +250,8 @@ public class JoinServerScreen implements Screen
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 	
-				SyndicateOfAdventurers.setClient(new ClientConnection(ip, port));
-				MessageStatus status = SyndicateOfAdventurers.getClient().register(login, password);
+				MyGame.setClient(new ClientConnection(ip, port));
+				MessageStatus status = MyGame.getClient().register(login, password);
 				if(status == MessageStatus.OK) return;
 				
 				dialog.text(status.name()); /** TODO add translations? */
