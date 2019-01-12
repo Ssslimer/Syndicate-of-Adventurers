@@ -88,6 +88,7 @@ public class ClientConnection extends Thread
 	
 	public void sentChatMessage(String chatMessageString)
 	{
+		System.out.println("INSIDE SENT CHAT MESSAG CC: " + chatMessageString);
 		sender.addMessage(new ChatMessage(login + ":" + " " + chatMessageString));
 	}
 	
@@ -187,7 +188,17 @@ public class ClientConnection extends Thread
 			case UPDATE_ENTITY:
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
 				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
+				if(message.getChat().isEmpty())
+				{
+					System.out.println("PUSTY?!??!?!?");
+				}
+				else
+				{
+					System.out.println("NO JEST: " + message.getChat().get(0));
+					
+				}
 				Chat.updateChat(message.getChat());
+				
 			break;
 			
 			default:

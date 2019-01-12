@@ -19,11 +19,18 @@ public class MessageSender extends Thread
 	public MessageSender(Socket clientSocket)
 	{
 		this.clientSocket = clientSocket;
+		
 	}
 	
 	@Override
 	public void run()
 	{
+		try 
+		{
+			streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
+		} 
+		catch (IOException e1) { e1.printStackTrace(); }
+		
 		while(true)
 		{
 			Message message = messages.poll();
@@ -46,7 +53,6 @@ public class MessageSender extends Thread
 		if(!clientSocket.isClosed())
 		{
 			System.out.println("NEW MESSAGE: " + message.getMessageType().toString());
-			streamToServer = new ObjectOutputStream(clientSocket.getOutputStream());
 			streamToServer.writeObject(message);
 		}
 	}

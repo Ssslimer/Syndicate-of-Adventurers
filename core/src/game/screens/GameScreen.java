@@ -65,6 +65,7 @@ public class GameScreen implements Screen, InputProcessor
     private Skin skin;
     private TextField chatText;
     private TextButton chatSendText;
+    private BitmapFont chatFont;
     
     private Sound CLANG;
     
@@ -93,6 +94,7 @@ public class GameScreen implements Screen, InputProcessor
     	
     	spriteBatch = new SpriteBatch();
     	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
+    	chatFont = new BitmapFont();
     	
     	skin = new Skin(Gdx.files.internal("uiskin.json"));
     	setupChatTextField();
@@ -148,22 +150,25 @@ public class GameScreen implements Screen, InputProcessor
 	private void renderChat()
 	{
 		spriteBatch.begin();
-		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - chatTexture.getWidth(), 0);
-		spriteBatch.end();
 		
+		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - chatTexture.getWidth(), 0);
 		List<String> newChatMessages = Chat.getChatMessages();
 		
-		for(int index = newChatMessages.size()-1, i = 0; index >= 0; index--, i++)
+		if(!newChatMessages.isEmpty())
 		{
-			String labelText = newChatMessages.get(index);
-			Label label = ChatLabelGenerator.generateLabel(chatText.getX(), chatText.getY() + i*20f , chatText.getWidth(), chatText.getHeight(), labelText, skin);
-			
-			stage.addActor(label);
-			
+			for(int index = newChatMessages.size()-1, i = 0; index >= 0; index--, i++)
+			{
+				String str = newChatMessages.get(index);
+				chatFont.setColor(Color.GOLD);
+				chatFont.draw(spriteBatch, str, chatText.getX(), chatText.getY() + 80f + i*20f);
+			}
 		}
+		
+		spriteBatch.end();
 		
 		stage.act();
 		stage.draw();
+		
 	}
 
 	@Override
@@ -347,6 +352,7 @@ public class GameScreen implements Screen, InputProcessor
 				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
 				{
 					SyndicateOfAdventurers.getClient().sentChatMessage(chatText.getText());
+					chatText.setText("Type message...");
 				}
 			}
 		});

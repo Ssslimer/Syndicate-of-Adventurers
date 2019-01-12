@@ -10,6 +10,7 @@ import entities.EntityPlayer;
 import networking.MessageStatus;
 import networking.MessageType;
 import networking.MoveDirection;
+import networking.messages.AttackMessage;
 import networking.messages.Message;
 import networking.messages.MoveMessage;
 import networking.messages.fromclient.ChatMessage;
@@ -114,7 +115,7 @@ public class MessageHandler extends Thread
 				
 				if(connectionWithClient.isLogedIn())
 				{
-					((EntityPlayer)Server.getMap().getEntities().get(((MoveMessage)task.getMessage()).getSessionId())).attack();
+					((EntityPlayer)Server.getMap().getEntities().get(((AttackMessage)task.getMessage()).getSessionId())).attack();
 				}
 			break;
 			

@@ -93,13 +93,16 @@ public class Server
 			e1.printStackTrace();
 		}
 		
+		List<String> newChatMessages = getNewChatMessages();
+		chat.clear();
+		
 		for(ServerConnection connection : connectionManager.getAllConnections())
 		{
 			try
 			{
 				if(connection.isLogedIn()) 
 				{
-					connection.sendMessageToClient(new UpdateEntityMessage(id, position, velocity, chat));
+					connection.sendMessageToClient(new UpdateEntityMessage(id, position, velocity, newChatMessages));
 				}
 			}
 			catch(IOException e)
@@ -107,7 +110,18 @@ public class Server
 				System.out.println(e);
 			}
 		}
-		chat.clear();
+	}
+
+	private List<String> getNewChatMessages() 
+	{
+		List<String> newChatMessages = new ArrayList<>();
+		
+		for(String str : chat)
+		{
+			newChatMessages.add(str);
+		}
+		
+		return newChatMessages;
 	}
 
 	public void stop()
