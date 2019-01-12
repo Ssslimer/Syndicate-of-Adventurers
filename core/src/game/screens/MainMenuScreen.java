@@ -224,6 +224,16 @@ public class MainMenuScreen implements Screen
 		float posX = (Gdx.graphics.getWidth()-quitButton.getWidth()) / 2f;
 		float posY = (Gdx.graphics.getHeight()-quitButton.getHeight()) / 2f - 200;
 		quitButton.setPosition(posX, posY);
+		
+		quitButton.addListener(new ClickListener()
+	    {
+		    @Override
+		    public void clicked(InputEvent event, float x, float y)
+		    {
+		    	Gdx.app.exit();
+		    }
+	    });
+		
 		stage.addActor(quitButton);
 	}
 }

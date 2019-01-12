@@ -196,8 +196,21 @@ public class JoinServerScreen implements Screen
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 				
-				SyndicateOfAdventurers.setClient(new ClientConnection(ip, port));
-				MessageStatus status = SyndicateOfAdventurers.getClient().login(login, password);
+				ClientConnection client = new ClientConnection(ip, port);
+				SyndicateOfAdventurers.setClient(client);
+				
+		    	if(!client.isServerOnline())
+		    	{
+					Dialog dialog = new Dialog("Connection error", skin, "dialog");	
+					dialog.button("OK");
+					dialog.key(Keys.ENTER, null);
+					dialog.setMovable(false);
+					dialog.text("Server offline"); /** TODO add translations? */
+					dialog.show(stage);
+					return;
+		    	}
+				
+				MessageStatus status = client.login(login, password);
 				if(status == MessageStatus.OK)
 				{
 					game.setScreen(new GameScreen(game));
