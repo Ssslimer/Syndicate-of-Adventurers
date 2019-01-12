@@ -1,19 +1,11 @@
 package server;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
-import com.badlogic.gdx.math.Vector3;
-
-import entities.Entity;
 import entities.World;
-import networking.messages.fromserver.UpdateEntityMessage;
 import util.ServerProperties;
 import util.Timer;
 
@@ -70,58 +62,7 @@ public class Server
 	
 	private void update()
 	{	
-		long id = -1;
-		world.spawnEntity(new Entity(new Vector3()));
-		Map<Long, Entity> entities = world.getEntities();
-		for(Entity entity : entities.values())
-		{
-			id = entity.getId();
-			break;
-		}
-		
-		Random random = new Random();
-		Vector3 position = new Vector3(random.nextInt(10), 0, random.nextInt(10));
-		Vector3 velocity = new Vector3(new Vector3(random.nextInt(10), 0, random.nextInt(10)));
-		world.updateEntityPos(id, position, velocity);
-		
-		try
-		{
-			Thread.sleep(5000);
-		}
-		catch(InterruptedException e1)
-		{
-			e1.printStackTrace();
-		}
-		
-		List<String> newChatMessages = getNewChatMessages();
-		chat.clear();
-		
-		for(ServerConnection connection : connectionManager.getAllConnections())
-		{
-			try
-			{
-				if(connection.isLogedIn()) 
-				{
-					connection.sendMessageToClient(new UpdateEntityMessage(id, position, velocity, newChatMessages));
-				}
-			}
-			catch(IOException e)
-			{
-				System.out.println(e);
-			}
-		}
-	}
-
-	private List<String> getNewChatMessages() 
-	{
-		List<String> newChatMessages = new ArrayList<>();
-		
-		for(String str : chat)
-		{
-			newChatMessages.add(str);
-		}
-		
-		return newChatMessages;
+		world.update();
 	}
 
 	public void stop()
@@ -142,5 +83,10 @@ public class Server
 	public static void addChatMessage(String chatMessageString)
 	{
 		chat.add(chatMessageString);
+	}
+	
+	public ConnectionManager getConnectionManager()
+	{
+		return connectionManager;
 	}
 }

@@ -13,5 +13,6 @@ public enum MessageType
 	CHAT_MESSAGE,
 	
 	FROM_SERVER, 
-	UPDATE_ENTITY
+	UPDATE_ENTITY,
+	UPDATE_CHAT
 }

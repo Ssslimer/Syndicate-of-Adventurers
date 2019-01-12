@@ -1,22 +1,19 @@
 package client.chat;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Chat 
 {
 	private static final int MAX_SIZE = 30;
 	
-	private static List<String> chatMessages = Collections.synchronizedList(new ArrayList<>());
+	private static List<String> chatMessages = Collections.synchronizedList(new LinkedList<>());
 	
-	public static void updateChat(List<String> newChatMessages)
+	public static void updateChat(String s)
 	{
-		for(String str : newChatMessages)
-		{
-			chatMessages.add(str);
-		}
-		
+		chatMessages.add(s);
+
 		removeOldMessages();
 	}
 	

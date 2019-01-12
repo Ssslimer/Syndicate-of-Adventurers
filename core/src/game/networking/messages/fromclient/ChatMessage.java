@@ -3,23 +3,22 @@ package networking.messages.fromclient;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import networking.MessageType;
-import networking.messages.Message;
 
-public class ChatMessage extends Message
+public class ChatMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -7376195247283240087L;
 
-	private String text;
+	private final String text;
 	
-	public ChatMessage(String chatMessageString) 
+	public ChatMessage(long sessionId, String chatMessageString) 
 	{
-		super(MessageType.CHAT_MESSAGE);
+		super(MessageType.CHAT_MESSAGE, sessionId);
 		this.text = chatMessageString;
 	}
 	
-	public String getMessageString()
+	public String getText()
 	{
-		return this.text;
+		return text;
 	}
 
 	@Override

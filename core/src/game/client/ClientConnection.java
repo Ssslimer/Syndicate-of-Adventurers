@@ -21,6 +21,7 @@ import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.MessageFromServer;
 import networking.messages.fromserver.SendMapMessage;
+import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 
 public class ClientConnection extends Thread
@@ -84,8 +85,7 @@ public class ClientConnection extends Thread
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		System.out.println("INSIDE SENT CHAT MESSAG CC: " + chatMessageString);
-		sender.addMessage(new ChatMessage(login + ":" + " " + chatMessageString));
+		sender.addMessage(new ChatMessage(sessionId, login + ": " + chatMessageString));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -180,19 +180,13 @@ public class ClientConnection extends Thread
 			case UPDATE_ENTITY:
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
 				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
-				if(message.getChat().isEmpty())
-				{
-					System.out.println("PUSTY?!??!?!?");
-				}
-				else
-				{
-					System.out.println("NO JEST: " + message.getChat().get(0));
-					
-				}
-				Chat.updateChat(message.getChat());
-				
 			break;
 			
+			case UPDATE_CHAT:
+				UpdateChatMessage updateChat = (UpdateChatMessage) serverCallback;
+				Chat.updateChat(updateChat.getText());
+				break;
+				
 			default:
 				System.out.println("Unknown command");
 		}

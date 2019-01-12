@@ -69,10 +69,11 @@ public class ServerConnection extends Thread
 		}
     }
 	
+	/** TODO REMOVE IF CHECK after adding better client list handling */
 	public void sendMessageToClient(Message message) throws IOException
 	{
 		System.out.println("Sending: " + message.getMessageType());
-		streamToClient.writeObject(message);
+		if(streamToClient != null) streamToClient.writeObject(message);
 	}
 	
 	private Message getMessageFromClient() throws ClassNotFoundException, IOException
@@ -96,5 +97,10 @@ public class ServerConnection extends Thread
 	public boolean isLogedIn()
 	{
 		return hasLogedIn;
+	}
+	
+	public boolean isClosed()
+	{
+		return clientSocket.isOutputShutdown();
 	}
 }

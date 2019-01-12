@@ -25,7 +25,6 @@ public class ConnectionManager extends Thread
 		
 		System.setProperty("javax.net.ssl.keyStore", "za.store");
 		System.setProperty("javax.net.ssl.keyStorePassword", "qazwsx123");
-		System.getProperty("javax.net.ssl.keyStore");
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package networking.messages.fromserver;
 
-import java.util.List;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.badlogic.gdx.math.Vector3;
@@ -15,16 +13,14 @@ public class UpdateEntityMessage extends Message
 	
 	private final long entityId;
 	private final Vector3 velocity, position;
-	private List<String> chat;
 	
-	public UpdateEntityMessage(long entityId, Vector3 velocity, Vector3 position, List<String> chat)
+	public UpdateEntityMessage(long entityId, Vector3 velocity, Vector3 position)
 	{
 		super(MessageType.UPDATE_ENTITY);
 		
 		this.entityId = entityId;
 		this.velocity = velocity;
 		this.position = position;
-		this.chat = chat;
 	}
 
 	public Vector3 getVelocity()
@@ -40,11 +36,6 @@ public class UpdateEntityMessage extends Message
 	public long getEntityId()
 	{
 		return entityId;
-	}
-	
-	public List<String> getChat()
-	{
-		return this.chat;
 	}
 
 	@Override

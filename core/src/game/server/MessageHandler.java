@@ -18,6 +18,7 @@ import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.MessageFromServer;
 import networking.messages.fromserver.SendMapMessage;
+import networking.messages.fromserver.UpdateChatMessage;
 
 /** Thread for processing messages from clients */
 public class MessageHandler extends Thread
@@ -115,11 +116,16 @@ public class MessageHandler extends Thread
 				}
 			break;
 			
-			case CHAT_MESSAGE:
-				
+			case CHAT_MESSAGE:				
 				if(connectionWithClient.isLogedIn())
 				{
-					Server.addChatMessage(((ChatMessage)task.getMessage()).getMessageString());
+					ChatMessage chatMessage = (ChatMessage) message;
+					
+					for(ServerConnection connectionToClient : server.getConnectionManager().getAllConnections())
+					{
+						connectionToClient.sendMessageToClient(new UpdateChatMessage(chatMessage.getText()));
+					}
+					Server.addChatMessage(chatMessage.getText());
 				}
 			break;
 				
