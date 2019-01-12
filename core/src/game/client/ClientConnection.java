@@ -19,7 +19,7 @@ import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
-import networking.messages.fromserver.MessageFromServer;
+import networking.messages.fromserver.AuthMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
@@ -85,7 +85,7 @@ public class ClientConnection extends Thread
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		sender.addMessage(new ChatMessage(sessionId, login + ": " + chatMessageString));
+		sender.addMessage(new ChatMessage(sessionId, chatMessageString));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -104,7 +104,7 @@ public class ClientConnection extends Thread
 	    	
 	    	sender.addMessage(new RegisterMessage(login, password));
 	    	
-	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
+	    	AuthMessage fromServer = (AuthMessage) getDataFromServer();
 
 	    	System.out.println("Message from server: " + fromServer.toString());
 
@@ -138,7 +138,7 @@ public class ClientConnection extends Thread
     	
 	    	sender.addMessage(new LoginMessage(login, password));
 	    	
-	    	MessageFromServer fromServer = (MessageFromServer) getDataFromServer();
+	    	AuthMessage fromServer = (AuthMessage) getDataFromServer();
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) start();
 	    	
 	    	return fromServer.getMessageStatus();
@@ -165,9 +165,13 @@ public class ClientConnection extends Thread
 			
 			case LOGIN:
 				/** TODO add missing code, maybe pop-ups */
-				switch(((MessageFromServer) serverCallback).getMessageStatus())
+				switch(((AuthMessage) serverCallback).getMessageStatus())
 				{
-					case OK: isLogedIn = true; break;
+					case OK: 
+						isLogedIn = true; 
+						sessionId = ((AuthMessage) serverCallback).getSessionID(); 
+						break;
+						
 					case WRONG_PASSWORD: break;
 					case NOT_REGISTRED: break;
 				}

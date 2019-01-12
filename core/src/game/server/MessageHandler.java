@@ -17,7 +17,7 @@ import networking.messages.MoveMessage;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
-import networking.messages.fromserver.MessageFromServer;
+import networking.messages.fromserver.AuthMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 
@@ -124,12 +124,13 @@ public class MessageHandler extends Thread
 				if(connectionWithClient.isLogedIn())
 				{
 					ChatMessage chatMessage = (ChatMessage) message;
+					String nick = Server.getLogin(chatMessage.getSessionId());
 					
 					for(ServerConnection connectionToClient : server.getConnectionManager().getAllConnections())
 					{
-						connectionToClient.sendMessageToClient(new UpdateChatMessage(chatMessage.getText()));
+						connectionToClient.sendMessageToClient(new UpdateChatMessage(nick + ": " + chatMessage.getText()));
 					}
-					Server.addChatMessage(chatMessage.getText());
+					Server.addChatMessage(nick + ": " + chatMessage.getText());
 				}
 			break;
 				
@@ -148,12 +149,12 @@ public class MessageHandler extends Thread
 			
 		if(server.getAuthManager().isPlayerRegistered(login))
 		{
-			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.GIVEN_LOGIN_EXISTS));	
+			connectionWithClient.sendMessageToClient(new AuthMessage(MessageStatus.GIVEN_LOGIN_EXISTS, -1));	
 		}
 		else
 		{
 			server.getAuthManager().registerPlayerIfNotRegistered(login, hashedPassword);
-			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.OK));	
+			connectionWithClient.sendMessageToClient(new AuthMessage(MessageStatus.OK, -1));	// correct this -1 here or create another message class for handling registration
 		}
 	}
 	
@@ -164,7 +165,7 @@ public class MessageHandler extends Thread
 			
 		if(!server.getAuthManager().isPlayerRegistered(login))
 		{
-			connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.NOT_REGISTRED));
+			connectionWithClient.sendMessageToClient(new AuthMessage(MessageStatus.NOT_REGISTRED, -1));
 		}
 		else
 		{
@@ -173,10 +174,10 @@ public class MessageHandler extends Thread
 				long sessionID = generateSessionID();
 				Server.addClient(sessionID, login);
 				connectionWithClient.login();
-				connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.OK));
+				connectionWithClient.sendMessageToClient(new AuthMessage(MessageStatus.OK, sessionID));
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			}
-			else connectionWithClient.sendMessageToClient(new MessageFromServer(MessageStatus.WRONG_PASSWORD));
+			else connectionWithClient.sendMessageToClient(new AuthMessage(MessageStatus.WRONG_PASSWORD, -1));
 		}
 	}
 	

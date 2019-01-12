@@ -6,22 +6,29 @@ import networking.MessageStatus;
 import networking.MessageType;
 import networking.messages.Message;
 
-public class MessageFromServer extends Message
+public class AuthMessage extends Message
 {
 	private static final long serialVersionUID = 2431956245233772488L;
 
 	private MessageStatus status;
+	private long sessionID;
 	
-	public MessageFromServer(MessageStatus status)
+	public AuthMessage(MessageStatus status, long sessionID)
 	{
 		super(MessageType.FROM_SERVER);
 
 		this.status = status;
+		this.sessionID = sessionID;
 	}
 
 	public MessageStatus getMessageStatus()
 	{
 		return status;
+	}
+	
+	public long getSessionID()
+	{
+		return sessionID;
 	}
 	
 	@Override
