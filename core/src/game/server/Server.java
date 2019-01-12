@@ -2,8 +2,10 @@ package server;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,7 +23,7 @@ public class Server
 	private ConnectionManager connectionManager;
 	private AuthManager authManager;
 	private static World world;
-	private static Map<String, String> chat = Collections.synchronizedMap(new HashMap<>());
+	private static List<String> chat = Collections.synchronizedList(new ArrayList<>());
 	
 	public Server(ServerProperties serverProperties)
 	{
@@ -95,13 +97,17 @@ public class Server
 		{
 			try
 			{
-				if(connection.isLogedIn()) connection.sendMessageToClient(new UpdateEntityMessage(id, position, velocity));
+				if(connection.isLogedIn()) 
+				{
+					connection.sendMessageToClient(new UpdateEntityMessage(id, position, velocity, chat));
+				}
 			}
 			catch(IOException e)
 			{
 				System.out.println(e);
 			}
 		}
+		chat.clear();
 	}
 
 	public void stop()
@@ -119,13 +125,8 @@ public class Server
 		return authManager;
 	}
 	
-	public static void addChatMessage(String nick, String chatMessageString)
+	public static void addChatMessage(String chatMessageString)
 	{
-		chat.put(nick, chatMessageString);
-	}
-	
-	public static Map<String, String> getChat()
-	{
-		return chat;
+		chat.add(chatMessageString);
 	}
 }

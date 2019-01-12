@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import client.chat.Chat;
 import networking.MessageStatus;
 import networking.MoveDirection;
 import networking.messages.AttackMessage;
@@ -87,7 +88,7 @@ public class ClientConnection extends Thread
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		sender.addMessage(new ChatMessage(chatMessageString));
+		sender.addMessage(new ChatMessage(login + ":" + " " + chatMessageString));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -186,6 +187,7 @@ public class ClientConnection extends Thread
 			case UPDATE_ENTITY:
 				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
 				SyndicateOfAdventurers.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
+				Chat.updateChat(message.getChat());
 			break;
 			
 			default:

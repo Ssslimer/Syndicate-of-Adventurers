@@ -31,6 +31,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -38,6 +39,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.SyndicateOfAdventurers;
+import client.chat.Chat;
+import client.chat.ChatLabelGenerator;
 import entities.TerrainTile;
 import networking.MoveDirection;
 import util.ConfigConstants;
@@ -147,6 +150,17 @@ public class GameScreen implements Screen, InputProcessor
 		spriteBatch.begin();
 		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - chatTexture.getWidth(), 0);
 		spriteBatch.end();
+		
+		List<String> newChatMessages = Chat.getChatMessages();
+		
+		for(int index = newChatMessages.size()-1, i = 0; index >= 0; index--, i++)
+		{
+			String labelText = newChatMessages.get(index);
+			Label label = ChatLabelGenerator.generateLabel(chatText.getX(), chatText.getY() + i*20f , chatText.getWidth(), chatText.getHeight(), labelText, skin);
+			
+			stage.addActor(label);
+			
+		}
 		
 		stage.act();
 		stage.draw();
