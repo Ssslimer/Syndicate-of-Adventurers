@@ -192,7 +192,7 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				CLANG .play(1.0f);
+				CLANG.play(1.0f);
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 				
@@ -246,11 +246,13 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				CLANG .play(1.0f);
+				CLANG.play(1.0f);
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
 	
-				MyGame.setClient(new ClientConnection(ip, port));
+				ClientConnection client = new ClientConnection(ip, port);
+				MyGame.setClient(client);
+				
 				MessageStatus status = MyGame.getClient().register(login, password);
 				if(status == MessageStatus.OK)
 				{

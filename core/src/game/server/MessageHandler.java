@@ -36,6 +36,7 @@ public class MessageHandler extends Thread
 	
 	public MessageHandler(Server server)
 	{
+		super("Message Handler");		
 		this.server = server;
 		rand = new Random();
 	}
@@ -43,6 +44,7 @@ public class MessageHandler extends Thread
 	@Override
 	public void run()
 	{
+		setPriority(10);
 		Executor executor = Executors.newFixedThreadPool(1);
 		
 		while(true)

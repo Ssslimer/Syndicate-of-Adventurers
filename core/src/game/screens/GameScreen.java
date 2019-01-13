@@ -72,6 +72,8 @@ public class GameScreen implements Screen, InputProcessor
     
     private Model model;
     private ModelInstance instance;
+    
+    private float timer;
 	
 	public GameScreen(MyGame game)
 	{	
@@ -124,13 +126,6 @@ public class GameScreen implements Screen, InputProcessor
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-				
-//		while(true)
-//		{
-//			SyndicateOfAdventurers.getClient().pingServer();
-//			try{Thread.sleep(1000);}
-//			catch(InterruptedException e){e.printStackTrace();}
-//		}
 	}
 
 	@Override
@@ -142,6 +137,13 @@ public class GameScreen implements Screen, InputProcessor
 //        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+        timer += delta;
+		if(timer > 5)
+		{
+			timer = 0;
+			MyGame.getClient().pingServer();
+		}
+        
         renderGameplay();
         renderChat();
 	}
