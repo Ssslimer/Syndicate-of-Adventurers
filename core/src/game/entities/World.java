@@ -9,53 +9,52 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 
+import client.MyGame;
 import networking.MoveDirection;
+import networking.messages.fromserver.SpawnEntityMessage;
+import server.ConnectionToClient;
+import server.Server;
 
 public class World implements Serializable
 {	
 	private static final long serialVersionUID = -787730389424356815L;
 	
 	private Map<Long, Entity> entities = new HashMap<>();
+	private Map<String, EntityPlayer> players = new HashMap<>();
 	private List<TerrainTile> terrain = new ArrayList<>();
+	
+	private static boolean isLocal = false;
 	
 	public World()
 	{
 		generateMap();
 	}
-	
+
 	public void spawnEntity(Entity entity)
-	{
+	{		
 		entities.put(entity.getId(), entity);
-	}
-	
-	public Entity getEntity(long id)
-	{
-		return entities.get(id);
-	}
-	
-	public EntityPlayer getPlayer(String login)
-	{
-		for(Map.Entry<Long, Entity> entity : entities.entrySet())
+		if(entity instanceof EntityPlayer) players.put(((EntityPlayer) entity).getLogin(), (EntityPlayer) entity);
+		
+		if(!isLocal)
 		{
-			if(entity.getValue() instanceof EntityPlayer)
+			System.out.println(Server.getConnectionManager().getAllConnections().size());
+			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
 			{
-				if(((EntityPlayer)entity).getLogin().compareTo(login) == 0)
-				{
-					return (EntityPlayer)entity.getValue();
-				}
+				connectionToClient.sendMessageToClient(new SpawnEntityMessage(entity));
 			}
 		}
-		
-		return null;
 	}
 	
 	public void updateEntityPos(long id, Vector3 position, Vector3 velocity)
 	{
 		Entity entity = entities.get(id);
+		if(entity == null) return;
+		
 		entity.position = position;
 		entity.velocity = velocity;
 	}
 	
+	/** TODO tmp map for testing */
 	private void generateMap()
 	{
 		for(int x = -10; x < 10; x++)
@@ -68,16 +67,6 @@ public class World implements Serializable
 		}
 	}
 
-	public Map<Long, Entity> getEntities()
-	{
-		return entities;
-	}
-
-	public List<TerrainTile> getTerrain()
-	{
-		return terrain;
-	}
-	
 	public void update()
 	{
 		for(Entity e : entities.values())
@@ -210,5 +199,40 @@ public class World implements Serializable
 				}
 			}
 		}
+	}
+
+	public Map<Long, Entity> getEntities()
+	{
+		return entities;
+	}
+
+	public List<TerrainTile> getTerrain()
+	{
+		return terrain;
+	}
+	
+	public Map<String, EntityPlayer> getPlayers()
+	{
+		return players;
+	}
+	
+	public Entity getEntity(long id)
+	{
+		return entities.get(id);
+	}
+	
+	public EntityPlayer getPlayer(String login)
+	{
+		return players.get(login);
+	}
+
+	public static boolean isLocal()
+	{
+		return isLocal;
+	}
+	
+	public static void setLocal(boolean b)
+	{
+		isLocal = b;
 	}
 }

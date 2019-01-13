@@ -1,7 +1,6 @@
 package screens;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Files.FileType;
@@ -13,22 +12,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -40,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.MyGame;
 import client.chat.Chat;
-import entities.TerrainTile;
+import entities.Entity;
 import networking.MoveDirection;
 import util.ConfigConstants;
 
@@ -50,14 +37,7 @@ public class GameScreen implements Screen, InputProcessor
 	
 	private InputMultiplexer inputMultiplexer;
 	private Stage stage;
-	
-	private PerspectiveCamera cam;
-    private ModelBatch modelBatch;
-    
-    private List<ModelInstance> terrainModels = new ArrayList<>();
-    private Environment environment;
-    private ModelBuilder modelBuilder;
-    
+	      
     private SpriteBatch spriteBatch;
     private Texture chatTexture;
     
@@ -69,10 +49,7 @@ public class GameScreen implements Screen, InputProcessor
     private Sound CLANG;
     
     private boolean usingChat;
-    
-    private Model model;
-    private ModelInstance instance;
-    
+
     private float timer;
 	
 	public GameScreen(MyGame game)
@@ -80,25 +57,7 @@ public class GameScreen implements Screen, InputProcessor
 		this.game = game;
 		
 		stage = new Stage();
-		inputMultiplexer = new InputMultiplexer();
-		
-    	this.environment = new Environment();
-    	this.environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-    	this.environment.add(new DirectionalLight().set(1, 1, 1, 0, -1, 0));
-    	
-    	this.modelBatch = new ModelBatch();
-    	this.modelBuilder = new ModelBuilder();
-    	
-    	model = modelBuilder.createBox(5, 5, 5, new Material(ColorAttribute.createDiffuse(Color.GREEN)), Usage.Position);
-    	instance = new ModelInstance(model);
-    	instance.transform.translate(new Vector3(0, 5, 0));
-    	
-    	this.cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    	this.cam.position.set(-10f, 10f, -10f);
-    	this.cam.lookAt(0, 0, 0);
-    	this.cam.near = 1f;
-    	this.cam.far = 300f;
-    	this.cam.update();
+		inputMultiplexer = new InputMultiplexer();	
     	
     	spriteBatch = new SpriteBatch();
     	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
@@ -109,23 +68,23 @@ public class GameScreen implements Screen, InputProcessor
     	setupChatSendTextButton();
     	
     	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
-        
-        List<TerrainTile> terrain = MyGame.getGameMap().getTerrain();
-        for(TerrainTile tile : terrain)
-        {
-        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(MyGame.getResources().getTerrainMaterial(tile.getTerrainType())));
-        	modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
-        	modelInstance.transform.translate(tile.getPosition());
-        	modelInstance.transform.scale(2.5f, 2.5f, 2.5f);
-        	this.terrainModels.add(modelInstance);
-        }
-
-		try{Thread.sleep(5000);}
-		catch(InterruptedException e){e.printStackTrace();}
 				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+		MyGame.getRenderer().initTerrain();
+		initEntities();
+	}
+	
+	private void initEntities()
+	{    	
+		for(Entity entity : MyGame.getGameMap().getEntities().values())
+		{
+			MyGame.getRenderer().initEntity(entity);						
+		}   	
+		
+		System.out.println("Total entityies initialized: " + MyGame.getGameMap().getEntities().values().size());
 	}
 
 	@Override
@@ -134,27 +93,22 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public void render(float delta)
 	{
-//        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
+      
+        //pingServer(delta);
+        MyGame.getRenderer().render();
+        renderChat();
+	}
+	
+	private void pingServer(float delta)
+	{
         timer += delta;
 		if(timer > 5)
 		{
 			timer = 0;
 			MyGame.getClient().pingServer();
-		}
-        
-        renderGameplay();
-        renderChat();
-	}
-	
-	private void renderGameplay()
-	{
-		modelBatch.begin(cam);
-        modelBatch.render(terrainModels, environment);
-        modelBatch.render(instance, environment);
-        modelBatch.end();
-	}
+		}	
+	}	
 	
 	private void renderChat()
 	{
@@ -176,8 +130,7 @@ public class GameScreen implements Screen, InputProcessor
 		spriteBatch.end();
 		
 		stage.act();
-		stage.draw();
-		
+		stage.draw();		
 	}
 
 	@Override
@@ -196,24 +149,12 @@ public class GameScreen implements Screen, InputProcessor
 	public void hide() {}
 
 	@Override
-	public void dispose(){ modelBatch.dispose(); }
+	public void dispose()
+	{
+		spriteBatch.dispose();
+		MyGame.getRenderer().clear();
+	}
 	
-	private Model createTerrainTile(Material material)
-	{	
-		final float size = 1;
-		
-		modelBuilder.begin();
-		MeshPartBuilder bPartBuilder = modelBuilder.part("rect", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal | Usage.TextureCoordinates, material);
-		bPartBuilder.setUVRange(0, 0, 1, 1);
-	    bPartBuilder.rect(-(size*0.5f), -(size*0.5f), 0, 
-	                	   (size*0.5f), -(size*0.5f), 0, 
-	                	   (size*0.5f),  (size*0.5f), 0, 
-	                	  -(size*0.5f),  (size*0.5f), 0,
-	                	   0, 0, -1);
-	
-	    return (modelBuilder.end());
-    }
-
 	@Override
 	public boolean keyDown(int keycode) 
 	{ 
@@ -221,22 +162,10 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			switch(keycode)
 			{
-			case Input.Keys.W:
-				MyGame.getClient().move(MoveDirection.UP, false);
-			break;
-			
-			case Input.Keys.S:
-				MyGame.getClient().move(MoveDirection.DOWN, false);
-			break;
-				
-			case Input.Keys.A:
-				MyGame.getClient().move(MoveDirection.LEFT, false);
-			break;
-				
-			case Input.Keys.D:
-				MyGame.getClient().move(MoveDirection.RIGHT, false);
-			break;
-			
+				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP, false);	break;
+				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN, false);	break;		
+				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT, false);	break;
+				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;			
 			}
 		}
 
@@ -250,22 +179,10 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			switch(keycode)
 			{
-			case Input.Keys.W:
-				MyGame.getClient().move(MoveDirection.UP, true);
-			break;
-			
-			case Input.Keys.S:
-				MyGame.getClient().move(MoveDirection.DOWN, true);
-			break;
-				
-			case Input.Keys.A:
-				MyGame.getClient().move(MoveDirection.LEFT, true);
-			break;
-				
-			case Input.Keys.D:
-				MyGame.getClient().move(MoveDirection.RIGHT, true);
-			break;
-			
+				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP, true); 	break;		
+				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN, true);	break;			
+				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT, true);	break;
+				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, true);	break;			
 			}
 		}
 		
@@ -296,16 +213,28 @@ public class GameScreen implements Screen, InputProcessor
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) { return !usingChat; }
+	public boolean touchUp(int screenX, int screenY, int pointer, int button)
+	{ 
+		return !usingChat; 
+	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) { return !usingChat; }
+	public boolean touchDragged(int screenX, int screenY, int pointer) 
+	{ 
+		return !usingChat; 
+	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) { return !usingChat; }
+	public boolean mouseMoved(int screenX, int screenY) 
+	{
+		return !usingChat; 
+	}
 
 	@Override
-	public boolean scrolled(int amount) { return !usingChat; }
+	public boolean scrolled(int amount)
+	{
+		return !usingChat; 
+	}
 	
 	private void setupChatTextField() 
 	{

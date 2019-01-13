@@ -76,11 +76,21 @@ public class ConnectionToClient extends Thread
 		}
     }
 	
-	/** TODO REMOVE IF CHECK after adding better client list handling */
-	public void sendMessageToClient(Message message) throws IOException
+	public void sendMessageToClient(Message message)
 	{
 		System.out.println("Sending: " + message.getMessageType());
-		if(streamToClient != null) streamToClient.writeObject(message);
+		
+		try
+		{
+			streamToClient.writeObject(message);
+			streamToClient.reset();
+			streamToClient.flush();
+		}
+		catch(IOException e)
+		{
+			System.out.println(e.getMessage());
+			connectionManager.removeConnection(this);
+		}
 	}
 	
 	private Message getMessageFromClient() throws ClassNotFoundException, IOException

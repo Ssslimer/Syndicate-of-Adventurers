@@ -8,6 +8,7 @@ import screens.MainMenuScreen;
 public class MyGame extends Game
 {	 
 	private static ClientConnection client;
+	private static WorldRenderer renderer;
 	private static final Resources resources = new Resources();
 	private static World gameMap;
 
@@ -16,6 +17,7 @@ public class MyGame extends Game
 	{		
 		resources.loadAll();
 		setScreen(new MainMenuScreen(this));
+		renderer = new WorldRenderer();
 	}
 	
 	@Override
@@ -47,5 +49,10 @@ public class MyGame extends Game
 	public static void setGameMap(World map)
 	{
 		gameMap = map;
+	}
+
+	public static WorldRenderer getRenderer()
+	{
+		return renderer;
 	}
 }

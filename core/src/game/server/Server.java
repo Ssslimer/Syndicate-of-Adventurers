@@ -14,7 +14,7 @@ import util.Timer;
 public class Server
 {	
 	private final ServerProperties serverProperties;	
-	private ConnectionManager connectionManager;
+	private static ConnectionManager connectionManager;
 	private AuthManager authManager;
 	private static World world;
 	private static List<String> chat = Collections.synchronizedList(new ArrayList<>());
@@ -88,7 +88,7 @@ public class Server
 		chat.add(chatMessageString);
 	}
 	
-	public ConnectionManager getConnectionManager()
+	public static ConnectionManager getConnectionManager()
 	{
 		return connectionManager;
 	}

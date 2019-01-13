@@ -10,6 +10,7 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import client.chat.Chat;
+import entities.World;
 import networking.MessageStatus;
 import networking.MoveDirection;
 import networking.messages.AttackMessage;
@@ -22,6 +23,7 @@ import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.AuthLoginMessage;
 import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
+import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 
@@ -177,7 +179,9 @@ public class ClientConnection extends Thread
 			break;
 
 			case LOAD_MAP:
-				MyGame.setGameMap(((SendMapMessage) serverCallback).getMap());
+				World world = ((SendMapMessage) serverCallback).getMap();
+				world.setLocal(true);
+				MyGame.setGameMap(world);
 			break;
 
 			case UPDATE_ENTITY:
@@ -188,8 +192,13 @@ public class ClientConnection extends Thread
 			case UPDATE_CHAT:
 				UpdateChatMessage updateChat = (UpdateChatMessage) serverCallback;
 				Chat.updateChat(updateChat.getText());
-				break;
-				
+			break;
+			
+			case SPAWN_ENTITY:
+				SpawnEntityMessage spawnMessage = (SpawnEntityMessage) serverCallback;
+				MyGame.getGameMap().spawnEntity(spawnMessage.getEntity());
+			break;
+			
 			default:
 				System.out.println("Unknown command");
 		}

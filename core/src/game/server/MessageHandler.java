@@ -87,7 +87,9 @@ public class MessageHandler extends Thread
 		Message message = task.getMessage();
 		MessageType content = message.getMessageType();
 		
-		System.out.println("NEW MESSAGE: " + message.getMessageType().toString());
+		
+		System.out.println("NEW MESSAGE: " + message.getMessageType().toString()); /** TODO remove in the future */
+		
 		switch(content)
 		{			
 			case PING:
@@ -108,7 +110,7 @@ public class MessageHandler extends Thread
 			break;
 			
 			case MOVE:
-				processMove(connectionWithClient, (MoveMessage)message);
+				processMove(connectionWithClient, (MoveMessage) message);
 			break;
 				
 			case ATTACK:
@@ -139,12 +141,16 @@ public class MessageHandler extends Thread
 		else
 		{
 			server.getAuthManager().registerPlayerIfNotRegistered(login, hashedPassword);
+			
 			long sessionID = generateSessionID();
 			Server.addClient(sessionID, login);
+			
 			connectionWithClient.login();
-			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));
-			Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 5, 0), login));
+			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));			
 			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
+			
+			System.out.println("Player: " + login + " has loged in for the first time");
+			Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 1), login));
 		}
 	}
 	
@@ -165,8 +171,10 @@ public class MessageHandler extends Thread
 				Server.addClient(sessionID, login);
 				connectionWithClient.login();
 				connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.OK, sessionID));
-				Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 5, 0), login));
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
+				
+				System.out.println("Player: " + login + " has loged in");
+				Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 1), login));
 			}
 			else connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.WRONG_PASSWORD, -1));
 		}
@@ -193,17 +201,18 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	private void processChat(ConnectionToClient connectionWithClient, ChatMessage message) throws IOException
+	private void processChat(ConnectionToClient connectionWithClient, ChatMessage message)
 	{
 		if(connectionWithClient.isLogedIn())
 		{
 			String nick = Server.getLogin(message.getSessionId());
 			
-			for(ConnectionToClient connectionToClient : server.getConnectionManager().getAllConnections())
+			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
 			{
 				connectionToClient.sendMessageToClient(new UpdateChatMessage(nick + ": " + message.getText()));
 			}
 			Server.addChatMessage(nick + ": " + message.getText());
+			System.out.println("[" + nick + "]:" + message.getText());
 		}
 	}
 	

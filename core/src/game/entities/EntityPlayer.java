@@ -5,7 +5,10 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 
+import client.MyGame;
 import networking.MoveDirection;
+import networking.messages.fromserver.UpdateEntityMessage;
+import server.ConnectionToClient;
 import server.Server;
 
 public class EntityPlayer extends Entity
@@ -15,9 +18,7 @@ public class EntityPlayer extends Entity
 	private static final int BASE_PLAYER_ATTACK = 10;
 	private static final int BASE_PLAYER_DEFENCE = 5;
 	private static final int BASE_PLAYER_HP = 100;
-	
-	private long playerID; // equal to sessionID ?
-	
+
 	private String login;
 	
 	private int HP;
@@ -46,8 +47,6 @@ public class EntityPlayer extends Entity
 	{
 		super(player.getPosition());
 		
-		playerID = player.getPlayerID();
-		
 		eqList = player.getEqList();
 		determinePlayerStats();
 	}
@@ -55,54 +54,64 @@ public class EntityPlayer extends Entity
 	@Override
 	public void update()
 	{
+		super.update();
+				
 		if(moveUp && moveRight)
 		{
 			position.x++;
 			position.y++;
-			this.direction = MoveDirection.UP_AND_RIGHT;
+			direction = MoveDirection.UP_AND_RIGHT;
 		}
 		else if(moveUp && moveLeft)
 		{
 			position.x--;
 			position.y++;
-			this.direction = MoveDirection.UP_AND_LEFT;
+			direction = MoveDirection.UP_AND_LEFT;
 		}
 		else if(moveDown && moveRight)
 		{
 			position.x++;
 			position.y--;
-			this.direction = MoveDirection.DOWN_AND_RIGHT;
+			direction = MoveDirection.DOWN_AND_RIGHT;
 		}
 		else if(moveDown && moveLeft)
 		{
 			position.x--;
 			position.y--;
-			this.direction = MoveDirection.DOWN_AND_LEFT;
+			direction = MoveDirection.DOWN_AND_LEFT;
 		}
 		else
 		{
 			if(moveUp)
 			{
 				position.y++;
-				this.direction = MoveDirection.UP;
+				direction = MoveDirection.UP;
 			}
 			
 			if(moveDown)
 			{
 				position.y--;
-				this.direction = MoveDirection.DOWN;
+				direction = MoveDirection.DOWN;
 			}
 			
 			if(moveRight)
 			{
 				position.x++;
-				this.direction = MoveDirection.RIGHT;
+				direction = MoveDirection.RIGHT;
 			}
 			
 			if(moveLeft)
 			{
 				position.x--;
-				this.direction = MoveDirection.LEFT;
+				direction = MoveDirection.LEFT;
+			}
+		}
+	
+		if(!World.isLocal() && (moveUp || moveDown || moveRight || moveLeft))
+		{
+			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
+			{
+				connectionToClient.sendMessageToClient(new UpdateEntityMessage(id, velocity, position));
 			}
 		}
 	}
@@ -111,12 +120,7 @@ public class EntityPlayer extends Entity
 	{
 		return login;
 	}
-	
-	public long getPlayerID()
-	{
-		return playerID;
-	}
-	
+
 	public int getHP()
 	{
 		return HP;

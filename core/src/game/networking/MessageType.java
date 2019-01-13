@@ -14,5 +14,6 @@ public enum MessageType
 	
 	FROM_SERVER,
 	UPDATE_ENTITY,
-	UPDATE_CHAT
+	UPDATE_CHAT,
+	SPAWN_ENTITY
 }

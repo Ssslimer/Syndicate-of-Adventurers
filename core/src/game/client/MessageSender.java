@@ -19,6 +19,7 @@ public class MessageSender extends Thread
 	public MessageSender(Socket clientSocket)
 	{
 		super("Output to server");
+		setDaemon(true);
 		this.clientSocket = clientSocket;
 	}
 	
@@ -58,10 +59,12 @@ public class MessageSender extends Thread
 	
 	private void sendToServer(Message message) throws IOException
 	{
-		if(!clientSocket.isClosed())
+		if(!clientSocket.isClosed() && !clientSocket.isOutputShutdown())
 		{
 			System.out.println("NEW MESSAGE: " + message.getMessageType().toString());
 			streamToServer.writeObject(message);
+			streamToServer.reset();
+			streamToServer.flush();
 		}
 	}
 }
