@@ -107,4 +107,16 @@ public class Server
 	{
 		return !clientIDs.containsKey(sessionID);
 	}
+	
+	public static long getSessionIdByLogin(String login)
+	{
+		for(Map.Entry<Long, String> entry : clientIDs.entrySet())
+		{
+			if(entry.getValue().compareTo(login) == 0)
+			{
+				return entry.getKey();
+			}
+		}
+		return -1;
+	}
 }

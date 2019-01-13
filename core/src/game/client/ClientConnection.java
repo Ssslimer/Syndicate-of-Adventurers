@@ -144,6 +144,7 @@ public class ClientConnection extends Thread
 	    	{
 	    		isLogedIn = true;
 	    		this.sessionId = ((AuthLoginMessage) fromServer).getSessionID(); 
+	    		this.login = login;
 	    		
 	    		start();
 	    	}
