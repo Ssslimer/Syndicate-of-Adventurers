@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.net.ssl.SSLServerSocketFactory;
@@ -15,7 +15,7 @@ public class ConnectionManager extends Thread
 	private final InetAddress address;
 	private final int port;
 	
-	private List<ConnectionToClient> usersConnections = new ArrayList<>();
+	private List<ConnectionToClient> connections = new LinkedList<>();
 
 	public ConnectionManager(Server server, String ip, int port) throws UnknownHostException
 	{
@@ -42,9 +42,9 @@ public class ConnectionManager extends Thread
 			
 			while(true)
 			{
-				ConnectionToClient connectionToClient = new ConnectionToClient(serverSocket.accept(), messageHander);			     			
+				ConnectionToClient connectionToClient = new ConnectionToClient(this, serverSocket.accept(), messageHander);			     			
 				connectionToClient.start();
-				usersConnections.add(connectionToClient);
+				connections.add(connectionToClient);
         	}
         }
 		catch(IOException e)
@@ -55,6 +55,14 @@ public class ConnectionManager extends Thread
 	
 	public List<ConnectionToClient> getAllConnections()
 	{
-		return usersConnections;
+		return connections;
+	}
+	
+	void removeConnection(ConnectionToClient connection)
+	{
+		synchronized(connections)
+		{
+			connections.remove(connection);
+		}
 	}
 }

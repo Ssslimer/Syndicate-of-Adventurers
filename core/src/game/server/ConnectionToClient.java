@@ -13,19 +13,22 @@ import networking.messages.Message;
 
 public class ConnectionToClient extends Thread
 {	
-	private Socket clientSocket;
 	private ObjectInputStream streamFromClient;
 	private ObjectOutputStream streamToClient;
-	
-	private final MessageHandler messageHandler;
 	
 	private boolean hasLogedIn, isRunning=true;
 	
 	private String login;
 
-	public ConnectionToClient(Socket clientSocket, MessageHandler messageHandler)
+	private final ConnectionManager connectionManager;
+	private final Socket clientSocket;
+	private final MessageHandler messageHandler;
+	
+	public ConnectionToClient(ConnectionManager connectionManager, Socket clientSocket, MessageHandler messageHandler)
 	{
 		super("ClientConnectionThread");
+		
+		this.connectionManager = connectionManager;
 		this.clientSocket = clientSocket;
 		this.messageHandler = messageHandler;
 	}
@@ -46,15 +49,18 @@ public class ConnectionToClient extends Thread
 			}
 			
 			/** TODO send player a disconnect info? */
+			connectionManager.removeConnection(this);
 	    }
 	    catch(SSLHandshakeException e)
 	    {
-	    	System.out.println(e);
+	    	System.out.println(e.getMessage());
+	    	connectionManager.removeConnection(this);
 	    }
 	    catch(SocketException e)
 	    {
 	    	System.out.println(e.getMessage());
 	    	System.out.println("Lost connection with client");
+	    	connectionManager.removeConnection(this);
 	    	return;
 	    }
 	    catch(EOFException e)
@@ -65,6 +71,7 @@ public class ConnectionToClient extends Thread
 	    catch(ClassNotFoundException | IOException e)
 	    {
 			e.printStackTrace();
+			connectionManager.removeConnection(this);
 			return;
 		}
     }
