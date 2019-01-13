@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 
@@ -61,8 +62,8 @@ public class World implements Serializable
 		{
 			for(int y = -10; y < 10; y++)
 			{
-				Vector3 position = new Vector3(x, y, 0);
-				terrain.add(new TerrainTile(position, 1));
+				Vector3 position = new Vector3(2.5f * x, 2.5f * y, 0);
+				terrain.add(new TerrainTile(position, new Random().nextInt(8)));
 			}
 		}
 	}

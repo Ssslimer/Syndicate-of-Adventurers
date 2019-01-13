@@ -6,9 +6,10 @@ public class AuthLoginMessage extends AuthMessage
 {
 	private static final long serialVersionUID = -3329951535473699645L;
 	
-	private long sessionID;
+	private final long sessionID;
 	
-	public AuthLoginMessage(MessageStatus status, long sessionID) {
+	public AuthLoginMessage(MessageStatus status, long sessionID)
+	{
 		super(status);
 		
 		this.sessionID = sessionID;
@@ -18,5 +19,4 @@ public class AuthLoginMessage extends AuthMessage
 	{
 		return this.sessionID;
 	}
-
 }

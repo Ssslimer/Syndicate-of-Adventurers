@@ -29,11 +29,9 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Sphere;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -42,9 +40,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.MyGame;
 import client.chat.Chat;
-import client.chat.ChatLabelGenerator;
 import entities.TerrainTile;
-import javafx.scene.transform.Transform;
 import networking.MoveDirection;
 import util.ConfigConstants;
 
@@ -76,6 +72,8 @@ public class GameScreen implements Screen, InputProcessor
     
     private Model model;
     private ModelInstance instance;
+    
+    private float timer;
 	
 	public GameScreen(MyGame game)
 	{	
@@ -128,13 +126,6 @@ public class GameScreen implements Screen, InputProcessor
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-				
-//		while(true)
-//		{
-//			SyndicateOfAdventurers.getClient().pingServer();
-//			try{Thread.sleep(1000);}
-//			catch(InterruptedException e){e.printStackTrace();}
-//		}
 	}
 
 	@Override
@@ -146,6 +137,13 @@ public class GameScreen implements Screen, InputProcessor
 //        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+        timer += delta;
+		if(timer > 5)
+		{
+			timer = 0;
+			MyGame.getClient().pingServer();
+		}
+        
         renderGameplay();
         renderChat();
 	}

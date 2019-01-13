@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class ChatLabelGenerator 
 {
-	public static Label generateLabel(float x, float y, float width, float height, String labelText, Skin skin)
+	public static Label generateLabel(float x, float y, float width, float height, String labelText)
 	{
 		LabelStyle style = new LabelStyle();
 		style.fontColor = Color.BLACK;

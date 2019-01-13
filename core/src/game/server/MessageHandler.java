@@ -20,7 +20,6 @@ import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.AuthLoginMessage;
-import networking.messages.fromserver.AuthMessage;
 import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
@@ -37,6 +36,7 @@ public class MessageHandler extends Thread
 	
 	public MessageHandler(Server server)
 	{
+		super("Message Handler");		
 		this.server = server;
 		rand = new Random();
 	}
@@ -44,6 +44,7 @@ public class MessageHandler extends Thread
 	@Override
 	public void run()
 	{
+		setPriority(10);
 		Executor executor = Executors.newFixedThreadPool(1);
 		
 		while(true)
@@ -133,12 +134,17 @@ public class MessageHandler extends Thread
 			
 		if(server.getAuthManager().isPlayerRegistered(login))
 		{
-			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.GIVEN_LOGIN_EXISTS));	
+			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.GIVEN_LOGIN_EXISTS, -1));	
 		}
 		else
 		{
 			server.getAuthManager().registerPlayerIfNotRegistered(login, hashedPassword);
-			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK));
+			long sessionID = generateSessionID();
+			Server.addClient(sessionID, login);
+			connectionWithClient.login();
+			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));
+			Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 5, 0), login));
+			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 		}
 	}
 	
