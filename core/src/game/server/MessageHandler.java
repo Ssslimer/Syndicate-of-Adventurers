@@ -74,7 +74,7 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	void handleMessage(ServerConnection source, Message message)
+	void handleMessage(ConnectionToClient source, Message message)
 	{
 		messages.add(new MessageTask(source, message));
 		shouldWait = false;		
@@ -83,7 +83,7 @@ public class MessageHandler extends Thread
 	
 	private void processMessage(MessageTask task) throws IOException
 	{	
-		ServerConnection connectionWithClient = task.getMessageOwner();			
+		ConnectionToClient connectionWithClient = task.getMessageOwner();			
 		Message message = task.getMessage();
 		MessageType content = message.getMessageType();
 		
@@ -131,7 +131,7 @@ public class MessageHandler extends Thread
 					ChatMessage chatMessage = (ChatMessage) message;
 					String nick = Server.getLogin(chatMessage.getSessionId());
 					
-					for(ServerConnection connectionToClient : server.getConnectionManager().getAllConnections())
+					for(ConnectionToClient connectionToClient : server.getConnectionManager().getAllConnections())
 					{
 						connectionToClient.sendMessageToClient(new UpdateChatMessage(nick + ": " + chatMessage.getText()));
 					}
@@ -144,7 +144,7 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	private void processRegister(ServerConnection connectionWithClient, RegisterMessage message) throws IOException
+	private void processRegister(ConnectionToClient connectionWithClient, RegisterMessage message) throws IOException
 	{		
 		connectionWithClient.stopCommunication();
 		
@@ -168,7 +168,7 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	private void processLogin(ServerConnection connectionWithClient, LoginMessage message) throws IOException
+	private void processLogin(ConnectionToClient connectionWithClient, LoginMessage message) throws IOException
 	{
 		String login = message.getLogin();
 		String password = message.getPassword();
@@ -207,16 +207,16 @@ public class MessageHandler extends Thread
 
 	private class MessageTask
 	{
-		private final ServerConnection messageOwner;
+		private final ConnectionToClient messageOwner;
 		private final Message message;
 		
-		private MessageTask(ServerConnection messageOwner, Message message)
+		private MessageTask(ConnectionToClient messageOwner, Message message)
 		{
 			this.messageOwner = messageOwner;
 			this.message = message;
 		}
 
-		private ServerConnection getMessageOwner()
+		private ConnectionToClient getMessageOwner()
 		{
 			return messageOwner;
 		}

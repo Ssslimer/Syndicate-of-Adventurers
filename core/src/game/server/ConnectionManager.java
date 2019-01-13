@@ -15,7 +15,7 @@ public class ConnectionManager extends Thread
 	private final InetAddress address;
 	private final int port;
 	
-	private List<ServerConnection> usersConnections = new ArrayList<>();
+	private List<ConnectionToClient> usersConnections = new ArrayList<>();
 
 	public ConnectionManager(Server server, String ip, int port) throws UnknownHostException
 	{
@@ -42,7 +42,7 @@ public class ConnectionManager extends Thread
 			
 			while(true)
 			{
-				ServerConnection connectionToClient = new ServerConnection(serverSocket.accept(), messageHander);			     			
+				ConnectionToClient connectionToClient = new ConnectionToClient(serverSocket.accept(), messageHander);			     			
 				connectionToClient.start();
 				usersConnections.add(connectionToClient);
         	}
@@ -53,7 +53,7 @@ public class ConnectionManager extends Thread
 		}
 	}
 	
-	public List<ServerConnection> getAllConnections()
+	public List<ConnectionToClient> getAllConnections()
 	{
 		return usersConnections;
 	}

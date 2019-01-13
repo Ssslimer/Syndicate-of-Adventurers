@@ -11,7 +11,7 @@ import javax.net.ssl.SSLHandshakeException;
 
 import networking.messages.Message;
 
-public class ServerConnection extends Thread
+public class ConnectionToClient extends Thread
 {	
 	private Socket clientSocket;
 	private ObjectInputStream streamFromClient;
@@ -23,7 +23,7 @@ public class ServerConnection extends Thread
 	
 	private String login;
 
-	public ServerConnection(Socket clientSocket, MessageHandler messageHandler)
+	public ConnectionToClient(Socket clientSocket, MessageHandler messageHandler)
 	{
 		super("ClientConnectionThread");
 		this.clientSocket = clientSocket;
