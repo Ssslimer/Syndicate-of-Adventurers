@@ -33,7 +33,7 @@ public class World implements Serializable
 		return entities.get(id);
 	}
 	
-	public Entity getPlayer(String login)
+	public EntityPlayer getPlayer(String login)
 	{
 		for(Map.Entry<Long, Entity> entity : entities.entrySet())
 		{
@@ -41,7 +41,7 @@ public class World implements Serializable
 			{
 				if(((EntityPlayer)entity).getLogin().compareTo(login) == 0)
 				{
-					return entity.getValue();
+					return (EntityPlayer)entity.getValue();
 				}
 			}
 		}

@@ -149,6 +149,7 @@ public class ClientConnection extends Thread
 	    	{
 	    		isLogedIn = true;
 	    		this.sessionId = fromServer.getSessionID(); 
+	    		this.login = login;
 	    		
 	    		start();
 	    	}

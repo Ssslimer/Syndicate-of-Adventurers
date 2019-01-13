@@ -108,35 +108,15 @@ public class MessageHandler extends Thread
 			break;
 			
 			case MOVE:
-				
-				if(connectionWithClient.isLogedIn())
-				{
-					MoveDirection direction = ((MoveMessage)task.getMessage()).getDirection();
-					boolean ifStop = ((MoveMessage)task.getMessage()).getIfToStop();
-					((EntityPlayer)Server.getMap().getEntities().get(((MoveMessage)task.getMessage()).getSessionId())).move(direction, ifStop);
-				}
+				processMove(connectionWithClient, (MoveMessage)message);
 			break;
 				
 			case ATTACK:
-				
-				if(connectionWithClient.isLogedIn())
-				{
-					((EntityPlayer)Server.getMap().getEntities().get(((AttackMessage)task.getMessage()).getSessionId())).attack();
-				}
+				processAttack(connectionWithClient, (AttackMessage) message);
 			break;
 			
-			case CHAT_MESSAGE:				
-				if(connectionWithClient.isLogedIn())
-				{
-					ChatMessage chatMessage = (ChatMessage) message;
-					String nick = Server.getLogin(chatMessage.getSessionId());
-					
-					for(ConnectionToClient connectionToClient : server.getConnectionManager().getAllConnections())
-					{
-						connectionToClient.sendMessageToClient(new UpdateChatMessage(nick + ": " + chatMessage.getText()));
-					}
-					Server.addChatMessage(nick + ": " + chatMessage.getText());
-				}
+			case CHAT_MESSAGE:	
+				processChat(connectionWithClient, (ChatMessage) message);
 			break;
 				
 			default:/** TODO maybe delete message to client ? */
@@ -189,6 +169,41 @@ public class MessageHandler extends Thread
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			}
 			else connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.WRONG_PASSWORD, -1));
+		}
+	}
+	
+	private void processMove(ConnectionToClient connectionWithClient, MoveMessage message)
+	{
+		if(connectionWithClient.isLogedIn())
+		{
+			MoveDirection direction = message.getDirection();
+			boolean ifStop = message.getIfToStop();		
+			String login = Server.getLogin(message.getSessionId());
+			
+			Server.getMap().getPlayer(login).move(direction, ifStop);
+		}
+	}
+	
+	private void processAttack(ConnectionToClient connectionWithClient, AttackMessage message)
+	{
+		if(connectionWithClient.isLogedIn())
+		{
+			String login = Server.getLogin(message.getSessionId());
+			Server.getMap().getPlayer(login).attack();
+		}
+	}
+	
+	private void processChat(ConnectionToClient connectionWithClient, ChatMessage message) throws IOException
+	{
+		if(connectionWithClient.isLogedIn())
+		{
+			String nick = Server.getLogin(message.getSessionId());
+			
+			for(ConnectionToClient connectionToClient : server.getConnectionManager().getAllConnections())
+			{
+				connectionToClient.sendMessageToClient(new UpdateChatMessage(nick + ": " + message.getText()));
+			}
+			Server.addChatMessage(nick + ": " + message.getText());
 		}
 	}
 	
