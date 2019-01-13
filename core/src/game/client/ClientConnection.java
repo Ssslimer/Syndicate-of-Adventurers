@@ -20,7 +20,7 @@ import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.AuthLoginMessage;
-import networking.messages.fromserver.AuthMessage;
+import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
@@ -41,6 +41,7 @@ public class ClientConnection extends Thread
 
 	public ClientConnection(String ip, int port)
 	{
+		super("Input from server");
 		this.ip = ip;
 		this.port = port;
 	}
@@ -105,14 +106,18 @@ public class ClientConnection extends Thread
 	    	
 	    	sender.addMessage(new RegisterMessage(login, password));
 	    	
-	    	AuthMessage fromServer = (AuthMessage) getDataFromServer();
+	    	AuthRegisterMessage fromServer = (AuthRegisterMessage) getDataFromServer();
 
 	    	System.out.println("Message from server: " + fromServer.toString());
-
-	    	MessageStatus status = fromServer.getMessageStatus();
-	    	System.out.println(status);
+	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
+	    	{
+	    		isLogedIn = true;
+	    		this.sessionId = fromServer.getSessionID(); 
+	    		
+	    		start();
+	    	}	    	
 	    	
-	    	return status;
+	    	return fromServer.getMessageStatus();
     	}
     	catch(IOException | ClassNotFoundException e)
     	{  		
@@ -139,11 +144,11 @@ public class ClientConnection extends Thread
     	
 	    	sender.addMessage(new LoginMessage(login, password));
 	    	
-	    	AuthMessage fromServer = (AuthMessage) getDataFromServer();
+	    	AuthLoginMessage fromServer = (AuthLoginMessage) getDataFromServer();
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
 	    	{
 	    		isLogedIn = true;
-	    		this.sessionId = ((AuthLoginMessage) fromServer).getSessionID(); 
+	    		this.sessionId = fromServer.getSessionID(); 
 	    		
 	    		start();
 	    	}
@@ -169,21 +174,7 @@ public class ClientConnection extends Thread
 				long ping = System.currentTimeMillis() - ((PingMessage) serverCallback).getTime();
 				System.out.println("PING " + ping);
 			break;
-			
-//			case LOGIN:
-//				/** TODO add missing code, maybe pop-ups */
-//				switch(((AuthMessage) serverCallback).getMessageStatus())
-//				{
-//					case OK: 
-//						isLogedIn = true; 
-////						this.sessionId = ((AuthMessage) serverCallback).getSessionID(); 
-//						break;
-//						
-//					case WRONG_PASSWORD: break;
-//					case NOT_REGISTRED: break;
-//				}
-//			break;
-			
+
 			case LOAD_MAP:
 				MyGame.setGameMap(((SendMapMessage) serverCallback).getMap());
 			break;

@@ -252,10 +252,16 @@ public class JoinServerScreen implements Screen
 	
 				MyGame.setClient(new ClientConnection(ip, port));
 				MessageStatus status = MyGame.getClient().register(login, password);
-				if(status == MessageStatus.OK) return;
-				
-				dialog.text(status.name()); /** TODO add translations? */
-				dialog.show(stage);
+				if(status == MessageStatus.OK)
+				{
+					game.setScreen(new LoadingScreen(game));
+					dispose();
+				}
+				else
+				{
+					dialog.text(status.name()); /** TODO add translations? */
+					dialog.show(stage);
+				}
 			}
 	    });
 		

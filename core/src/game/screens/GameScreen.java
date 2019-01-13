@@ -29,11 +29,9 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Sphere;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -42,9 +40,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.MyGame;
 import client.chat.Chat;
-import client.chat.ChatLabelGenerator;
 import entities.TerrainTile;
-import javafx.scene.transform.Transform;
 import networking.MoveDirection;
 import util.ConfigConstants;
 

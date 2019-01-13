@@ -18,7 +18,8 @@ public class MessageSender extends Thread
 	
 	public MessageSender(Socket clientSocket)
 	{
-		this.clientSocket = clientSocket;		
+		super("Output to server");
+		this.clientSocket = clientSocket;
 	}
 	
 	@Override

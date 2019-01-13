@@ -20,7 +20,6 @@ public class LoadingScreen implements Screen
 	
 	private final SpriteBatch spriteBatch = new SpriteBatch();
 	private Texture background;
-	private Label label;
 	
 	public LoadingScreen(MyGame game)
 	{
