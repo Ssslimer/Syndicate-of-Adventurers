@@ -177,10 +177,10 @@ public class MessageHandler extends Thread
 		if(connectionWithClient.isLogedIn())
 		{
 			MoveDirection direction = message.getDirection();
-			boolean ifStop = message.getIfToStop();
-			long id = message.getSessionId();
+			boolean ifStop = message.getIfToStop();		
+			String login = Server.getLogin(message.getSessionId());
 			
-			((EntityPlayer)Server.getMap().getEntity(id)).move(direction, ifStop);
+			Server.getMap().getPlayer(login).move(direction, ifStop);
 		}
 	}
 	
@@ -188,8 +188,8 @@ public class MessageHandler extends Thread
 	{
 		if(connectionWithClient.isLogedIn())
 		{
-			long id = message.getSessionId();
-			((EntityPlayer)Server.getMap().getEntity(id)).attack();
+			String login = Server.getLogin(message.getSessionId());
+			Server.getMap().getPlayer(login).attack();
 		}
 	}
 	
