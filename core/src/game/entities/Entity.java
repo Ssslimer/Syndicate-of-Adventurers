@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import networking.MoveDirection;
 
-public class Entity implements Serializable
+public abstract class Entity implements Serializable
 {
 	private static final long serialVersionUID = 9193370594513812803L;
 	
@@ -15,7 +15,7 @@ public class Entity implements Serializable
 	
 	protected Vector3 position;
 	protected Vector3 velocity = new Vector3();
-	protected MoveDirection direction;
+	protected MoveDirection moveDirection = MoveDirection.NONE;
 
 	public Entity(Vector3 position)
 	{
@@ -25,7 +25,7 @@ public class Entity implements Serializable
 		this.position = position;
 	}
 
-	public void update() {}
+	public abstract void update(float delta);
 	
 	public Vector3 getPosition()
 	{
@@ -39,12 +39,12 @@ public class Entity implements Serializable
 	
 	public MoveDirection getDirection()
 	{
-		return this.direction;
+		return moveDirection;
 	}
 	
 	public void setDirection(MoveDirection direction)
 	{
-		this.direction = direction;
+		this.moveDirection = direction;
 	}
 	
 	public long getId() 

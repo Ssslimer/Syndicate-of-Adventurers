@@ -1,14 +1,29 @@
 package networking;
 
-public enum MoveDirection 
+import com.badlogic.gdx.math.Vector3;
+
+public enum MoveDirection
 {
-	UP, 
-	DOWN, 
-	LEFT, 
-	RIGHT,
+	NONE (new Vector3( 0, 0, 0)),
+	UP   (new Vector3( 1, 0, 0)), 
+	DOWN (new Vector3(-1, 0, 0)), 
+	LEFT (new Vector3( 0, 0,-1)), 
+	RIGHT(new Vector3( 0, 0, 1)),
 	
-	UP_AND_RIGHT,
-	UP_AND_LEFT,
-	DOWN_AND_RIGHT,
-	DOWN_AND_LEFT
+	UP_AND_RIGHT  (new Vector3( 1, 0, 1).nor()),
+	UP_AND_LEFT   (new Vector3( 1, 0,-1).nor()),
+	DOWN_AND_RIGHT(new Vector3(-1, 0, 1).nor()),
+	DOWN_AND_LEFT (new Vector3(-1, 0,-1).nor());
+	
+	private final Vector3 direction;
+	
+	private MoveDirection(Vector3 direction)
+	{
+		this.direction = direction;
+	}
+	
+	public Vector3 getDirection()
+	{
+		return direction;
+	}
 }

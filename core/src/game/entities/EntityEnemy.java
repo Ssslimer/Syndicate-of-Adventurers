@@ -33,7 +33,7 @@ public class EntityEnemy extends Entity
 	}
 	
 	@Override
-	public void update()
+	public void update(float delta)
 	{
 		double xAndYTranslationProbability = rand.nextDouble();
 		double xTranslationProbability = rand.nextDouble();
@@ -46,25 +46,25 @@ public class EntityEnemy extends Entity
 			{
 				position.x++;
 				position.y++;
-				this.direction = MoveDirection.UP_AND_RIGHT;
+				moveDirection = MoveDirection.UP_AND_RIGHT;
 			}
 			else if(xTranslationProbability > 0.5d && yTranslationProbability <= 0.5d)
 			{
 				position.x--;
 				position.y++;
-				this.direction = MoveDirection.UP_AND_LEFT;
+				moveDirection = MoveDirection.UP_AND_LEFT;
 			}
 			else if(xTranslationProbability <= 0.5d && yTranslationProbability > 0.5d)
 			{
 				position.x++;
 				position.y--;
-				this.direction = MoveDirection.DOWN_AND_LEFT;
+				moveDirection = MoveDirection.DOWN_AND_LEFT;
 			}
 			else if(xTranslationProbability > 0.5d && yTranslationProbability > 0.5d)
 			{
 				position.x--;
 				position.y--;
-				this.direction = MoveDirection.DOWN_AND_RIGHT;
+				moveDirection = MoveDirection.DOWN_AND_RIGHT;
 			}
 		}		
 		else
@@ -72,23 +72,23 @@ public class EntityEnemy extends Entity
 			if(xTranslationProbability <= 0.33d)
 			{
 				position.x++;
-				this.direction = MoveDirection.RIGHT;
+				moveDirection = MoveDirection.RIGHT;
 			}
 			else if(xTranslationProbability <= 0.67d)
 			{
 				position.x--;
-				this.direction = MoveDirection.LEFT;
+				moveDirection = MoveDirection.LEFT;
 			}
 			
 			if(yTranslationProbability <= 0.33d)
 			{
 				position.y++;
-				this.direction = MoveDirection.UP;
+				moveDirection = MoveDirection.UP;
 			}
 			else if(yTranslationProbability <= 0.67d)
 			{
 				position.y--;
-				this.direction = MoveDirection.DOWN;
+				moveDirection = MoveDirection.DOWN;
 			}
 		}
 
@@ -125,7 +125,7 @@ public class EntityEnemy extends Entity
 	
 	private void attack()
 	{
-		Server.getMap().attackIfPlayerInFront(attackPower, position, direction);
+		Server.getMap().attackIfPlayerInFront(attackPower, position, moveDirection);
 	}
 	
 }

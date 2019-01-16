@@ -21,7 +21,6 @@ public class UpdateEntityMessage extends Message
 		this.entityId = entityId;
 		this.velocity = velocity;
 		this.position = position;
-		System.out.println("Constructor: " + position);
 	}
 
 	public Vector3 getVelocity()

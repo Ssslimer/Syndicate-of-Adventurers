@@ -188,7 +188,7 @@ public class MessageHandler extends Thread
 			boolean ifStop = message.getIfToStop();		
 			String login = Server.getLogin(message.getSessionId());
 			
-			Server.getMap().getPlayer(login).move(direction, ifStop);
+			Server.getMap().getPlayer(login).setMoveDirection(direction, ifStop);
 		}
 	}
 	

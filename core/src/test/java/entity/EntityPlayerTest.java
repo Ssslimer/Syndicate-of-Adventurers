@@ -16,10 +16,6 @@ import util.Clamp;
 
 class EntityPlayerTest 
 {
-	private static final int BASE_PLAYER_ATTACK = 10;
-	private static final int BASE_PLAYER_DEFENCE = 5;
-	private static final int BASE_PLAYER_HP = 100;
-	
 	@Test
 	void test() 
 	{
@@ -57,34 +53,30 @@ class EntityPlayerTest
 		assertTrue(e1.getPosition().z == 3);
 		
 		assertEquals(e2.getPosition(), v2);
-		
-		assertTrue(e1.getAttackPower() == BASE_PLAYER_ATTACK);
-		assertTrue(e1.getDefencePower() == BASE_PLAYER_DEFENCE);
-		assertTrue(e1.getHP() == BASE_PLAYER_HP);
 	}
 	
 	@Test
 	void entityPlayerMoveTest()
 	{
 		EntityPlayer e = new EntityPlayer(new Vector3(5, 5, 5), "test");
-		e.move(MoveDirection.UP, false);	
-		e.update();
+		e.setMoveDirection(MoveDirection.UP, false);	
+		e.update(1);
 		
 		assertTrue(e.getPosition().x == 5);
 		assertTrue(e.getPosition().y == 6); // after update it should move in y axis by 1
 		assertTrue(e.getPosition().z == 5);
 		
-		e.move(MoveDirection.RIGHT, false);	
-		e.update();
+		e.setMoveDirection(MoveDirection.RIGHT, false);	
+		e.update(1);
 		
 		assertTrue(e.getPosition().x == 6); // after update it should move in x axis by 1
 		assertTrue(e.getPosition().y == 7); // after update it should move in y axis by 1
 		assertTrue(e.getPosition().z == 5);
 		
 		// stopping movement UP and RIGHT
-		e.move(MoveDirection.UP, true);
-		e.move(MoveDirection.RIGHT, true);
-		e.update();
+		e.setMoveDirection(MoveDirection.UP, true);
+		e.setMoveDirection(MoveDirection.RIGHT, true);
+		e.update(1);
 		
 		// we expect that it won't move after update
 		assertTrue(e.getPosition().x == 6);
@@ -102,26 +94,15 @@ class EntityPlayerTest
 		int damage = 25;
 		
 		EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 0), "test");
-		Item item = new Item(itemAttackPower, itemDefencePower, itemHPPower);
-		
+		Item item = new Item(itemAttackPower, itemDefencePower, itemHPPower);		
 		e.addItem(item);
 		
-		assertTrue(e.getAttackPower() == BASE_PLAYER_ATTACK + itemAttackPower);
-		assertTrue(e.getDefencePower() == BASE_PLAYER_DEFENCE + itemDefencePower);
-		assertTrue(e.getHP() == BASE_PLAYER_HP + itemHPPower);
-		
-		int hpBeforeDamage = e.getHP();
+		int hpBeforeDamage = e.getHealth();
 		e.getDamage(damage);
 		
-		int realDamage = Clamp.clampInt(damage - e.getDefencePower(), 0, damage);
+		int realDamage = Clamp.clampInt(damage - e.getDefence(), 0, damage);
 		
-		assertTrue(e.getHP() == hpBeforeDamage - realDamage);
-		
-		e.removeItem(item);
-		
-		assertTrue(e.getAttackPower() == BASE_PLAYER_ATTACK);
-		assertTrue(e.getDefencePower() == BASE_PLAYER_DEFENCE);
-		assertTrue(e.getHP() == BASE_PLAYER_HP - realDamage);
+		assertTrue(e.getHealth() == hpBeforeDamage - realDamage);
 	}
 
 }

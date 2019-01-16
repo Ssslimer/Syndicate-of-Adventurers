@@ -50,7 +50,7 @@ public class GameScreen implements Screen, InputProcessor
     
     private boolean usingChat;
 
-    private float timer;
+    private float timer; // for ping
 	
 	public GameScreen(MyGame game)
 	{	
@@ -83,8 +83,6 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			MyGame.getRenderer().initEntity(entity);						
 		}   	
-		
-		System.out.println("Total entityies initialized: " + MyGame.getGameMap().getEntities().values().size());
 	}
 
 	@Override
@@ -162,9 +160,9 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			switch(keycode)
 			{
-				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP, false);	break;
-				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN, false);	break;		
-				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT, false);	break;
+				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP,    false);	break;
+				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  false);	break;		
+				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  false);	break;
 				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;			
 			}
 		}
@@ -179,9 +177,9 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			switch(keycode)
 			{
-				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP, true); 	break;		
-				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN, true);	break;			
-				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT, true);	break;
+				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP,    true); 	break;		
+				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  true);	break;			
+				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  true);	break;
 				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, true);	break;			
 			}
 		}

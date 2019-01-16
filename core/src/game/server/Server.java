@@ -43,7 +43,7 @@ public class Server
 		{
 			long timeBefore = Timer.getTime();
 			
-			update();
+			update(Timer.getLogicDeltaTime());
 			
 			long timeLeft = (long)Timer.getLogicDeltaTime() + timeBefore - Timer.getTime();	
 			Timer.updateTPS();
@@ -63,9 +63,9 @@ public class Server
 		}
 	}
 	
-	private void update()
+	private void update(float delta)
 	{	
-		world.update();
+		world.update(delta);
 	}
 
 	public void stop()

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 
-import client.MyGame;
 import networking.MoveDirection;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.ConnectionToClient;
@@ -21,7 +20,8 @@ public class EntityPlayer extends Entity
 
 	private String login;
 	
-	private int HP;
+	private float speed = 5f;
+	private int helth;
 	private int attackPower;
 	private int defencePower;
 	
@@ -38,7 +38,7 @@ public class EntityPlayer extends Entity
 		
 		this.login = login;
 		
-		HP = BASE_PLAYER_HP;
+		helth = BASE_PLAYER_HP;
 		attackPower = BASE_PLAYER_ATTACK;
 		defencePower = BASE_PLAYER_DEFENCE;
 	}
@@ -47,66 +47,15 @@ public class EntityPlayer extends Entity
 	{
 		super(player.getPosition());
 		
-		eqList = player.getEqList();
+		eqList = player.getItems();
 		determinePlayerStats();
 	}
 	
 	@Override
-	public void update()
-	{
-		super.update();
-				
-		if(moveUp && moveRight)
-		{
-			position.x++;
-			position.y++;
-			direction = MoveDirection.UP_AND_RIGHT;
-		}
-		else if(moveUp && moveLeft)
-		{
-			position.x--;
-			position.y++;
-			direction = MoveDirection.UP_AND_LEFT;
-		}
-		else if(moveDown && moveRight)
-		{
-			position.x++;
-			position.y--;
-			direction = MoveDirection.DOWN_AND_RIGHT;
-		}
-		else if(moveDown && moveLeft)
-		{
-			position.x--;
-			position.y--;
-			direction = MoveDirection.DOWN_AND_LEFT;
-		}
-		else
-		{
-			if(moveUp)
-			{
-				position.y++;
-				direction = MoveDirection.UP;
-			}
-			
-			if(moveDown)
-			{
-				position.y--;
-				direction = MoveDirection.DOWN;
-			}
-			
-			if(moveRight)
-			{
-				position.x++;
-				direction = MoveDirection.RIGHT;
-			}
-			
-			if(moveLeft)
-			{
-				position.x--;
-				direction = MoveDirection.LEFT;
-			}
-		}
-	
+	public void update(float delta)
+	{	
+		position.add(moveDirection.getDirection().cpy().scl(1 / delta));
+		
 		if(!World.isLocal() && (moveUp || moveDown || moveRight || moveLeft))
 		{
 			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
@@ -116,36 +65,11 @@ public class EntityPlayer extends Entity
 		}
 	}
 	
-	public String getLogin()
-	{
-		return login;
-	}
-
-	public int getHP()
-	{
-		return HP;
-	}
-	
-	public int getAttackPower()
-	{
-		return attackPower;
-	}
-	
-	public int getDefencePower()
-	{
-		return defencePower;
-	}
-	
-	public List<Item> getEqList()
-	{
-		return eqList;
-	}
-	
 	public void addItem(Item item)
 	{
 		eqList.add(item);
 		
-		HP += item.getHPBonus();
+		helth += item.getHPBonus();
 		attackPower += item.getAttack();
 		defencePower += item.getDefence();
 	}
@@ -156,7 +80,7 @@ public class EntityPlayer extends Entity
 		{
 			eqList.remove(item);
 			
-			HP -= item.getHPBonus();
+			helth -= item.getHPBonus();
 			attackPower -= item.getAttack();
 			defencePower -= item.getDefence();
 		}
@@ -166,7 +90,7 @@ public class EntityPlayer extends Entity
 	{
 		for(Item item : eqList)
 		{
-			HP += item.getHPBonus();
+			helth += item.getHPBonus();
 			attackPower += item.getAttack();
 			defencePower += item.getDefence();
 		}
@@ -178,32 +102,55 @@ public class EntityPlayer extends Entity
 		
 		if(damageAttack > 0)
 		{
-			HP -= damageAttack;
+			helth -= damageAttack;
 		}
 	}
 	
-	public void move(MoveDirection direction, boolean ifToStop)
+	public void setMoveDirection(MoveDirection direction, boolean ifToStop)
 	{
-		if(direction == MoveDirection.UP)
-		{
-			moveUp = !ifToStop;
-		}
-		else if(direction == MoveDirection.DOWN)
-		{
-			moveDown = !ifToStop;
-		}
-		else if(direction == MoveDirection.LEFT)
-		{
-			moveLeft = !ifToStop;
-		}
-		else if(direction == MoveDirection.RIGHT)
-		{
-			moveRight = !ifToStop;
-		}
+		if(direction == MoveDirection.UP)			moveUp = !ifToStop;
+		else if(direction == MoveDirection.DOWN)	moveDown = !ifToStop;
+		else if(direction == MoveDirection.LEFT)	moveLeft = !ifToStop;
+		else if(direction == MoveDirection.RIGHT) 	moveRight = !ifToStop;
+		
+		if(moveUp && moveRight)			moveDirection = MoveDirection.UP_AND_RIGHT;
+		else if(moveUp && moveLeft)		moveDirection = MoveDirection.UP_AND_LEFT;
+		else if(moveDown && moveRight)	moveDirection = MoveDirection.DOWN_AND_RIGHT;
+		else if(moveDown && moveLeft)	moveDirection = MoveDirection.DOWN_AND_LEFT;
+		else if(moveUp) 				moveDirection = MoveDirection.UP;
+		else if(moveDown) 				moveDirection = MoveDirection.DOWN;
+		else if(moveRight)				moveDirection = MoveDirection.RIGHT;
+		else if(moveLeft) 				moveDirection = MoveDirection.LEFT;
+		else 							moveDirection = MoveDirection.NONE;
 	}
 	
 	public void attack()
 	{
-		Server.getMap().attackIfEnemyInFront(attackPower, position, direction);
+		Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
+	}
+	
+	public String getLogin()
+	{
+		return login;
+	}
+
+	public int getHealth()
+	{
+		return helth;
+	}
+	
+	public int getAttack()
+	{
+		return attackPower;
+	}
+	
+	public int getDefence()
+	{
+		return defencePower;
+	}
+	
+	public List<Item> getItems()
+	{
+		return eqList;
 	}
 }

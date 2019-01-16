@@ -67,11 +67,11 @@ public class World implements Serializable
 		}
 	}
 
-	public void update()
+	public void update(float delta)
 	{
 		for(Entity e : entities.values())
 		{
-			e.update();
+			e.update(delta);
 		}
 	}
 	
