@@ -15,7 +15,7 @@ public abstract class Entity implements Serializable
 	
 	protected Vector3 position;
 	protected Vector3 velocity = new Vector3();
-	protected MoveDirection moveDirection = MoveDirection.NONE;
+	protected Vector3 moveDirection = new Vector3();
 
 	public Entity(Vector3 position)
 	{
@@ -37,14 +37,9 @@ public abstract class Entity implements Serializable
 		this.position = position;
 	}
 	
-	public MoveDirection getDirection()
+	public Vector3 getMoveDirection()
 	{
 		return moveDirection;
-	}
-	
-	public void setDirection(MoveDirection direction)
-	{
-		this.moveDirection = direction;
 	}
 	
 	public long getId() 

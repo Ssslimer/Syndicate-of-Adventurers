@@ -6,16 +6,19 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
+import server.ServerProperties;
+import server.ServerPropertiesLoader;
+
 class ServerPropertiesLoaderTest
 {
 	@Test
 	public void loadServerPropertiesTest() 
 	{
 		ServerPropertiesLoader loader = new ServerPropertiesLoader(Paths.get("src", "test", "resources", "server_properties.xml"));
-
-		assertEquals("192.168.2.53", loader.getIP());
-		assertEquals(4444, loader.getPortNumber());
-		assertEquals(50, loader.getTPS());
+		ServerProperties properties = loader.load();
+		assertEquals("192.168.2.53", properties.getIP());
+		assertEquals(4444, properties.getPortNumber());
+		assertEquals(50, properties.getTPS());
 	}
 
 }

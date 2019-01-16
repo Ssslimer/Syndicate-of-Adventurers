@@ -27,10 +27,7 @@ public class EntityPlayer extends Entity
 	
 	private List<Item> eqList = new ArrayList<>();
 	
-	boolean moveUp;
-	boolean moveDown;
-	boolean moveLeft;
-	boolean moveRight;
+	boolean moveUp, moveDown, moveLeft, moveRight;
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{
@@ -54,7 +51,7 @@ public class EntityPlayer extends Entity
 	@Override
 	public void update(float delta)
 	{	
-		position.add(moveDirection.getDirection().cpy().scl(1 / delta));
+		position.add(moveDirection.cpy().scl(speed / delta));
 		
 		if(!World.isLocal() && (moveUp || moveDown || moveRight || moveLeft))
 		{
@@ -113,20 +110,20 @@ public class EntityPlayer extends Entity
 		else if(direction == MoveDirection.LEFT)	moveLeft = !ifToStop;
 		else if(direction == MoveDirection.RIGHT) 	moveRight = !ifToStop;
 		
-		if(moveUp && moveRight)			moveDirection = MoveDirection.UP_AND_RIGHT;
-		else if(moveUp && moveLeft)		moveDirection = MoveDirection.UP_AND_LEFT;
-		else if(moveDown && moveRight)	moveDirection = MoveDirection.DOWN_AND_RIGHT;
-		else if(moveDown && moveLeft)	moveDirection = MoveDirection.DOWN_AND_LEFT;
-		else if(moveUp) 				moveDirection = MoveDirection.UP;
-		else if(moveDown) 				moveDirection = MoveDirection.DOWN;
-		else if(moveRight)				moveDirection = MoveDirection.RIGHT;
-		else if(moveLeft) 				moveDirection = MoveDirection.LEFT;
-		else 							moveDirection = MoveDirection.NONE;
+		if(moveUp && moveRight)			moveDirection = MoveDirection.UP_AND_RIGHT.getDirection();
+		else if(moveUp && moveLeft)		moveDirection = MoveDirection.UP_AND_LEFT.getDirection();
+		else if(moveDown && moveRight)	moveDirection = MoveDirection.DOWN_AND_RIGHT.getDirection();
+		else if(moveDown && moveLeft)	moveDirection = MoveDirection.DOWN_AND_LEFT.getDirection();
+		else if(moveUp) 				moveDirection = MoveDirection.UP.getDirection();
+		else if(moveDown) 				moveDirection = MoveDirection.DOWN.getDirection();
+		else if(moveRight)				moveDirection = MoveDirection.RIGHT.getDirection();
+		else if(moveLeft) 				moveDirection = MoveDirection.LEFT.getDirection();
+		else 							moveDirection = MoveDirection.NONE.getDirection();
 	}
 	
 	public void attack()
 	{
-		Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
+		//Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
 	}
 	
 	public String getLogin()

@@ -35,67 +35,8 @@ public class EntityEnemy extends Entity
 	@Override
 	public void update(float delta)
 	{
-		double xAndYTranslationProbability = rand.nextDouble();
-		double xTranslationProbability = rand.nextDouble();
-		double yTranslationProbability = rand.nextDouble();
 		double attackProbability = rand.nextDouble();
-		
-		if(xAndYTranslationProbability <= 0.5d)
-		{
-			if(xTranslationProbability <= 0.5d && yTranslationProbability <= 0.5d)
-			{
-				position.x++;
-				position.y++;
-				moveDirection = MoveDirection.UP_AND_RIGHT;
-			}
-			else if(xTranslationProbability > 0.5d && yTranslationProbability <= 0.5d)
-			{
-				position.x--;
-				position.y++;
-				moveDirection = MoveDirection.UP_AND_LEFT;
-			}
-			else if(xTranslationProbability <= 0.5d && yTranslationProbability > 0.5d)
-			{
-				position.x++;
-				position.y--;
-				moveDirection = MoveDirection.DOWN_AND_LEFT;
-			}
-			else if(xTranslationProbability > 0.5d && yTranslationProbability > 0.5d)
-			{
-				position.x--;
-				position.y--;
-				moveDirection = MoveDirection.DOWN_AND_RIGHT;
-			}
-		}		
-		else
-		{
-			if(xTranslationProbability <= 0.33d)
-			{
-				position.x++;
-				moveDirection = MoveDirection.RIGHT;
-			}
-			else if(xTranslationProbability <= 0.67d)
-			{
-				position.x--;
-				moveDirection = MoveDirection.LEFT;
-			}
-			
-			if(yTranslationProbability <= 0.33d)
-			{
-				position.y++;
-				moveDirection = MoveDirection.UP;
-			}
-			else if(yTranslationProbability <= 0.67d)
-			{
-				position.y--;
-				moveDirection = MoveDirection.DOWN;
-			}
-		}
-
-		if(attackProbability <= 0.5d)
-		{
-			attack();
-		}
+		if(attackProbability <= 0.5d) attack();	
 	}
 	
 	public int getHP()
@@ -125,7 +66,7 @@ public class EntityEnemy extends Entity
 	
 	private void attack()
 	{
-		Server.getMap().attackIfPlayerInFront(attackPower, position, moveDirection);
+		//Server.getMap().attackIfPlayerInFront(attackPower, position, moveDirection);
 	}
 	
 }

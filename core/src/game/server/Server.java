@@ -8,21 +8,28 @@ import java.util.Map;
 import java.util.HashMap;
 
 import entities.World;
-import util.ServerProperties;
 import util.Timer;
 
 public class Server
 {	
-	private final ServerProperties serverProperties;	
-	private static ConnectionManager connectionManager;
+	private final ServerProperties serverProperties;
+	private final List<String> admins;
 	private AuthManager authManager;
+	
 	private static World world;
+	private static ConnectionManager connectionManager;
+	
 	private static List<String> chat = Collections.synchronizedList(new ArrayList<>());
 	private static Map<Long, String> clientIDs = Collections.synchronizedMap(new HashMap<>());
+
 	
-	public Server(ServerProperties serverProperties)
+	public Server()
 	{
-		this.serverProperties = serverProperties;
+		ServerPropertiesLoader propertiesLoader = new ServerPropertiesLoader();
+		this.serverProperties = propertiesLoader.load();
+		
+		AdminsLoader adminsLoader = new AdminsLoader();
+		this.admins = adminsLoader.load();
 	}
 	
 	public void start() throws UnknownHostException
@@ -118,5 +125,10 @@ public class Server
 			}
 		}
 		return -1;
+	}
+	
+	public boolean isAdmin(String login)
+	{
+		return admins.contains(login);
 	}
 }

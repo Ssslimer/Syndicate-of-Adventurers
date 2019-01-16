@@ -1,4 +1,4 @@
-package util;
+package server;
 
 public class ServerProperties 
 {
@@ -6,11 +6,18 @@ public class ServerProperties
 	private final int port;
 	private final int tps;
 	
-	public ServerProperties(ServerPropertiesLoader loader)
+	public ServerProperties()
 	{	
-		this.ip = loader.getIP();
-		this.port = loader.getPortNumber();
-		this.tps = loader.getTPS();
+		this.ip = "127.0.0.1";
+		this.port = 4444;
+		this.tps = 50;
+	}
+	
+	public ServerProperties(String ip, int port, int tps)
+	{	
+		this.ip = ip;
+		this.port = port;
+		this.tps = tps;
 	}
 	
 	public String getIP()

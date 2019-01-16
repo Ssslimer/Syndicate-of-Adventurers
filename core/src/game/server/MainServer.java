@@ -2,16 +2,11 @@ package server;
 
 import java.net.UnknownHostException;
 
-import util.ServerProperties;
-import util.ServerPropertiesLoader;
-
 public class MainServer
 {
 	public static void main(String[] args)
 	{
-		ServerProperties serverProperties = new ServerProperties(new ServerPropertiesLoader());
-				
-        Server server = new Server(serverProperties);
+        Server server = new Server();
         try
 		{
 			server.start();

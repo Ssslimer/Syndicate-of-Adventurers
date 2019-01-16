@@ -1,4 +1,4 @@
-package util;
+package server;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,20 +16,21 @@ import org.xml.sax.SAXException;
 public class ServerPropertiesLoader 
 {
 	private static final Path XML_DEFAULT_FILE_PATH = Paths.get("server_properties.xml");
+	private final Path path;
 	
 	private Element server_info;
 	
-	public ServerPropertiesLoader(Path path)
-	{	
-		load(path);
-	}
-	
 	public ServerPropertiesLoader()
 	{	
-		load(XML_DEFAULT_FILE_PATH);
+		this.path = XML_DEFAULT_FILE_PATH;
 	}
 	
-	private void load(Path path)
+	public ServerPropertiesLoader(Path path)
+	{	
+		this.path = path;
+	}
+
+	public ServerProperties load()
 	{
 		try 
 		{
@@ -41,32 +42,35 @@ public class ServerPropertiesLoader
 			NodeList list = doc.getElementsByTagName("server-info");
 			server_info = (Element) list.item(0);
 			
+			return new ServerProperties(getIP(), getPortNumber(), getTPS());		
 		} 
 		catch(ParserConfigurationException e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} 
 		catch(SAXException e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} 
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
+		
+		return new ServerProperties();
 	}
 	
-	public String getIP()
+	private String getIP()
 	{	
 		return server_info.getElementsByTagName("ip").item(0).getTextContent();
 	}
 	
-	public int getPortNumber()
+	private int getPortNumber()
 	{
 		return Integer.parseInt(server_info.getElementsByTagName("port").item(0).getTextContent());
 	}
 	
-	public int getTPS()
+	private int getTPS()
 	{
 		return Integer.parseInt(server_info.getElementsByTagName("tps").item(0).getTextContent());
 	}
