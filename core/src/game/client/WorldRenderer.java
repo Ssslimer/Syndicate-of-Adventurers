@@ -8,7 +8,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -28,7 +28,7 @@ public class WorldRenderer
     private ModelBuilder modelBuilder = new ModelBuilder();
     private Environment environment = new Environment();
     private ModelBatch modelBatch = new ModelBatch();
-	private PerspectiveCamera cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	private OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     
     private List<ModelInstance> terrainModels = new ArrayList<>();	
     private Map<Entity, ModelInstance> entityInstances = new HashMap<>();
@@ -38,10 +38,11 @@ public class WorldRenderer
     	environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
     	environment.add(new DirectionalLight().set(1, 1, 1, 0, -1, 0));
     	
-    	cam.position.set(-10f, 10f, -10f);
+    	cam.position.set(-10, 10, 0);
     	cam.lookAt(0, 0, 0);
     	cam.near = 1f;
     	cam.far = 300f;
+    	cam.zoom = 0.02f;
     	cam.update();
     }
     

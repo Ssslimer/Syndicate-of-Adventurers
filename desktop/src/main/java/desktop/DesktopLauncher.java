@@ -1,5 +1,8 @@
 package desktop;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 
 import com.badlogic.gdx.Files.FileType;
@@ -12,7 +15,7 @@ import util.ConfigConstants;
 
 public class DesktopLauncher
 {
-	public static void main(String[] arg)
+	public static void main(String[] arg) throws IOException
 	{
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = true;
@@ -25,5 +28,17 @@ public class DesktopLauncher
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
 		new LwjglApplication(new MyGame(), config);
+	}
+	
+	public static int sizeof(Object obj) throws IOException
+	{
+	    ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream);
+
+	    objectOutputStream.writeObject(obj);
+	    objectOutputStream.flush();
+	    objectOutputStream.close();
+
+	    return byteOutputStream.toByteArray().length;
 	}
 }
