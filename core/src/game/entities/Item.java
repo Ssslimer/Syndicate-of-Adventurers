@@ -1,5 +1,7 @@
 package entities;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Item 
 {
 	private int attack;
@@ -31,4 +33,11 @@ public class Item
 	{
 		return HPBonus;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return type.toString() + "(" + attack + "," + defence + "," + HPBonus + ")";
+	}
 }
+	
