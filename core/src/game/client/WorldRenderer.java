@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import entities.Entity;
+import entities.EntityPlayer;
 import entities.TerrainTile;
 
 public class WorldRenderer
@@ -90,6 +91,7 @@ public class WorldRenderer
 	{
 		modelBatch.begin(cam);
 		
+		followPlayer();
 		renderEntities();
 		renderMap();
 		
@@ -118,5 +120,13 @@ public class WorldRenderer
 	public void clear()
 	{
 		modelBatch.dispose();
+	}
+	
+	private void followPlayer()
+	{
+		EntityPlayer player = MyGame.getGameMap().getPlayer(MyGame.getClient().getLogin());
+    	cam.position.set(-10, 10, 0).add(player.getPosition());
+    	cam.lookAt(player.getPosition());
+    	cam.update();
 	}
 }
