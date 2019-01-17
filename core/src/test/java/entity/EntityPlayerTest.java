@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import entities.EntityPlayer;
 import entities.Item;
+import entities.ItemType;
 import networking.MoveDirection;
 import util.Clamp;
 
@@ -94,7 +95,7 @@ class EntityPlayerTest
 		int damage = 25;
 		
 		EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 0), "test");
-		Item item = new Item(itemAttackPower, itemDefencePower, itemHPPower);		
+		Item item = new Item(itemAttackPower, itemDefencePower, itemHPPower, ItemType.SWORD);		
 		e.addItem(item);
 		
 		int hpBeforeDamage = e.getHealth();

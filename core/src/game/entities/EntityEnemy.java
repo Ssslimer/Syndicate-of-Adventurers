@@ -21,6 +21,8 @@ public class EntityEnemy extends Entity
 	private int attackPower;
 	private int defencePower;
 	
+	private Loot loot;
+	
 	public EntityEnemy(Vector3 position)
 	{
 		super(position);
@@ -30,6 +32,8 @@ public class EntityEnemy extends Entity
 		HP = BASE_ENEMY_HP;
 		attackPower = BASE_ENEMY_ATTACK;
 		defencePower = BASE_ENEMY_DEFENCE;		
+		
+		loot = new Loot();
 	}
 	
 	@Override
@@ -52,6 +56,11 @@ public class EntityEnemy extends Entity
 	public int getDefence()
 	{
 		return defencePower;
+	}
+	
+	public Loot getLoot()
+	{
+		return loot;
 	}
 
 	public void getDamage(int damageAttack)

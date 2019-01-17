@@ -21,9 +21,10 @@ public class EntityPlayer extends Entity
 	private String login;
 	
 	private float speed = 5f;
-	private int helth;
+	private int health;
 	private int attackPower;
 	private int defencePower;
+	private int gold;
 	
 	private List<Item> eqList = new ArrayList<>();
 	
@@ -35,9 +36,10 @@ public class EntityPlayer extends Entity
 		
 		this.login = login;
 		
-		helth = BASE_PLAYER_HP;
+		health = BASE_PLAYER_HP;
 		attackPower = BASE_PLAYER_ATTACK;
 		defencePower = BASE_PLAYER_DEFENCE;
+		gold = 0;
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -66,7 +68,7 @@ public class EntityPlayer extends Entity
 	{
 		eqList.add(item);
 		
-		helth += item.getHPBonus();
+		health += item.getHPBonus();
 		attackPower += item.getAttack();
 		defencePower += item.getDefence();
 	}
@@ -77,7 +79,7 @@ public class EntityPlayer extends Entity
 		{
 			eqList.remove(item);
 			
-			helth -= item.getHPBonus();
+			health -= item.getHPBonus();
 			attackPower -= item.getAttack();
 			defencePower -= item.getDefence();
 		}
@@ -87,7 +89,7 @@ public class EntityPlayer extends Entity
 	{
 		for(Item item : eqList)
 		{
-			helth += item.getHPBonus();
+			health += item.getHPBonus();
 			attackPower += item.getAttack();
 			defencePower += item.getDefence();
 		}
@@ -99,8 +101,27 @@ public class EntityPlayer extends Entity
 		
 		if(damageAttack > 0)
 		{
-			helth -= damageAttack;
+			health -= damageAttack;
 		}
+	}
+	
+	public void addGold(int goldAmount)
+	{
+		gold += goldAmount;
+	}
+	
+	public void pay(int goldAmount)
+	{
+		gold -= goldAmount;	
+	}
+	
+	public boolean canAfford(int expense)
+	{
+		if(gold >= expense)
+		{
+			return true;
+		}
+		else return false;
 	}
 	
 	public void setMoveDirection(MoveDirection direction, boolean ifToStop)
@@ -133,7 +154,7 @@ public class EntityPlayer extends Entity
 
 	public int getHealth()
 	{
-		return helth;
+		return health;
 	}
 	
 	public int getAttack()
