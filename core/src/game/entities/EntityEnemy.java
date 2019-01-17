@@ -133,4 +133,10 @@ public class EntityEnemy extends Entity implements Damageable
 	{
 		//Server.getMap().attackIfPlayerInFront(attackPower, position, moveDirection);
 	}	
+	
+	public Loot die()
+	{
+		alive = false;
+		return loot;
+	}
 }
