@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.HashMap;
 
 import entities.World;
@@ -16,6 +17,7 @@ public class Server
 	private final List<String> admins;
 	private AuthManager authManager;
 	
+	public static final Random random = new Random();
 	private static World world;
 	private static ConnectionManager connectionManager;
 	

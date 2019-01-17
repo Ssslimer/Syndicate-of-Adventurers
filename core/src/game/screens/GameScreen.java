@@ -25,8 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import client.Chat;
 import client.MyGame;
-import client.chat.Chat;
 import entities.Entity;
 import networking.MoveDirection;
 import util.ConfigConstants;

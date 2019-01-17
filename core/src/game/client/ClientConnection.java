@@ -9,7 +9,6 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
-import client.chat.Chat;
 import entities.World;
 import networking.MessageStatus;
 import networking.MoveDirection;
@@ -79,17 +78,17 @@ public class ClientConnection extends Thread
 	
 	public void move(MoveDirection direction, boolean toStop)
 	{
-		sender.addMessage(new MoveMessage(sessionId, direction, toStop));
+		if(isLogedIn) sender.addMessage(new MoveMessage(sessionId, direction, toStop));
 	}
 
 	public void attack()
 	{
-		sender.addMessage(new AttackMessage(sessionId));
+		if(isLogedIn) sender.addMessage(new AttackMessage(sessionId));
 	}
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		sender.addMessage(new ChatMessage(sessionId, chatMessageString));
+		if(isLogedIn) sender.addMessage(new ChatMessage(sessionId, chatMessageString));
 	}
 	
 	public MessageStatus register(String login, String password)

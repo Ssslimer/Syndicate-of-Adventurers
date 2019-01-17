@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import com.badlogic.gdx.math.Vector3;
 
-import networking.MoveDirection;
-
 public abstract class Entity implements Serializable
 {
 	private static final long serialVersionUID = 9193370594513812803L;

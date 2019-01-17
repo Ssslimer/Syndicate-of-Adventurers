@@ -10,7 +10,7 @@ import networking.messages.fromserver.UpdateEntityMessage;
 import server.ConnectionToClient;
 import server.Server;
 
-public class EntityPlayer extends Entity
+public class EntityPlayer extends Entity implements Damageable
 {
 	private static final long serialVersionUID = 4071973552148454031L;
 	
@@ -95,7 +95,7 @@ public class EntityPlayer extends Entity
 		}
 	}
 
-	public void getDamage(int damageAttack)
+	public void dealDamage(int damageAttack)
 	{
 		damageAttack -= defencePower;
 		
@@ -103,25 +103,6 @@ public class EntityPlayer extends Entity
 		{
 			health -= damageAttack;
 		}
-	}
-	
-	public void addGold(int goldAmount)
-	{
-		gold += goldAmount;
-	}
-	
-	public void pay(int goldAmount)
-	{
-		gold -= goldAmount;	
-	}
-	
-	public boolean canAfford(int expense)
-	{
-		if(gold >= expense)
-		{
-			return true;
-		}
-		else return false;
 	}
 	
 	public void setMoveDirection(MoveDirection direction, boolean ifToStop)
@@ -145,6 +126,16 @@ public class EntityPlayer extends Entity
 	public void attack()
 	{
 		//Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
+	}
+	
+	public void changeGold(int goldAmount)
+	{
+		gold += goldAmount;
+	}
+
+	public boolean canAfford(int expense)
+	{
+		return gold >= expense;
 	}
 	
 	public String getLogin()

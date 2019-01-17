@@ -4,10 +4,9 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 
-import networking.MoveDirection;
 import server.Server;
 
-public class EntityEnemy extends Entity
+public class EntityEnemy extends Entity implements Damageable
 {
 	private static final long serialVersionUID = -8463316271178712082L;
 	
@@ -89,7 +88,7 @@ public class EntityEnemy extends Entity
 		return loot;
 	}
 
-	public void getDamage(int damageAttack)
+	public void dealDamage(int damageAttack)
 	{
 		damageAttack -= defencePower;
 		

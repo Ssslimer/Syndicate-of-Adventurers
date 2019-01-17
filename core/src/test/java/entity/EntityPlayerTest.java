@@ -99,7 +99,7 @@ class EntityPlayerTest
 		e.addItem(item);
 		
 		int hpBeforeDamage = e.getHealth();
-		e.getDamage(damage);
+		e.dealDamage(damage);
 		
 		int realDamage = Clamp.clampInt(damage - e.getDefence(), 0, damage);
 		

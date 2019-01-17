@@ -1,4 +1,4 @@
-package client.chat;
+package client;
 
 import java.util.Collections;
 import java.util.LinkedList;

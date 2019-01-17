@@ -1,5 +1,7 @@
 package client;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Game;
 
 import entities.World;
@@ -7,6 +9,7 @@ import screens.MainMenuScreen;
 
 public class MyGame extends Game
 {	 
+	public static final Random random = new Random();
 	private static ClientConnection client;
 	private static WorldRenderer renderer;
 	private static final Resources resources = new Resources();

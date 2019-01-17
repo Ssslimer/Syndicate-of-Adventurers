@@ -1,17 +1,16 @@
 package entities;
 
-import java.util.Random;
+import server.Server;
 
 public class Loot 
 {
-	private Random rand;
+	private final int goldLoot;
+	private final Item item;
 	
-	private int goldLoot;
-	private Item item;
-	
+	/** TODO remove random loot to generator */
 	public Loot()
 	{
-		goldLoot = rand.nextInt(50);	
+		goldLoot = Server.random.nextInt(50);	
 		item = generateItem();
 	}
 	
@@ -19,6 +18,22 @@ public class Loot
 	{
 		this.goldLoot = goldLoot;
 		this.item = item;
+	}
+	
+	private Item generateItem()
+	{
+		double itemLootProbability = Server.random.nextDouble();
+		
+		if(itemLootProbability < 0.5)
+		{
+			int attack = Server.random.nextInt(10);
+			int defence = Server.random.nextInt(10);
+			int health = Server.random.nextInt(10);
+
+			return new Item(attack, defence, health, ItemType.SWORD);
+		}
+		
+		return null;
 	}
 	
 	public int getGold()
@@ -33,24 +48,6 @@ public class Loot
 	
 	public boolean hasItem()
 	{
-		if(item == null) return false;
-		else return true;
-	}
-	
-	private Item generateItem()
-	{
-		double itemLootProbability = rand.nextDouble();
-		
-		if(itemLootProbability < 0.5)
-		{
-			int attack = rand.nextInt(10);
-			int defence = rand.nextInt(10);
-			int health = rand.nextInt(10);
-			
-			Item newItem = new Item(attack, defence, health, ItemType.SWORD);
-					
-			return newItem;
-		}
-		else return null;
+		return item != null;
 	}
 }

@@ -83,56 +83,56 @@ public class World implements Serializable
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.UP_AND_LEFT)
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
 			{
 				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
 			{
 				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.UP)
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.DOWN)
 			{
 				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.RIGHT)
 			{
 				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.LEFT)
 			{
 				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityEnemy)
 				{
-					((EntityEnemy)e).getDamage(damageAttack);
+					((EntityEnemy)e).dealDamage(damageAttack);
 				}
 			}
 		}
@@ -146,56 +146,56 @@ public class World implements Serializable
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.UP_AND_LEFT)
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
 			{
 				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
 			{
 				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.UP)
 			{
 				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.DOWN)
 			{
 				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.RIGHT)
 			{
 				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 			else if(attackDirection == MoveDirection.LEFT)
 			{
 				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityPlayer)
 				{
-					((EntityPlayer)e).getDamage(damageAttack);
+					((EntityPlayer)e).dealDamage(damageAttack);
 				}
 			}
 		}
