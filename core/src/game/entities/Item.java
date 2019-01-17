@@ -8,7 +8,7 @@ public class Item
 	private int defence;
 	private int HPBonus;
 	
-	public final ItemType type;
+	private final ItemType type;
 	
 	public Item(int attack, int defence, int HPBonus, ItemType type)
 	{
@@ -34,10 +34,20 @@ public class Item
 		return HPBonus;
 	}
 	
+	public ItemType getType()
+	{
+		return type;
+	}
+	
 	@Override
 	public String toString()
-	{
-		return type.toString() + "(" + attack + "," + defence + "," + HPBonus + ")";
+	{		
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("type", type)
+				.append("attack", attack)
+				.append("defence", defence)
+				.toString();
 	}
 }
 	
