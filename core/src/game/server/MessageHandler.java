@@ -85,12 +85,10 @@ public class MessageHandler extends Thread
 	{	
 		ConnectionToClient connectionWithClient = task.getMessageOwner();			
 		Message message = task.getMessage();
-		MessageType content = message.getMessageType();
-		
 		
 		System.out.println("NEW MESSAGE: " + message.getMessageType().toString()); /** TODO remove in the future */
 		
-		switch(content)
+		switch(message.getMessageType())
 		{			
 			case PING:
 				connectionWithClient.sendMessageToClient(message);
@@ -110,15 +108,15 @@ public class MessageHandler extends Thread
 			break;
 			
 			case MOVE:
-				processMove(connectionWithClient, (MoveMessage) message);
+				if(connectionWithClient.isLogedIn()) processMove(connectionWithClient, (MoveMessage) message);
 			break;
 				
 			case ATTACK:
-				processAttack(connectionWithClient, (AttackMessage) message);
+				if(connectionWithClient.isLogedIn()) processAttack(connectionWithClient, (AttackMessage) message);
 			break;
 			
 			case CHAT_MESSAGE:	
-				processChat(connectionWithClient, (ChatMessage) message);
+				if(connectionWithClient.isLogedIn()) processChat(connectionWithClient, (ChatMessage) message);
 			break;
 				
 			default:/** TODO maybe delete message to client ? */

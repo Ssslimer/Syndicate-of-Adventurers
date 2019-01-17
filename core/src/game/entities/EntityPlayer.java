@@ -9,6 +9,7 @@ import networking.MoveDirection;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.ConnectionToClient;
 import server.Server;
+import world.World;
 
 public class EntityPlayer extends Entity implements Damageable
 {

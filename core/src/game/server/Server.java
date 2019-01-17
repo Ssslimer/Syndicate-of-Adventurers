@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
 
-import entities.World;
 import util.Timer;
+import world.World;
 
 public class Server
 {	

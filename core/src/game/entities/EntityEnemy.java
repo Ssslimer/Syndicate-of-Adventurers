@@ -1,5 +1,8 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
@@ -14,8 +17,6 @@ public class EntityEnemy extends Entity implements Damageable
 	private static final int BASE_ENEMY_DEFENCE = 5;
 	private static final int BASE_ENEMY_HP = 50;
 	
-	private Random rand;
-	
 	private float speed = 5f;
 	private int HP;
 	private int attackPower;
@@ -23,11 +24,11 @@ public class EntityEnemy extends Entity implements Damageable
 	
 	private Loot loot;
 	
+	private static final int FOLLOW_RANGE = 20;
+
 	public EntityEnemy(Vector3 position)
 	{
 		super(position);
-		
-		rand = new Random();
 		
 		HP = BASE_ENEMY_HP;
 		attackPower = BASE_ENEMY_ATTACK;
@@ -39,33 +40,63 @@ public class EntityEnemy extends Entity implements Damageable
 	@Override
 	public void update(float delta)
 	{
+		changeTarget();
 		move(delta);
 		
-		double attackProbability = rand.nextDouble();
+		double attackProbability = Server.random.nextDouble();
 		if(attackProbability <= 0.5d) attack();	
 	}
 	
-	private void move(float delta)
+	private void changeTarget()
 	{
-		Vector3 closestPlayer = Server.getMap().getClosestPlayerPosition(this.position);
+		EntityPlayer player = getClosestPlayerInRange();
 		
-		if(closestPlayer != null)
+		if(player != null)
 		{
-			this.moveDirection = this.position.sub(closestPlayer).nor(); // check if this is correct
-			
-			position.add(moveDirection.cpy().scl(speed / delta));
+			moveDirection = position.sub(player.getPosition()).nor(); /** TODO check if this is correct */
 		}
 		else
 		{
-			float x = rand.nextFloat();
-			float y = 0; // y has to be 0 so that enemy is not flying
-			float z = rand.nextFloat();
-			
-			Vector3 newDirection = new Vector3(x, y, z);
-			
-			position.add(moveDirection.cpy().scl(speed / delta));
-			
+			moveDirection = new Vector3(Server.random.nextFloat(), 0, Server.random.nextFloat());
 		}
+	}
+	
+	private void move(float delta)
+	{	
+		position.add(moveDirection.cpy().scl(speed / delta));	
+	}
+	
+	private List<EntityPlayer> findPlayersInRange() 
+	{	
+		List<EntityPlayer> playersInRange = new ArrayList<>();
+		
+		for(EntityPlayer player : Server.getMap().getPlayers().values())
+		{
+			if(player.getPosition().sub(getPosition()).len() <= FOLLOW_RANGE)
+			{
+				playersInRange.add(player);
+			}
+		}
+		
+		return playersInRange;
+	}
+	
+	private EntityPlayer getClosestPlayerInRange()
+	{
+		EntityPlayer closest = null;
+		float smallestDistance = Float.MAX_VALUE;
+		
+		for(EntityPlayer player : Server.getMap().getPlayers().values())
+		{
+			float distance = player.getPosition().sub(getPosition()).len();
+			if(distance<= FOLLOW_RANGE && distance < smallestDistance)
+			{
+				closest = player;
+				smallestDistance = distance;
+			}
+		}
+		
+		return closest;
 	}
 	
 	public int getHP()
@@ -101,6 +132,5 @@ public class EntityEnemy extends Entity implements Damageable
 	private void attack()
 	{
 		//Server.getMap().attackIfPlayerInFront(attackPower, position, moveDirection);
-	}
-	
+	}	
 }

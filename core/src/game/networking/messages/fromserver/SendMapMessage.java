@@ -2,9 +2,9 @@ package networking.messages.fromserver;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import entities.World;
 import networking.MessageType;
 import networking.messages.Message;
+import world.World;
 
 public class SendMapMessage extends Message
 {

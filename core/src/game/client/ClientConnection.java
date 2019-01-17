@@ -9,7 +9,6 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
-import entities.World;
 import networking.MessageStatus;
 import networking.MoveDirection;
 import networking.messages.AttackMessage;
@@ -25,6 +24,7 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import world.World;
 
 public class ClientConnection extends Thread
 {

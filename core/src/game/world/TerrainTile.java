@@ -1,4 +1,4 @@
-package entities;
+package world;
 
 import java.io.Serializable;
 

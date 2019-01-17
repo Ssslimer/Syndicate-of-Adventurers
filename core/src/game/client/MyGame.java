@@ -4,8 +4,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 
-import entities.World;
 import screens.MainMenuScreen;
+import world.World;
 
 public class MyGame extends Game
 {	 

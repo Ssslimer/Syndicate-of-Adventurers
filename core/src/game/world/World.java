@@ -1,4 +1,4 @@
-package entities;
+package world;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +10,9 @@ import java.util.Random;
 import com.badlogic.gdx.math.Vector3;
 
 import client.MyGame;
+import entities.Entity;
+import entities.EntityEnemy;
+import entities.EntityPlayer;
 import networking.MoveDirection;
 import networking.messages.fromserver.SpawnEntityMessage;
 import server.ConnectionToClient;
@@ -24,6 +27,8 @@ public class World implements Serializable
 	private List<TerrainTile> terrain = new ArrayList<>();
 	
 	private static boolean isLocal = false;
+	
+	private Vector3 spawnPoint = new Vector3();
 	
 	public World()
 	{
@@ -50,8 +55,8 @@ public class World implements Serializable
 		Entity entity = entities.get(id);
 		if(entity == null) return;
 		
-		entity.position = position;
-		entity.velocity = velocity;
+		entity.setPosition(position);
+		entity.setVelocity(velocity);
 	}
 	
 	/** TODO tmp map for testing */
@@ -236,26 +241,13 @@ public class World implements Serializable
 		isLocal = b;
 	}
 
-	public Vector3 getClosestPlayerPosition(Vector3 enemyPosition) 
+	public Vector3 getSpawnPoint()
 	{
-		float distance = 50; // change it if it's too much
-		Vector3 playerPos = new Vector3();
-		
-		for(Entity e : entities.values())
-		{
-			if(e instanceof EntityPlayer)
-			{
-				float currentDistance = enemyPosition.cpy().dst(e.getPosition());
-				
-				if(currentDistance < distance)
-				{
-					distance = currentDistance;
-					playerPos = e.getPosition();
-				}
-			}
-		}
-		
-		if(distance < 50) return playerPos;
-		else return null;
+		return spawnPoint;
+	}
+
+	public void setSpawnPoint(Vector3 spawnPoint)
+	{
+		this.spawnPoint = spawnPoint;
 	}
 }

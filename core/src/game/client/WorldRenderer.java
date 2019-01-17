@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import entities.Entity;
 import entities.EntityPlayer;
-import entities.TerrainTile;
+import world.TerrainTile;
 
 public class WorldRenderer
 {
