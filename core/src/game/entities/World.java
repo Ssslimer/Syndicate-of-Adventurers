@@ -235,4 +235,27 @@ public class World implements Serializable
 	{
 		isLocal = b;
 	}
+
+	public Vector3 getClosestPlayerPosition(Vector3 enemyPosition) 
+	{
+		float distance = 50; // change it if it's too much
+		Vector3 playerPos = new Vector3();
+		
+		for(Entity e : entities.values())
+		{
+			if(e instanceof EntityPlayer)
+			{
+				float currentDistance = enemyPosition.cpy().dst(e.getPosition());
+				
+				if(currentDistance < distance)
+				{
+					distance = currentDistance;
+					playerPos = e.getPosition();
+				}
+			}
+		}
+		
+		if(distance < 50) return playerPos;
+		else return null;
+	}
 }

@@ -17,6 +17,7 @@ public class EntityEnemy extends Entity
 	
 	private Random rand;
 	
+	private float speed = 5f;
 	private int HP;
 	private int attackPower;
 	private int defencePower;
@@ -39,8 +40,33 @@ public class EntityEnemy extends Entity
 	@Override
 	public void update(float delta)
 	{
+		move(delta);
+		
 		double attackProbability = rand.nextDouble();
 		if(attackProbability <= 0.5d) attack();	
+	}
+	
+	private void move(float delta)
+	{
+		Vector3 closestPlayer = Server.getMap().getClosestPlayerPosition(this.position);
+		
+		if(closestPlayer != null)
+		{
+			this.moveDirection = this.position.sub(closestPlayer).nor(); // check if this is correct
+			
+			position.add(moveDirection.cpy().scl(speed / delta));
+		}
+		else
+		{
+			float x = rand.nextFloat();
+			float y = 0; // y has to be 0 so that enemy is not flying
+			float z = rand.nextFloat();
+			
+			Vector3 newDirection = new Vector3(x, y, z);
+			
+			position.add(moveDirection.cpy().scl(speed / delta));
+			
+		}
 	}
 	
 	public int getHP()
