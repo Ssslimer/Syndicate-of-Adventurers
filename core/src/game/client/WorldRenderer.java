@@ -124,9 +124,9 @@ public class WorldRenderer
 	
 	private void followPlayer()
 	{
-		EntityPlayer player = MyGame.getGameMap().getPlayer(MyGame.getClient().getLogin());
-    	cam.position.set(-10, 10, 0).add(player.getPosition());
-    	cam.lookAt(player.getPosition());
-    	cam.update();
+//		EntityPlayer player = MyGame.getGameMap().getPlayer(MyGame.getClient().getLogin());
+//    	cam.position.set(-10, 10, 0).add(player.getPosition());
+//    	cam.lookAt(player.getPosition());
+//    	cam.update();
 	}
 }
