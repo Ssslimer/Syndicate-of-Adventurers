@@ -163,4 +163,9 @@ public class EntityPlayer extends Entity implements Damageable
 	{
 		return eqList;
 	}
+	
+	public void die()
+	{
+		alive = false;
+	}
 }

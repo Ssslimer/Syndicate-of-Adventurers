@@ -14,6 +14,8 @@ public abstract class Entity implements Serializable
 	protected Vector3 position;
 	protected Vector3 velocity = new Vector3();
 	protected Vector3 moveDirection = new Vector3();
+	
+	boolean alive;
 
 	public Entity(Vector3 position)
 	{
@@ -21,6 +23,8 @@ public abstract class Entity implements Serializable
 		lastId++;
 		
 		this.position = position;
+		
+		alive = true;
 	}
 
 	public abstract void update(float delta);
