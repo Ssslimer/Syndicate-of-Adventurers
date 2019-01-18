@@ -2,7 +2,7 @@
 
 <configuration>
 	<server-info id="1001">
-		<ip>192.168.2.53</ip>
+		<ip>127.0.0.1</ip>
 		<port>4444</port>
 		<tps>50</tps>
 	</server-info>

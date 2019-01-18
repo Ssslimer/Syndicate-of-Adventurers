@@ -39,7 +39,7 @@ public class WorldRenderer
     	environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
     	environment.add(new DirectionalLight().set(1, 1, 1, 0, -1, 0));
     	
-    	cam.position.set(-10, 10, 0);
+    	cam.position.set(0, -10, 10);
     	cam.lookAt(0, 0, 0);
     	cam.near = 1f;
     	cam.far = 300f;
@@ -63,7 +63,7 @@ public class WorldRenderer
         for(TerrainTile tile : terrain)
         {
         	ModelInstance modelInstance = new ModelInstance(createTerrainTile(MyGame.getResources().getTerrainMaterial(tile.getTerrainType())));
-        	modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
+        	//modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
         	modelInstance.transform.translate(tile.getPosition());
         	modelInstance.transform.scale(2.5f, 2.5f, 2.5f);
         	
@@ -91,9 +91,9 @@ public class WorldRenderer
 	{
 		modelBatch.begin(cam);
 		
+		renderMap();
 		followPlayer();
 		renderEntities();
-		renderMap();
 		
 		modelBatch.end();
 	}
@@ -125,7 +125,9 @@ public class WorldRenderer
 	private void followPlayer()
 	{
 		EntityPlayer player = MyGame.getGameMap().getPlayer(MyGame.getClient().getLogin());
-    	cam.position.set(-10, 10, 0).add(player.getPosition());
+		if(player == null) return;
+		
+    	cam.position.set(0, -10, 10).add(player.getPosition());
     	cam.lookAt(player.getPosition());
     	cam.update();
 	}

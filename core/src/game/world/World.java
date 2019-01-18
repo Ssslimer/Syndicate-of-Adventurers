@@ -42,7 +42,6 @@ public class World implements Serializable
 		
 		if(!isLocal)
 		{
-			System.out.println(Server.getConnectionManager().getAllConnections().size());
 			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
 			{
 				connectionToClient.sendMessageToClient(new SpawnEntityMessage(entity));
