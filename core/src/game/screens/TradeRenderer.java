@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import client.MyGame;
+
 public class TradeRenderer 
 {
 	public static final boolean SELLING = true;
@@ -31,7 +33,7 @@ public class TradeRenderer
 	{
 		stage = new Stage();
 		batch = new SpriteBatch();	
-		sellingOrBuying = null;
+		sellingOrBuying = MyGame.getPlayer().getSellingOrBuying();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
@@ -64,11 +66,6 @@ public class TradeRenderer
 	public Stage getStage()
 	{
 		return stage;
-	}
-	
-	public void setSellingOrBuying(Boolean sellingOrBuying)
-	{
-		this.sellingOrBuying = sellingOrBuying;
 	}
 	
 	private void setupStartTradeButton()

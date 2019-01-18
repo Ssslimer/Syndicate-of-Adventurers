@@ -18,6 +18,9 @@ public class EntityPlayer extends Entity implements Damageable
 	private static final int BASE_PLAYER_ATTACK = 10;
 	private static final int BASE_PLAYER_DEFENCE = 5;
 	private static final int BASE_PLAYER_HP = 100;
+	
+	public static final boolean SELLING = true;
+	public static final boolean BUYING = false;
 
 	private String login;
 	
@@ -28,8 +31,11 @@ public class EntityPlayer extends Entity implements Damageable
 	private int gold;
 	
 	private List<Item> eqList = new ArrayList<>();
+	private Item sellingItem;
 	
 	boolean moveUp, moveDown, moveLeft, moveRight;
+	
+	private Boolean sellingOrBuying;
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{
@@ -41,6 +47,8 @@ public class EntityPlayer extends Entity implements Damageable
 		attackPower = BASE_PLAYER_ATTACK;
 		defencePower = BASE_PLAYER_DEFENCE;
 		gold = 0;
+		
+		sellingOrBuying = null;
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -49,6 +57,8 @@ public class EntityPlayer extends Entity implements Damageable
 		
 		eqList = player.getItems();
 		determinePlayerStats();
+		
+		sellingOrBuying = null;
 	}
 	
 	@Override
@@ -85,7 +95,7 @@ public class EntityPlayer extends Entity implements Damageable
 			defencePower -= item.getDefence();
 		}
 	}
-	
+
 	private void determinePlayerStats()
 	{
 		for(Item item : eqList)
@@ -129,7 +139,7 @@ public class EntityPlayer extends Entity implements Damageable
 		//Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
 	}
 	
-	public void changeGold(int goldAmount)
+	public void addGold(int goldAmount)
 	{
 		gold += goldAmount;
 	}
@@ -162,6 +172,16 @@ public class EntityPlayer extends Entity implements Damageable
 	public List<Item> getItems()
 	{
 		return eqList;
+	}
+	
+	public Boolean getSellingOrBuying()
+	{
+		return sellingOrBuying;
+	}
+	
+	public void setSellingOrBuying(Boolean sellingOrBuying)
+	{
+		this.sellingOrBuying = sellingOrBuying;
 	}
 	
 	public void die()
