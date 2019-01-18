@@ -9,6 +9,7 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import entities.Item;
 import networking.MessageStatus;
 import networking.MoveDirection;
 import networking.messages.Message;
@@ -24,6 +25,9 @@ import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
+import networking.messages.trade.TradeDecisionMessage;
+import networking.messages.trade.TradeOfferMessage;
+import networking.messages.trade.TradeStartMessage;
 import world.World;
 
 public class ClientConnection extends Thread
@@ -89,6 +93,31 @@ public class ClientConnection extends Thread
 	public void sentChatMessage(String chatMessageString)
 	{
 		if(isLogedIn) sender.addMessage(new ChatMessage(sessionId, chatMessageString));
+	}
+	
+	public void sentTradeStartMessage(Item item)
+	{
+		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, item));
+	}
+	
+	public void sentTradeOfferMessage(int goldAmount)
+	{
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, goldAmount));
+	}
+	
+	public void sentTradeOfferMessage(Item item)
+	{
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, item));
+	}
+	
+	public void sentTradeOfferMessage(Item item, int goldAmount)
+	{
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, goldAmount, item));
+	}
+	
+	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId)
+	{
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted));
 	}
 	
 	public MessageStatus register(String login, String password)
