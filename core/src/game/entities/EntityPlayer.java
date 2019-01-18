@@ -145,6 +145,11 @@ public class EntityPlayer extends Entity implements Damageable
 	{
 		gold += goldAmount;
 	}
+	
+	public void removeGold(int goldAmount)
+	{
+		gold -= goldAmount;
+	}
 
 	public boolean canAfford(int expense)
 	{

@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import com.badlogic.gdx.math.Vector3;
 
 import entities.EntityPlayer;
+import entities.Item;
 import networking.MessageStatus;
 import networking.MessageType;
 import networking.MoveDirection;
@@ -23,6 +24,7 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
+import networking.messages.trade.TradeDecisionMessage;
 import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
 
@@ -128,6 +130,10 @@ public class MessageHandler extends Thread
 			case TRADE_OFFER:
 				if(connectionWithClient.isLogedIn()) processTradeOffer(connectionWithClient, (TradeOfferMessage) message);
 			break;
+			
+			case TRADE_DECISION:
+				if(connectionWithClient.isLogedIn()) processTradeDecision(connectionWithClient, (TradeDecisionMessage) message);
+			break;
 				
 			default:/** TODO maybe delete message to client ? */
 				System.out.println("Client send wrong command!!");
@@ -232,6 +238,30 @@ public class MessageHandler extends Thread
 	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
 	{
 		
+	}
+	
+	private void processTradeDecision(ConnectionToClient connectionWithClient, TradeDecisionMessage message)
+	{
+		if(message.getOfferAccepted())
+		{
+			Item sellingItem = message.getSellingItem();
+			Item offeringItem = message.getOffer().getItem();
+			int offeringGold = message.getOffer().getGoldAmount();
+			
+			long sellerId = message.getSessionId();
+			long buyerId = message.getOtherTraderId();
+			
+			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getEntity(sellerId);
+			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getEntity(buyerId);
+			
+			sellerEntity.removeItem(sellingItem);
+			if(offeringItem != null) sellerEntity.addItem(offeringItem);
+			if(offeringGold > 0) sellerEntity.addGold(offeringGold);
+			
+			buyerEntity.addItem(sellingItem);
+			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
+			if(offeringGold > 0) buyerEntity.removeGold(offeringGold);
+		}
 	}
 	
 	private long generateSessionID() 

@@ -115,9 +115,9 @@ public class ClientConnection extends Thread
 		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, goldAmount, item));
 	}
 	
-	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId)
+	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, TradeOfferMessage offer, Item item)
 	{
-		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted));
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, offer, item));
 	}
 	
 	public MessageStatus register(String login, String password)
