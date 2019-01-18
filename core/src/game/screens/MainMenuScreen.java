@@ -99,7 +99,8 @@ public class MainMenuScreen implements Screen
 		style.font = new BitmapFont();
 		
 		serverIPField = new TextField("", style);
-		serverIPField.setText("Server IP...");
+		//serverIPField.setText("Server IP...");
+		serverIPField.setText("127.0.0.1");
 		serverIPField.setWidth(200);
 		serverIPField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-serverIPField.getWidth()) / 2f;
@@ -131,7 +132,8 @@ public class MainMenuScreen implements Screen
 		style.font = new BitmapFont();
 		
 		serverPortField = new TextField("", style);
-		serverPortField.setText("Port...");
+		//serverPortField.setText("Port...");
+		serverPortField.setText("4444");
 		serverPortField.setWidth(200);
 		serverPortField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-serverPortField.getWidth()) / 2f;
