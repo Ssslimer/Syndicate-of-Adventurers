@@ -86,7 +86,7 @@ public class EntityEnemy extends Entity implements Damageable
 		
 		for(EntityPlayer player : Server.getMap().getPlayers().values())
 		{
-			float distance = player.getPosition().sub(getPosition()).len();
+			float distance = player.getPosition().dst(getPosition());
 			if(distance<= FOLLOW_RANGE && distance < smallestDistance)
 			{
 				closest = player;

@@ -198,7 +198,10 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP,    true); 	break;		
 				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  true);	break;			
 				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  true);	break;
-				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, true);	break;			
+				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, true);	break;
+				
+				case Input.Keys.T: break;
+				case Input.Keys.Y: break;
 			}
 		}
 		
