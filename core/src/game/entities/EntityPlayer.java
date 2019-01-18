@@ -37,6 +37,7 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	private Boolean sellingOrBuying;
 	private Boolean hasOffer;
+	private long tradingWithId = -1;
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{
@@ -145,6 +146,11 @@ public class EntityPlayer extends Entity implements Damageable
 	{
 		gold += goldAmount;
 	}
+	
+	public void removeGold(int goldAmount)
+	{
+		gold -= goldAmount;
+	}
 
 	public boolean canAfford(int expense)
 	{
@@ -195,7 +201,17 @@ public class EntityPlayer extends Entity implements Damageable
 	{
 		this.hasOffer = hasOffer;
 	}
+	
+	public long getTradingWithId()
+	{
+		return tradingWithId;
+	}
 
+	public void setTradingWithId(long tradingWithId)
+	{
+		this.tradingWithId = tradingWithId;
+	}
+	
 	public void die()
 	{
 		alive = false;

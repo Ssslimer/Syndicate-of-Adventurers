@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import client.Chat;
 import client.MyGame;
 import entities.Entity;
+import entities.EntityPlayer;
 import networking.MoveDirection;
 import util.ConfigConstants;
 
@@ -69,13 +70,11 @@ public class GameScreen implements Screen, InputProcessor
     	setupChatTextField();
     	setupChatSendTextButton();
     	
-    	tradeRenderer = new TradeRenderer();
-    	
     	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
-		inputMultiplexer.addProcessor(tradeRenderer.getStage());
+		//inputMultiplexer.addProcessor(tradeRenderer.getStage());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 		MyGame.getRenderer().initTerrain();
@@ -101,7 +100,8 @@ public class GameScreen implements Screen, InputProcessor
         //pingServer(delta);
         MyGame.getRenderer().render();
         renderChat();
-        tradeRenderer.render();       
+        
+        if(tradeRenderer != null) tradeRenderer.render();     
 	}
 	
 	private void pingServer(float delta)
@@ -169,7 +169,26 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP,    false);	break;
 				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  false);	break;		
 				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  false);	break;
-				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;			
+				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;	
+				
+				case Input.Keys.T: 
+					tradeRenderer = new TradeRenderer(); 
+					inputMultiplexer.addProcessor(tradeRenderer.getStage());
+					Gdx.input.setInputProcessor(inputMultiplexer);
+				break;
+				
+				case Input.Keys.Y: 
+					tradeRenderer = new TradeRenderer(); 
+					inputMultiplexer.addProcessor(tradeRenderer.getStage());
+					Gdx.input.setInputProcessor(inputMultiplexer);
+					
+					EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
+					if(seller != null)
+					{
+						MyGame.getPlayer().setTradingWithId(seller.getId());
+					}
+					
+				break;
 			}
 		}
 		
@@ -180,7 +199,7 @@ public class GameScreen implements Screen, InputProcessor
 				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
 				{
 					MyGame.getClient().sentChatMessage(chatText.getText());
-					//chatText.setText("Type message...");
+					chatText.setText("");
 				}
 			}
 		}
@@ -198,7 +217,7 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.W: MyGame.getClient().move(MoveDirection.UP,    true); 	break;		
 				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  true);	break;			
 				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  true);	break;
-				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, true);	break;			
+				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, true);	break;
 			}
 		}
 		

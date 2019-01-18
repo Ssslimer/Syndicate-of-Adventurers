@@ -249,4 +249,29 @@ public class World implements Serializable
 	{
 		this.spawnPoint = spawnPoint;
 	}
+	
+	public EntityPlayer findClosestTradingEntity(Vector3 pos)
+	{
+		EntityPlayer player = null;
+		float maxDistance = 10;
+		float currentDistance = 10;
+		
+		for(Entity e : entities.values())
+		{
+			if(e instanceof EntityPlayer)
+			{
+				if(((EntityPlayer)e).getSellingOrBuying() == EntityPlayer.SELLING)
+				{
+					if(e.getPosition().dst(pos) < maxDistance && e.getPosition().dst(pos) < currentDistance)
+					{
+						currentDistance = e.getPosition().dst(pos);
+						player = (EntityPlayer)e;
+					}
+				}
+			}
+		}
+		
+		if(player == null) return null;
+		else return player;
+	}
 }
