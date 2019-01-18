@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import client.Chat;
 import client.MyGame;
 import entities.Entity;
+import entities.EntityPlayer;
 import networking.MoveDirection;
 import util.ConfigConstants;
 
@@ -180,6 +181,13 @@ public class GameScreen implements Screen, InputProcessor
 					tradeRenderer = new TradeRenderer(); 
 					inputMultiplexer.addProcessor(tradeRenderer.getStage());
 					Gdx.input.setInputProcessor(inputMultiplexer);
+					
+					EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
+					if(seller != null)
+					{
+						MyGame.getPlayer().setTradingWithId(seller.getId());
+					}
+					
 				break;
 			}
 		}

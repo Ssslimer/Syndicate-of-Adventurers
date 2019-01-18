@@ -237,7 +237,7 @@ public class MessageHandler extends Thread
 	
 	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
 	{
-		
+
 	}
 	
 	private void processTradeDecision(ConnectionToClient connectionWithClient, TradeDecisionMessage message)
