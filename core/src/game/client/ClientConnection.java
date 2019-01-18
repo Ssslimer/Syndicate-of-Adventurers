@@ -11,9 +11,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import networking.MessageStatus;
 import networking.MoveDirection;
-import networking.messages.AttackMessage;
 import networking.messages.Message;
-import networking.messages.MoveMessage;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
@@ -24,6 +22,8 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import networking.messages.ingame.AttackMessage;
+import networking.messages.ingame.MoveMessage;
 import world.World;
 
 public class ClientConnection extends Thread
@@ -196,6 +196,12 @@ public class ClientConnection extends Thread
 			case SPAWN_ENTITY:
 				SpawnEntityMessage spawnMessage = (SpawnEntityMessage) serverCallback;
 				MyGame.getGameMap().spawnEntity(spawnMessage.getEntity());
+			break;
+			
+			case TRADE_START: // we get info that other player started trade
+			break;
+			
+			case TRADE_OFFER: // we get info that other player send us an offer for our trade
 			break;
 			
 			default:

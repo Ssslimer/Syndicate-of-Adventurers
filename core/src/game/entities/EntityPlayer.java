@@ -18,6 +18,9 @@ public class EntityPlayer extends Entity implements Damageable
 	private static final int BASE_PLAYER_ATTACK = 10;
 	private static final int BASE_PLAYER_DEFENCE = 5;
 	private static final int BASE_PLAYER_HP = 100;
+	
+	public static final boolean SELLING = true;
+	public static final boolean BUYING = false;
 
 	private String login;
 	
@@ -28,8 +31,12 @@ public class EntityPlayer extends Entity implements Damageable
 	private int gold;
 	
 	private List<Item> eqList = new ArrayList<>();
+	private Item sellingItem;
 	
 	boolean moveUp, moveDown, moveLeft, moveRight;
+	
+	private Boolean sellingOrBuying;
+	private Boolean hasOffer;
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{
@@ -41,6 +48,9 @@ public class EntityPlayer extends Entity implements Damageable
 		attackPower = BASE_PLAYER_ATTACK;
 		defencePower = BASE_PLAYER_DEFENCE;
 		gold = 0;
+		
+		sellingOrBuying = null;
+		setHasOffer(false);
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -49,6 +59,8 @@ public class EntityPlayer extends Entity implements Damageable
 		
 		eqList = player.getItems();
 		determinePlayerStats();
+		
+		sellingOrBuying = null;
 	}
 	
 	@Override
@@ -85,7 +97,7 @@ public class EntityPlayer extends Entity implements Damageable
 			defencePower -= item.getDefence();
 		}
 	}
-	
+
 	private void determinePlayerStats()
 	{
 		for(Item item : eqList)
@@ -129,7 +141,7 @@ public class EntityPlayer extends Entity implements Damageable
 		//Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
 	}
 	
-	public void changeGold(int goldAmount)
+	public void addGold(int goldAmount)
 	{
 		gold += goldAmount;
 	}
@@ -164,6 +176,26 @@ public class EntityPlayer extends Entity implements Damageable
 		return eqList;
 	}
 	
+	public Boolean getSellingOrBuying()
+	{
+		return sellingOrBuying;
+	}
+	
+	public void setSellingOrBuying(Boolean sellingOrBuying)
+	{
+		this.sellingOrBuying = sellingOrBuying;
+	}
+	
+	public Boolean getHasOffer() 
+	{
+		return hasOffer;
+	}
+
+	public void setHasOffer(Boolean hasOffer) 
+	{
+		this.hasOffer = hasOffer;
+	}
+
 	public void die()
 	{
 		alive = false;

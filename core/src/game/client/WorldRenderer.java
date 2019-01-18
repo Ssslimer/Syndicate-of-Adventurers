@@ -62,8 +62,7 @@ public class WorldRenderer
         List<TerrainTile> terrain = MyGame.getGameMap().getTerrain();
         for(TerrainTile tile : terrain)
         {
-        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(MyGame.getResources().getTerrainMaterial(tile.getTerrainType())));
-        	//modelInstance.transform.setFromEulerAngles(0, -90, 0);       	
+        	ModelInstance modelInstance = new ModelInstance(createTerrainTile(MyGame.getResources().getTerrainMaterial(tile.getTerrainType())));      	
         	modelInstance.transform.translate(tile.getPosition());
         	modelInstance.transform.scale(2.5f, 2.5f, 2.5f);
         	

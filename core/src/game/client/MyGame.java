@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 
+import entities.EntityPlayer;
 import screens.MainMenuScreen;
 import world.World;
 
@@ -14,6 +15,7 @@ public class MyGame extends Game
 	private static WorldRenderer renderer;
 	private static final Resources resources = new Resources();
 	private static World gameMap;
+	private static EntityPlayer player;
 
 	@Override
 	public void create()
@@ -57,5 +59,15 @@ public class MyGame extends Game
 	public static WorldRenderer getRenderer()
 	{
 		return renderer;
+	}
+	
+	public static void loadPlayer()
+	{
+		player = gameMap.getPlayer(client.getLogin());
+	}
+	
+	public static EntityPlayer getPlayer()
+	{
+		return player;
 	}
 }

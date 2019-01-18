@@ -1,4 +1,4 @@
-package networking.messages;
+package networking.messages.ingame;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

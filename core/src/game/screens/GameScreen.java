@@ -45,15 +45,17 @@ public class GameScreen implements Screen, InputProcessor
     private TextField chatText;
     private TextButton chatSendText;
     private BitmapFont chatFont;
+    private boolean usingChat;
+    
+    private TradeRenderer tradeRenderer;
     
     private Sound CLANG;
-    
-    private boolean usingChat;
 
     private float timer; // for ping
 	
 	public GameScreen(MyGame game)
 	{	
+		MyGame.loadPlayer();
 		this.game = game;
 		
 		stage = new Stage();
@@ -67,10 +69,13 @@ public class GameScreen implements Screen, InputProcessor
     	setupChatTextField();
     	setupChatSendTextButton();
     	
+    	tradeRenderer = new TradeRenderer();
+    	
     	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
 				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
+		inputMultiplexer.addProcessor(tradeRenderer.getStage());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 		MyGame.getRenderer().initTerrain();
@@ -96,6 +101,7 @@ public class GameScreen implements Screen, InputProcessor
         //pingServer(delta);
         MyGame.getRenderer().render();
         renderChat();
+        tradeRenderer.render();       
 	}
 	
 	private void pingServer(float delta)
@@ -164,6 +170,18 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  false);	break;		
 				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  false);	break;
 				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;			
+			}
+		}
+		
+		if(usingChat)
+		{
+			if(keycode == Input.Keys.ENTER)
+			{
+				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
+				{
+					MyGame.getClient().sentChatMessage(chatText.getText());
+					//chatText.setText("Type message...");
+				}
 			}
 		}
 
@@ -288,7 +306,7 @@ public class GameScreen implements Screen, InputProcessor
 				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
 				{
 					MyGame.getClient().sentChatMessage(chatText.getText());
-					chatText.setText("Type message...");
+					//chatText.setText("Type message...");
 				}
 			}
 		});
