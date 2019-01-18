@@ -1,4 +1,6 @@
-package entities;
+package trade;
+
+import entities.Item;
 
 public class Offer 
 {

@@ -1,9 +1,9 @@
 package networking.messages.trade;
 
 import entities.Item;
-import entities.Offer;
 import networking.MessageType;
 import networking.messages.fromclient.ClientMessage;
+import trade.Offer;
 
 public class TradeOfferMessage extends ClientMessage
 {

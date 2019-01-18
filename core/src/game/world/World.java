@@ -260,7 +260,9 @@ public class World implements Serializable
 		{
 			if(e instanceof EntityPlayer)
 			{
-				if(((EntityPlayer)e).getSellingOrBuying() == EntityPlayer.SELLING)
+				if(((EntityPlayer)e).
+						getSellingOrBuying() == 
+						EntityPlayer.SELLING)
 				{
 					if(e.getPosition().dst(pos) < maxDistance && e.getPosition().dst(pos) < currentDistance)
 					{
