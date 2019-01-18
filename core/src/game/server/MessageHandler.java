@@ -13,9 +13,7 @@ import entities.EntityPlayer;
 import networking.MessageStatus;
 import networking.MessageType;
 import networking.MoveDirection;
-import networking.messages.AttackMessage;
 import networking.messages.Message;
-import networking.messages.MoveMessage;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
@@ -23,6 +21,8 @@ import networking.messages.fromserver.AuthLoginMessage;
 import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
+import networking.messages.ingame.AttackMessage;
+import networking.messages.ingame.MoveMessage;
 
 /** Thread for processing messages from clients */
 public class MessageHandler extends Thread
