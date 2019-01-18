@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.net.UnknownHostException;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
@@ -13,12 +16,13 @@ import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemType;
 import networking.MoveDirection;
+import server.Server;
 import util.Clamp;
 
-class EntityPlayerTest 
+public class EntityPlayerTest 
 {
 	@Test
-	void test() 
+	public void test() 
 	{
 		int x1 = 0;
 		int y1 = 0;
@@ -57,7 +61,7 @@ class EntityPlayerTest
 	}
 	
 	@Test
-	void entityPlayerMoveTest()
+	public void entityPlayerMoveTest()
 	{
 		EntityPlayer e = new EntityPlayer(new Vector3(5, 5, 5), "test");
 		e.setMoveDirection(MoveDirection.UP, false);	
@@ -86,7 +90,7 @@ class EntityPlayerTest
 	}
 
 	@Test
-	void getStatsAndDamageTest()
+	public void getStatsAndDamageTest()
 	{
 		int itemAttackPower = 25;
 		int itemDefencePower = 10;

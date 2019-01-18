@@ -1,9 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 
