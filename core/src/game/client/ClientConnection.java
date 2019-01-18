@@ -198,6 +198,12 @@ public class ClientConnection extends Thread
 				MyGame.getGameMap().spawnEntity(spawnMessage.getEntity());
 			break;
 			
+			case TRADE_START: // we get info that other player started trade
+			break;
+			
+			case TRADE_OFFER: // we get info that other player send us an offer for our trade
+			break;
+			
 			default:
 				System.out.println("Unknown command");
 		}

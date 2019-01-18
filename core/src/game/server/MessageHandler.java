@@ -23,6 +23,8 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
+import networking.messages.trade.TradeOfferMessage;
+import networking.messages.trade.TradeStartMessage;
 
 /** Thread for processing messages from clients */
 public class MessageHandler extends Thread
@@ -118,6 +120,14 @@ public class MessageHandler extends Thread
 			case CHAT_MESSAGE:	
 				if(connectionWithClient.isLogedIn()) processChat(connectionWithClient, (ChatMessage) message);
 			break;
+			
+			case TRADE_START:
+				if(connectionWithClient.isLogedIn()) processTradeStart(connectionWithClient, (TradeStartMessage) message);
+			break;
+				
+			case TRADE_OFFER:
+				if(connectionWithClient.isLogedIn()) processTradeOffer(connectionWithClient, (TradeOfferMessage) message);
+			break;
 				
 			default:/** TODO maybe delete message to client ? */
 				System.out.println("Client send wrong command!!");
@@ -212,6 +222,16 @@ public class MessageHandler extends Thread
 			Server.addChatMessage(nick + ": " + message.getText());
 			System.out.println("[" + nick + "]:" + message.getText());
 		}
+	}
+	
+	private void processTradeStart(ConnectionToClient connectionWithClient, TradeStartMessage message)
+	{
+		
+	}
+	
+	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
+	{
+		
 	}
 	
 	private long generateSessionID() 
