@@ -36,6 +36,7 @@ public class EntityPlayer extends Entity implements Damageable
 	boolean moveUp, moveDown, moveLeft, moveRight;
 	
 	private Boolean sellingOrBuying;
+	private Boolean hasOffer;
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{
@@ -49,6 +50,7 @@ public class EntityPlayer extends Entity implements Damageable
 		gold = 0;
 		
 		sellingOrBuying = null;
+		setHasOffer(false);
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -184,6 +186,16 @@ public class EntityPlayer extends Entity implements Damageable
 		this.sellingOrBuying = sellingOrBuying;
 	}
 	
+	public Boolean getHasOffer() 
+	{
+		return hasOffer;
+	}
+
+	public void setHasOffer(Boolean hasOffer) 
+	{
+		this.hasOffer = hasOffer;
+	}
+
 	public void die()
 	{
 		alive = false;

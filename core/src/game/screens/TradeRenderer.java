@@ -1,6 +1,9 @@
 package screens;
 
+import java.nio.file.Paths;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -28,12 +31,15 @@ public class TradeRenderer
 	private TextButton endTradeBtn;
 	
 	private Boolean sellingOrBuying;
+	private Boolean hasOffer;
 		
 	public TradeRenderer()
 	{
 		stage = new Stage();
+		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
 		batch = new SpriteBatch();	
 		sellingOrBuying = MyGame.getPlayer().getSellingOrBuying();
+		hasOffer = MyGame.getPlayer().getHasOffer();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
@@ -51,16 +57,49 @@ public class TradeRenderer
 			if(sellingOrBuying = SELLING) renderSelling();
 			else renderBuying();	
 		}
+		
+		if(hasOffer)
+		{
+			renderOffer();
+		}
 	}
 	
 	private void renderSelling()
 	{
+		batch.begin();
+		batch.draw(tradeWindowTexture, 0, 0);
+		batch.end();
 		
+		stage.addActor(startTradeBtn);
+		stage.addActor(endTradeBtn);
+		
+		stage.act();
+		stage.draw();	
+		stage.clear();
 	}
 	
 	private void renderBuying()
 	{
+		batch.begin();
+		batch.draw(tradeWindowTexture, 0, 0);
+		batch.end();
 		
+		stage.addActor(offerBtn);
+		stage.addActor(endTradeBtn);
+		
+		stage.act();
+		stage.draw();	
+		stage.clear();
+	}
+	
+	private void renderOffer()
+	{
+		stage.addActor(acceptOffertBtn);
+		stage.addActor(declineOffertBtn);
+		
+		stage.act();
+		stage.draw();	
+		stage.clear();
 	}
 	
 	public Stage getStage()
