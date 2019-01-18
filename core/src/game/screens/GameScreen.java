@@ -48,7 +48,6 @@ public class GameScreen implements Screen, InputProcessor
     private boolean usingChat;
     
     private TradeRenderer tradeRenderer;
-    private boolean usingTrade;
     
     private Sound CLANG;
 
@@ -56,6 +55,7 @@ public class GameScreen implements Screen, InputProcessor
 	
 	public GameScreen(MyGame game)
 	{	
+		MyGame.loadPlayer();
 		this.game = game;
 		
 		stage = new Stage();
@@ -101,6 +101,7 @@ public class GameScreen implements Screen, InputProcessor
         //pingServer(delta);
         MyGame.getRenderer().render();
         renderChat();
+        tradeRenderer.render();       
 	}
 	
 	private void pingServer(float delta)
