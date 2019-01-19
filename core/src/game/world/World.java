@@ -75,14 +75,11 @@ public class World implements Serializable
 	public void update(float delta)
 	{
 		/** TODO change this shit */
-		synchronized(entities)
+		synchronized(this)
 		{
 			for(Entity e : entities.values())
 			{
-				synchronized(e)
-				{
-					e.update(delta);
-				}				
+				e.update(delta);
 			}
 		}
 		
