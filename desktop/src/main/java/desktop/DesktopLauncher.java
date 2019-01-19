@@ -18,7 +18,7 @@ public class DesktopLauncher
 	public static void main(String[] arg)
 	{
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.resizable = true;
+		config.resizable = false;
 		config.vSyncEnabled = true;
 		config.title = "Syndicate of Adventurers";
 		config.initialBackgroundColor = Color.BLACK;
