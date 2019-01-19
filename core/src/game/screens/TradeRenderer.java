@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,7 +22,9 @@ public class TradeRenderer
 	private Stage stage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
+	
 	private Skin skin;
+	private BitmapFont tradeFont;
 	
 	private TextButton startTradeBtn;
 	private TextButton offerBtn;
@@ -36,9 +39,11 @@ public class TradeRenderer
 		stage = new Stage();
 		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
 		batch = new SpriteBatch();
-		trader = MyGame.getPlayer();
-		
+				
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		tradeFont = new BitmapFont();
+		
+		trader = MyGame.getPlayer();
 		
 		setupStartTradeButton();
 		setupOfferButton();
@@ -77,8 +82,11 @@ public class TradeRenderer
 	
 	private void renderBuying()
 	{
+		String traderName = ((EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId())).getLogin();
+		
 		batch.begin();
 		batch.draw(tradeWindowTexture, 0, 0);
+		tradeFont.draw(batch, "Trading with " + traderName, tradeWindowTexture.getWidth()/10f, (tradeWindowTexture.getHeight() * 9f)/10f);
 		batch.end();
 		
 		stage.addActor(offerBtn);
