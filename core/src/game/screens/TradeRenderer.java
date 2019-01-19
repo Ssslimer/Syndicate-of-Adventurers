@@ -8,6 +8,7 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -66,11 +67,14 @@ public class TradeRenderer
 		
 		trader = MyGame.getPlayer();
 		
+		itemButtons = new Table();
+		
 		setupStartTradeButton();
 		setupOfferButton();
 		setupAcceptOffertButton();
 		setupDeclineOffertButton();
 		setupEndTradeButton();
+		setupSellItemButton();
 	}
 	
 	public void render()
@@ -290,9 +294,23 @@ public class TradeRenderer
 	
 	private void setupItemButtons()
 	{
+		boolean itemsInStage = false;
+		clearStageFromItemButtons();
+		
+		if(!itemButtons.getCells().isEmpty())
+		{
+			itemButtons.clear();
+			itemsInStage = true;
+		}
+		
 		List<Item> items = trader.getItems();
 		
-		int index = 0;
+		itemButtons.setWidth(startTradeBtn.getWidth() * 2);
+		itemButtons.setHeight(startTradeBtn.getHeight() * 5);
+		
+		itemButtons.setPosition(TRADE_SCREEN_WIDTH, sellItemBtn.getY());
+		
+		int index = 1;
 		for(Item item : items)
 		{
 			ItemButton button = new ItemButton(skin, item);
@@ -300,8 +318,8 @@ public class TradeRenderer
 			button.setWidth(startTradeBtn.getWidth() * 2);
 			button.setHeight(startTradeBtn.getHeight());
 			
-			float posX = 7 * TRADE_SCREEN_WIDTH / 7f;
-			float posY = sellItemBtn.getY() - index * button.getHeight();
+			float posX = 5 * TRADE_SCREEN_WIDTH / 7f;
+			float posY = TRADE_SCREEN_HEIGHT - (index * button.getHeight());
 			button.setPosition(posX, posY);
 			
 			button.addListener(new ClickListener()
@@ -310,12 +328,29 @@ public class TradeRenderer
 				public void clicked(InputEvent event, float x, float y)
 				{
 					tradingItem = button.getItem();
-					sellItemBtn.setText(button.getName());
+					sellItemBtn.setText(tradingItem.getType().toString() + "(" + tradingItem.getAttack() + "," + tradingItem.getDefence() + "," + tradingItem.getHPBonus() + ")");
 				}
 			});
 			
-			itemButtons.add(button);
+			System.out.println(item.getType().toString() + "!!!!!!!!!!!!!!!!!!");
+			
+			//itemButtons.add(button);
+			sellingStage.addActor(button);
 			index++;
+		}
+		
+		//if(!itemsInStage)sellingStage.addActor(itemButtons);
+
+	}
+	
+	private void clearStageFromItemButtons()
+	{
+		for(Actor actor : sellingStage.getActors())
+		{
+			if(actor instanceof ItemButton)
+			{
+				actor.remove();
+			}
 		}
 	}
 }

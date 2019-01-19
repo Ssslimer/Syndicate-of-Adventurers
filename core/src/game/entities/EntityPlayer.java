@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
@@ -48,6 +49,8 @@ public class EntityPlayer extends Entity implements Damageable
 		gold = 0;
 		
 		addItem(new Item(1, 2, 0, ItemType.SWORD));
+		addItem(new Item(2, 15, 3, ItemType.SHIELD));
+		addItem(new Item(10, 5, 8, ItemType.SWORD));
 		
 		tradeState = TradeState.NOT_TRADING;
 		hasOffer = new Boolean(false);
@@ -59,6 +62,10 @@ public class EntityPlayer extends Entity implements Damageable
 		
 		eqList = player.getItems();
 		determinePlayerStats();
+		
+		addItem(new Item(1, 2, 0, ItemType.SWORD));
+		addItem(new Item(2, 15, 3, ItemType.SHIELD));
+		addItem(new Item(10, 5, 8, ItemType.SWORD));
 		
 		tradeState = TradeState.NOT_TRADING;
 		hasOffer = new Boolean(false);
