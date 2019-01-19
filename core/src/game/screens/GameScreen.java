@@ -30,6 +30,7 @@ import client.MyGame;
 import entities.Entity;
 import entities.EntityPlayer;
 import networking.MoveDirection;
+import trade.TradeState;
 import util.ConfigConstants;
 
 public class GameScreen implements Screen, InputProcessor 
@@ -175,6 +176,7 @@ public class GameScreen implements Screen, InputProcessor
 					tradeRenderer = new TradeRenderer(); 
 					inputMultiplexer.addProcessor(tradeRenderer.getStage());
 					Gdx.input.setInputProcessor(inputMultiplexer);
+					MyGame.getPlayer().setTrateState(TradeState.SELLING);
 				break;
 				
 				case Input.Keys.Y: 
@@ -187,6 +189,7 @@ public class GameScreen implements Screen, InputProcessor
 					{
 						MyGame.getPlayer().setTradingWithId(seller.getId());
 					}
+					MyGame.getPlayer().setTrateState(TradeState.BUYING);
 					
 				break;
 			}
