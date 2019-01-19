@@ -1,6 +1,7 @@
 package screens;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Files.FileType;
@@ -9,12 +10,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.MyGame;
 import entities.EntityPlayer;
+import entities.Item;
+import entities.ItemButton;
 import trade.TradeState;
 import util.ConfigConstants;
 
@@ -37,6 +42,10 @@ public class TradeRenderer
 	private TextButton acceptOffertBtn;
 	private TextButton declineOffertBtn;
 	private TextButton endTradeBtn;
+
+	private TextButton sellItemBtn;
+	private Table itemButtons;
+	private Item tradingItem;
 	
 	private EntityPlayer trader;
 		
@@ -44,7 +53,7 @@ public class TradeRenderer
 	{
 		TRADE_SCREEN_WIDTH = width;
 		TRADE_SCREEN_HEIGHT = height;
-		
+
 		this.sellingStage = sellingStage;
 		this.offerStage = offerStage;
 		this.decisionStage = decisionStage;
@@ -235,7 +244,7 @@ public class TradeRenderer
 		float posX = 2 * TRADE_SCREEN_WIDTH / 7f;
 		float posY = startTradeBtn.getY();
 		
-		offerBtn.setPosition(posX, posY);
+		endTradeBtn.setPosition(posX, posY);
 		
 		startTradeBtn.addListener(new ClickListener()
 		{
@@ -254,6 +263,59 @@ public class TradeRenderer
 		});
 		
 		sellingStage.addActor(endTradeBtn);
-		offerStage.addActor(endTradeBtn);
+	}
+	
+	private void setupSellItemButton()
+	{
+		sellItemBtn = new TextButton("Item...", skin);
+		sellItemBtn.setWidth(startTradeBtn.getWidth() * 2);
+		sellItemBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = 5 * TRADE_SCREEN_WIDTH / 14;
+		float posY = TRADE_SCREEN_HEIGHT / 2;
+		
+		sellItemBtn.setPosition(posX, posY);
+		
+		sellItemBtn.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				setupItemButtons();
+			}
+		});
+		
+		sellingStage.addActor(sellItemBtn);
+	}
+	
+	private void setupItemButtons()
+	{
+		List<Item> items = trader.getItems();
+		
+		int index = 0;
+		for(Item item : items)
+		{
+			ItemButton button = new ItemButton(skin, item);
+			
+			button.setWidth(startTradeBtn.getWidth() * 2);
+			button.setHeight(startTradeBtn.getHeight());
+			
+			float posX = 7 * TRADE_SCREEN_WIDTH / 7f;
+			float posY = sellItemBtn.getY() - index * button.getHeight();
+			button.setPosition(posX, posY);
+			
+			button.addListener(new ClickListener()
+			{
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					tradingItem = button.getItem();
+					sellItemBtn.setText(button.getName());
+				}
+			});
+			
+			itemButtons.add(button);
+			index++;
+		}
 	}
 }

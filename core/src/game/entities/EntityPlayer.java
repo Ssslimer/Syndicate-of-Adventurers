@@ -47,6 +47,8 @@ public class EntityPlayer extends Entity implements Damageable
 		defencePower = BASE_PLAYER_DEFENCE;
 		gold = 0;
 		
+		addItem(new Item(1, 2, 0, ItemType.SWORD));
+		
 		tradeState = TradeState.NOT_TRADING;
 		hasOffer = new Boolean(false);
 	}
