@@ -208,7 +208,7 @@ public class ClientConnection extends Thread
 
 			case LOAD_MAP:
 				World world = ((SendMapMessage) serverCallback).getMap();
-				world.setLocal(true);
+				World.setLocal(true);
 				MyGame.setGameMap(world);
 			break;
 

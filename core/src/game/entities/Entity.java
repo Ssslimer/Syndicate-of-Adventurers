@@ -53,4 +53,9 @@ public abstract class Entity implements Serializable
 	{
 		this.velocity = velocity;
 	}
+
+	public Vector3 getVelocity()
+	{
+		return velocity;
+	}	
 }

@@ -35,11 +35,11 @@ public class WorldRenderer
     	environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
     	environment.add(new DirectionalLight().set(1, 1, 1, 0, -1, 0));
     	
-    	cam.position.set(0, -10, 10);
+    	cam.position.set(0, -5, 5);
     	cam.lookAt(0, 0, 0);
     	cam.near = 1f;
     	cam.far = 300f;
-    	cam.zoom = 0.02f;
+    	cam.zoom = 0.005f;
     	cam.update();
     }
     
@@ -50,6 +50,7 @@ public class WorldRenderer
     	{
     		ModelInstance instance = new ModelInstance(MyGame.getResources().getModel("PLAYER_" + i));
     		instance.transform.setTranslation(entity.getPosition());
+    		instances[i] = instance;
     	}
     	
 		entityInstances.put(entity, instances);
@@ -88,10 +89,10 @@ public class WorldRenderer
 			ModelInstance[] instances = entityInstances.get(entity);
 			if(instances == null) instances = MyGame.getRenderer().initEntity(entity);
 			
-			//ModelInstance instance = 
+			ModelInstance instance = instances[getRotation(entity.getVelocity())];
 			
-			//instances.transform.setTranslation(entity.getPosition());
-	       // modelBatch.render(instance, environment);
+			instance.transform.setTranslation(entity.getPosition());
+	        modelBatch.render(instance, environment);
 		}
 	}	
 
@@ -111,7 +112,7 @@ public class WorldRenderer
 		EntityPlayer player = MyGame.getGameMap().getPlayer(MyGame.getClient().getLogin());
 		if(player == null) return;
 		
-    	cam.position.set(0, -10, 10).add(player.getPosition());
+    	cam.position.set(0, -5, 5).add(player.getPosition());
     	cam.lookAt(player.getPosition());
     	cam.update();
 	}

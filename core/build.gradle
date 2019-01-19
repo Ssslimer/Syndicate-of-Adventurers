@@ -2,6 +2,7 @@
 
 sourceSets.main.java.srcDirs = ["src/game"]
 sourceSets.test.java.srcDirs = ["src/test/java"]
+project.ext.mainClassName = "server.MainServer"
 
 eclipse.project
 {

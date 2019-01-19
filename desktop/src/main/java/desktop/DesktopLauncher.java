@@ -17,8 +17,11 @@ public class DesktopLauncher
 {
 	public static void main(String[] arg)
 	{
+		System.getProperty("java.class.path");
+		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = true;
+		config.fullscreen = true;
 		config.vSyncEnabled = true;
 		config.title = "Syndicate of Adventurers";
 		config.initialBackgroundColor = Color.BLACK;
@@ -30,6 +33,7 @@ public class DesktopLauncher
 		new LwjglApplication(new MyGame(), config);
 	}
 	
+	/** TODO place it in another file */
 	public static int sizeof(Object obj) throws IOException
 	{
 	    ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
