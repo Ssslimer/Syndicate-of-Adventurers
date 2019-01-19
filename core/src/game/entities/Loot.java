@@ -1,9 +1,13 @@
 package entities;
 
+import java.io.Serializable;
+
 import server.Server;
 
-public class Loot 
+public class Loot implements Serializable
 {
+	private static final long serialVersionUID = -3799759061044135043L;
+	
 	private final int goldLoot;
 	private final Item item;
 	

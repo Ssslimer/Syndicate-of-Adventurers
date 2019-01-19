@@ -2,9 +2,7 @@ package client;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -37,6 +35,10 @@ public class Resources
 		loadPlayerTextures();
 		assetManager.finishLoading();
 		createPlayerModels();
+		
+		loadMonsterTextures();
+		assetManager.finishLoading();
+		createMonsterModels();
 		
 		assetManager.finishLoading();
 	}
@@ -84,6 +86,28 @@ public class Resources
 		for(int i = 0; i < 8; i++)
 		{
 			String name = "PLAYER_" + i;
+			Texture texture = getTexture(name);
+			texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		
+			Model model = createModel(new Material(TextureAttribute.createDiffuse(texture)));			
+			models.put(name, model);
+		}
+	}
+	
+	private void loadMonsterTextures()
+	{
+		for(int i = 0; i < 8; i++)
+		{
+			String name = "MONSTER_" + i;
+			addTexture(name, Paths.get("assets", "textures", "entities", "monster", "monster_"+i+".png"));
+		}
+	}
+	
+	private void createMonsterModels()
+	{
+		for(int i = 0; i < 8; i++)
+		{
+			String name = "MONSTER_" + i;
 			Texture texture = getTexture(name);
 			texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 		

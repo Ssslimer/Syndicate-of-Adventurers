@@ -4,6 +4,7 @@ public class Timer
 {
 	private static long lastTickTime = getTime();
 	
+	private static long tickCount = 0;
 	private static int ticks;
 	
 	private static int TPS;
@@ -19,7 +20,8 @@ public class Timer
         	ticks = 0;
             lastTickTime += 1000;
         }
-        ticks++;      
+        ticks++;
+        tickCount++;
     }
 	
     public static long getTime()
@@ -51,5 +53,10 @@ public class Timer
     public static float getLogicDeltaTime()
     {
     	return logicDeltaTime;
+    }
+    
+    public static long getTickCount()
+    {
+    	return tickCount;
     }
 }

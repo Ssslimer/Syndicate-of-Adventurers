@@ -9,7 +9,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 
-import client.MyGame;
 import entities.Entity;
 import entities.EntityEnemy;
 import entities.EntityPlayer;
@@ -18,6 +17,7 @@ import networking.messages.fromserver.SpawnEntityMessage;
 import server.ConnectionToClient;
 import server.Server;
 import trade.TradeState;
+import util.Timer;
 
 public class World implements Serializable
 {	
@@ -77,6 +77,13 @@ public class World implements Serializable
 		for(Entity e : entities.values())
 		{
 			e.update(delta);
+		}
+		
+		if(!isLocal && Timer.getTickCount() % 500 == 0)
+		{
+			int posX = -5 + Server.random.nextInt(10);
+			int posY = -5 + Server.random.nextInt(10);
+			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 0)));
 		}
 	}
 	

@@ -12,10 +12,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import entities.Entity;
+import entities.EntityEnemy;
 import entities.EntityPlayer;
 import util.MathHelper;
 import world.TerrainTile;
@@ -49,7 +48,10 @@ public class WorldRenderer
     	ModelInstance[] instances = new ModelInstance[MOVE_DIRECTIONS];
     	for(int i = 0; i < MOVE_DIRECTIONS; i++)
     	{
-    		ModelInstance instance = new ModelInstance(MyGame.getResources().getModel("PLAYER_" + i));
+    		String name = null;
+    		if(entity instanceof EntityPlayer) name = "PLAYER_";
+    		else if(entity instanceof EntityEnemy) name = "MONSTER_";
+    		ModelInstance instance = new ModelInstance(MyGame.getResources().getModel(name + i));
     		instance.transform.setTranslation(entity.getPosition());
     		instances[i] = instance;
     	}
