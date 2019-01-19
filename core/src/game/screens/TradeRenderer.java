@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import client.MyGame;
 import entities.EntityPlayer;
 import trade.TradeState;
+import util.ConfigConstants;
 
 public class TradeRenderer 
 {
@@ -37,12 +38,12 @@ public class TradeRenderer
 	
 	private EntityPlayer trader;
 		
-	public TradeRenderer(float width, float height)
+	public TradeRenderer(float width, float height, Stage stage)
 	{
 		TRADE_SCREEN_WIDTH = width;
 		TRADE_SCREEN_HEIGHT = height;
 		
-		stage = new Stage();
+		this.stage = stage;
 		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
 		batch = new SpriteBatch();
 				
@@ -83,7 +84,7 @@ public class TradeRenderer
 		
 		stage.act();
 		stage.draw();	
-		stage.clear();
+		//stage.clear();
 	}
 	
 	private void renderBuying()
@@ -100,7 +101,7 @@ public class TradeRenderer
 		
 		stage.act();
 		stage.draw();	
-		stage.clear();
+		//stage.clear();
 	}
 	
 	private void renderOffer()
@@ -110,7 +111,7 @@ public class TradeRenderer
 		
 		stage.act();
 		stage.draw();	
-		stage.clear();
+		//stage.clear();
 	}
 	
 	public Stage getStage()
@@ -121,7 +122,13 @@ public class TradeRenderer
 	private void setupStartTradeButton()
 	{
 		startTradeBtn = new TextButton("Start", skin);
-		//setup pos and size
+		startTradeBtn.setWidth(TRADE_SCREEN_WIDTH/7f);
+		startTradeBtn.setHeight(TRADE_SCREEN_HEIGHT/10f);
+		
+		float posX = 4 * TRADE_SCREEN_WIDTH / 7f;	
+		float posY = TRADE_SCREEN_HEIGHT/10f;
+		
+		startTradeBtn.setPosition(posX, posY);
 		
 		startTradeBtn.addListener(new ClickListener()
 		{
@@ -130,7 +137,6 @@ public class TradeRenderer
 			{
 				if(trader.getTradeState() == TradeState.SELLING)
 				{
-					//send start trade;
 				}
 			}
 		});
