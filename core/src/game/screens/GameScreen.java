@@ -35,6 +35,9 @@ import util.ConfigConstants;
 
 public class GameScreen implements Screen, InputProcessor 
 {
+	private final float CHAT_WIDTH;
+	private final float CHAT_HEIGHT;
+	
 	private MyGame game;
 	
 	private InputMultiplexer inputMultiplexer;
@@ -65,6 +68,10 @@ public class GameScreen implements Screen, InputProcessor
     	
     	spriteBatch = new SpriteBatch();
     	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
+    	
+    	CHAT_WIDTH = 2* chatTexture.getWidth()/3;
+    	CHAT_HEIGHT = 2 * chatTexture.getHeight()/3;
+    	
     	chatFont = new BitmapFont();
     	
     	skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -119,7 +126,7 @@ public class GameScreen implements Screen, InputProcessor
 	{
 		spriteBatch.begin();
 		
-		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - chatTexture.getWidth(), 0);
+		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - CHAT_WIDTH, 0, CHAT_WIDTH, CHAT_HEIGHT);
 		List<String> newChatMessages = Chat.getChatMessages();
 		
 		if(!newChatMessages.isEmpty())
@@ -233,8 +240,8 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
-		if(screenX >= ConfigConstants.WIDTH - chatTexture.getWidth() &&
-				screenY >= ConfigConstants.HEIGHT - chatTexture.getHeight())
+		if(screenX >= ConfigConstants.WIDTH - CHAT_WIDTH &&
+				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
 		{
 			usingChat = true;
 			stage.setKeyboardFocus(null);
@@ -283,10 +290,10 @@ public class GameScreen implements Screen, InputProcessor
 		chatText = new TextField("", style);
 		chatText.setText("Type message...");
 		
-		chatText.setWidth((chatTexture.getWidth()/10f)*8f);
-		chatText.setHeight(chatTexture.getWidth() / 10f);
+		chatText.setWidth((CHAT_WIDTH/10f)*8f);
+		chatText.setHeight(CHAT_WIDTH / 10f);
 		
-		float posX = ConfigConstants.WIDTH - chatTexture.getWidth() + 10f;
+		float posX = ConfigConstants.WIDTH - CHAT_WIDTH + 10f;
 		float posY = 10f;
 		
 		chatText.setPosition(posX, posY);
@@ -312,10 +319,10 @@ public class GameScreen implements Screen, InputProcessor
 	private void setupChatSendTextButton() 
 	{
 		chatSendText = new TextButton("Send", skin);
-		chatSendText.setWidth(chatTexture.getWidth()/10f);
+		chatSendText.setWidth(CHAT_WIDTH/8f);
 		chatSendText.setHeight(chatText.getHeight());
 
-		float posX = ConfigConstants.WIDTH - 50f;	
+		float posX = ConfigConstants.WIDTH - 40f;	
 		float posY = 10f;
 		
 		chatSendText.setPosition(posX, posY);
@@ -328,7 +335,7 @@ public class GameScreen implements Screen, InputProcessor
 				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
 				{
 					MyGame.getClient().sentChatMessage(chatText.getText());
-					//chatText.setText("Type message...");
+					chatText.setText("");
 				}
 			}
 		});
