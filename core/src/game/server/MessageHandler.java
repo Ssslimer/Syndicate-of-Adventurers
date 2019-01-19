@@ -211,7 +211,7 @@ public class MessageHandler extends Thread
 		if(connectionWithClient.isLogedIn())
 		{
 			String login = Server.getLogin(message.getSessionId());
-			Server.getMap().getPlayer(login).attack();
+			//Server.getMap().getPlayer(login).attack();
 		}
 	}
 	

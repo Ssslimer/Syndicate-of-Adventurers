@@ -72,14 +72,13 @@ public class World implements Serializable
 		}
 	}
 
-	public synchronized void update(float delta)
+	public void update(float delta)
 	{
-		/** TODO change this shit */
-		
-			for(Entity e : entities.values())
-			{
-				e.update(delta);
-			}
+		/** TODO fix bug */	
+		for(Entity e : entities.values())
+		{
+			e.update(delta);
+		}
 		
 		
 		if(!isLocal && Timer.getTickCount() % 100 == 0)
@@ -215,6 +214,30 @@ public class World implements Serializable
 			}
 		}
 	}
+	
+	public EntityPlayer findClosestTradingEntity(Vector3 pos)
+	{
+		EntityPlayer player = null;
+		float maxDistance = 10;
+		float currentDistance = 10;
+		
+		for(Entity e : entities.values())
+		{
+			if(e instanceof EntityPlayer)
+			{
+				if(((EntityPlayer)e).getTradeState() == TradeState.SELLING)
+				{
+					if(e.getPosition().dst(pos) < maxDistance && e.getPosition().dst(pos) < currentDistance)
+					{
+						currentDistance = e.getPosition().dst(pos);
+						player = (EntityPlayer)e;
+					}
+				}
+			}
+		}
+		
+		return player == null ? null : player;
+	}
 
 	public Map<Long, Entity> getEntities()
 	{
@@ -259,30 +282,5 @@ public class World implements Serializable
 	public void setSpawnPoint(Vector3 spawnPoint)
 	{
 		this.spawnPoint = spawnPoint;
-	}
-	
-	public EntityPlayer findClosestTradingEntity(Vector3 pos)
-	{
-		EntityPlayer player = null;
-		float maxDistance = 10;
-		float currentDistance = 10;
-		
-		for(Entity e : entities.values())
-		{
-			if(e instanceof EntityPlayer)
-			{
-				if(((EntityPlayer)e).getTradeState() == TradeState.SELLING)
-				{
-					if(e.getPosition().dst(pos) < maxDistance && e.getPosition().dst(pos) < currentDistance)
-					{
-						currentDistance = e.getPosition().dst(pos);
-						player = (EntityPlayer)e;
-					}
-				}
-			}
-		}
-		
-		if(player == null) return null;
-		else return player;
-	}
+	}	
 }
