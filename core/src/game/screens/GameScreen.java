@@ -44,6 +44,8 @@ public class GameScreen implements Screen, InputProcessor
 	private InputMultiplexer inputMultiplexer;
 	private Stage stage;
 	private Stage tradeStage;
+	private Stage tradeOfferStage;
+	private Stage tradeDecisionStage;
 	      
     private SpriteBatch spriteBatch;
     private Texture chatTexture;
@@ -71,6 +73,8 @@ public class GameScreen implements Screen, InputProcessor
 		
 		stage = new Stage();
 		tradeStage = new Stage();
+		tradeOfferStage = new Stage();
+		tradeDecisionStage = new Stage();
 		inputMultiplexer = new InputMultiplexer();	
     	
     	spriteBatch = new SpriteBatch();
@@ -89,8 +93,6 @@ public class GameScreen implements Screen, InputProcessor
 				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
-		inputMultiplexer.addProcessor(tradeStage);
-		//inputMultiplexer.addProcessor(tradeRenderer.getStage());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 		MyGame.getRenderer().initTerrain();
@@ -191,9 +193,7 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.C: displayingChat = !displayingChat; break;
 				
 				case Input.Keys.T: 
-					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage); 
-					inputMultiplexer.addProcessor(tradeRenderer.getStage());
-					Gdx.input.setInputProcessor(inputMultiplexer);
+					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
 					MyGame.getPlayer().setTrateState(TradeState.SELLING);
 					isTrading = true;
 				break;
@@ -205,9 +205,7 @@ public class GameScreen implements Screen, InputProcessor
 					}
 					else
 					{
-						tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage); 
-						inputMultiplexer.addProcessor(tradeRenderer.getStage());
-						Gdx.input.setInputProcessor(inputMultiplexer);
+						tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
 						
 						EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
 						if(seller != null)

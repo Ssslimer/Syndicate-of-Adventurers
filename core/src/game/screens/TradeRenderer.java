@@ -23,7 +23,9 @@ public class TradeRenderer
 	private final float TRADE_SCREEN_WIDTH;
 	private final float TRADE_SCREEN_HEIGHT;
 	
-	private Stage stage;
+	private Stage sellingStage;
+	private Stage offerStage;
+	private Stage decisionStage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
 	
@@ -38,12 +40,15 @@ public class TradeRenderer
 	
 	private EntityPlayer trader;
 		
-	public TradeRenderer(float width, float height, Stage stage)
+	public TradeRenderer(float width, float height, Stage sellingStage, Stage offerStage, Stage decisionStage)
 	{
 		TRADE_SCREEN_WIDTH = width;
 		TRADE_SCREEN_HEIGHT = height;
 		
-		this.stage = stage;
+		this.sellingStage = sellingStage;
+		this.offerStage = offerStage;
+		this.decisionStage = decisionStage;
+		
 		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
 		batch = new SpriteBatch();
 				
@@ -79,11 +84,8 @@ public class TradeRenderer
 		batch.draw(tradeWindowTexture, 0, 0, TRADE_SCREEN_WIDTH, TRADE_SCREEN_HEIGHT);
 		batch.end();
 		
-		stage.addActor(startTradeBtn);
-		stage.addActor(endTradeBtn);
-		
-		stage.act();
-		stage.draw();	
+		sellingStage.act();
+		sellingStage.draw();	
 		//stage.clear();
 	}
 	
@@ -96,27 +98,29 @@ public class TradeRenderer
 		tradeFont.draw(batch, "Trading with " + traderName, TRADE_SCREEN_WIDTH/10f, (TRADE_SCREEN_HEIGHT * 9f)/10f);
 		batch.end();
 		
-		stage.addActor(offerBtn);
-		stage.addActor(endTradeBtn);
-		
-		stage.act();
-		stage.draw();	
-		//stage.clear();
+		offerStage.act();
+		offerStage.draw();
 	}
 	
 	private void renderOffer()
-	{
-		stage.addActor(acceptOffertBtn);
-		stage.addActor(declineOffertBtn);
-		
-		stage.act();
-		stage.draw();	
-		//stage.clear();
+	{		
+		decisionStage.act();
+		decisionStage.draw();
 	}
 	
-	public Stage getStage()
+	public Stage getSellingStage()
 	{
-		return stage;
+		return sellingStage;
+	}
+	
+	public Stage getOfferStage()
+	{
+		return offerStage;
+	}
+	
+	public Stage getDecisionStage()
+	{
+		return decisionStage;
 	}
 	
 	private void setupStartTradeButton()
@@ -141,12 +145,19 @@ public class TradeRenderer
 			}
 		});
 		
-		stage.addActor(startTradeBtn);
+		sellingStage.addActor(startTradeBtn);
 	}
 	
 	private void setupOfferButton()
 	{
 		offerBtn = new TextButton("Offer", skin);
+		offerBtn.setWidth(startTradeBtn.getWidth());
+		offerBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = startTradeBtn.getX();	
+		float posY = startTradeBtn.getY();
+		
+		offerBtn.setPosition(posX, posY);
 		
 		offerBtn.addListener(new ClickListener()
 		{
@@ -160,12 +171,19 @@ public class TradeRenderer
 			}
 		});
 		
-		stage.addActor(offerBtn);
+		offerStage.addActor(offerBtn);
 	}
 	
 	private void setupAcceptOffertButton()
 	{
 		acceptOffertBtn = new TextButton("Accept", skin);
+		acceptOffertBtn.setWidth(startTradeBtn.getWidth());
+		acceptOffertBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = startTradeBtn.getX();	
+		float posY = startTradeBtn.getY();
+		
+		acceptOffertBtn.setPosition(posX, posY);
 		
 		acceptOffertBtn.addListener(new ClickListener()
 		{
@@ -179,12 +197,19 @@ public class TradeRenderer
 			}
 		});
 		
-		stage.addActor(acceptOffertBtn);
+		decisionStage.addActor(acceptOffertBtn);
 	}
 	
 	private void setupDeclineOffertButton()
 	{
 		declineOffertBtn = new TextButton("Decline", skin);
+		declineOffertBtn.setWidth(startTradeBtn.getWidth());
+		declineOffertBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = 2 * TRADE_SCREEN_WIDTH / 7f;	
+		float posY = startTradeBtn.getY();
+		
+		declineOffertBtn.setPosition(posX, posY);
 		
 		declineOffertBtn.addListener(new ClickListener()
 		{
@@ -198,12 +223,19 @@ public class TradeRenderer
 			}
 		});
 		
-		stage.addActor(declineOffertBtn);
+		decisionStage.addActor(declineOffertBtn);
 	}
 	
 	private void setupEndTradeButton()
 	{
 		endTradeBtn = new TextButton("Exit", skin);
+		endTradeBtn.setWidth(startTradeBtn.getWidth());
+		endTradeBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = 2 * TRADE_SCREEN_WIDTH / 7f;
+		float posY = startTradeBtn.getY();
+		
+		offerBtn.setPosition(posX, posY);
 		
 		startTradeBtn.addListener(new ClickListener()
 		{
@@ -221,6 +253,7 @@ public class TradeRenderer
 			}
 		});
 		
-		stage.addActor(endTradeBtn);
+		sellingStage.addActor(endTradeBtn);
+		offerStage.addActor(endTradeBtn);
 	}
 }
