@@ -58,7 +58,7 @@ public class GameScreen implements Screen, InputProcessor
     private boolean usingChat;
     private boolean displayingChat;
     
-    private boolean isTrading = false;
+    public static boolean isTrading = false;
     
     private TradeRenderer tradeRenderer;
     
@@ -193,19 +193,14 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.C: displayingChat = !displayingChat; break;
 				
 				case Input.Keys.T: 
-					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
+					if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
 					MyGame.getPlayer().setTrateState(TradeState.SELLING);
 					isTrading = true;
 				break;
 				
 				case Input.Keys.Y:
-					if(isTrading)
-					{
-						isTrading = false;
-					}
-					else
-					{
-						tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
+
+						if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
 						
 						EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
 						if(seller != null)
@@ -214,7 +209,7 @@ public class GameScreen implements Screen, InputProcessor
 							MyGame.getPlayer().setTrateState(TradeState.BUYING);
 							isTrading = true;
 						}
-					}
+					
 							
 				break;
 			}
