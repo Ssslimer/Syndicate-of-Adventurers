@@ -180,14 +180,14 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;	
 				
 				case Input.Keys.T: 
-					tradeRenderer = new TradeRenderer(); 
+					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT); 
 					inputMultiplexer.addProcessor(tradeRenderer.getStage());
 					Gdx.input.setInputProcessor(inputMultiplexer);
 					MyGame.getPlayer().setTrateState(TradeState.SELLING);
 				break;
 				
 				case Input.Keys.Y: 
-					tradeRenderer = new TradeRenderer(); 
+					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT); 
 					inputMultiplexer.addProcessor(tradeRenderer.getStage());
 					Gdx.input.setInputProcessor(inputMultiplexer);
 					

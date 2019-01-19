@@ -19,6 +19,9 @@ import trade.TradeState;
 
 public class TradeRenderer 
 {
+	private final float TRADE_SCREEN_WIDTH;
+	private final float TRADE_SCREEN_HEIGHT;
+	
 	private Stage stage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
@@ -34,8 +37,11 @@ public class TradeRenderer
 	
 	private EntityPlayer trader;
 		
-	public TradeRenderer()
+	public TradeRenderer(float width, float height)
 	{
+		TRADE_SCREEN_WIDTH = width;
+		TRADE_SCREEN_HEIGHT = height;
+		
 		stage = new Stage();
 		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
 		batch = new SpriteBatch();
@@ -69,7 +75,7 @@ public class TradeRenderer
 	private void renderSelling()
 	{
 		batch.begin();
-		batch.draw(tradeWindowTexture, 0, 0);
+		batch.draw(tradeWindowTexture, 0, 0, TRADE_SCREEN_WIDTH, TRADE_SCREEN_HEIGHT);
 		batch.end();
 		
 		stage.addActor(startTradeBtn);
@@ -85,8 +91,8 @@ public class TradeRenderer
 		String traderName = ((EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId())).getLogin();
 		
 		batch.begin();
-		batch.draw(tradeWindowTexture, 0, 0);
-		tradeFont.draw(batch, "Trading with " + traderName, tradeWindowTexture.getWidth()/10f, (tradeWindowTexture.getHeight() * 9f)/10f);
+		batch.draw(tradeWindowTexture, 0, 0, TRADE_SCREEN_WIDTH, TRADE_SCREEN_HEIGHT);
+		tradeFont.draw(batch, "Trading with " + traderName, TRADE_SCREEN_WIDTH/10f, (TRADE_SCREEN_HEIGHT * 9f)/10f);
 		batch.end();
 		
 		stage.addActor(offerBtn);
