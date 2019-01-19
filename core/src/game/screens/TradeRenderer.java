@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,16 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import client.MyGame;
+import entities.EntityPlayer;
+import trade.TradeState;
 
 public class TradeRenderer 
 {
-	public static final boolean SELLING = true;
-	public static final boolean BUYING = false;
-	
 	private Stage stage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
+	
 	private Skin skin;
+	private BitmapFont tradeFont;
 	
 	private TextButton startTradeBtn;
 	private TextButton offerBtn;
@@ -30,18 +32,18 @@ public class TradeRenderer
 	private TextButton declineOffertBtn;
 	private TextButton endTradeBtn;
 	
-	private Boolean sellingOrBuying;
-	private Boolean hasOffer;
+	private EntityPlayer trader;
 		
 	public TradeRenderer()
 	{
 		stage = new Stage();
 		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
-		batch = new SpriteBatch();	
-		sellingOrBuying = MyGame.getPlayer().getSellingOrBuying();
-		hasOffer = MyGame.getPlayer().getHasOffer();
-		
+		batch = new SpriteBatch();
+				
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		tradeFont = new BitmapFont();
+		
+		trader = MyGame.getPlayer();
 		
 		setupStartTradeButton();
 		setupOfferButton();
@@ -52,13 +54,13 @@ public class TradeRenderer
 	
 	public void render()
 	{
-		if(sellingOrBuying != null)
+		if(trader.getTradeState() != TradeState.NOT_TRADING)
 		{
-			if(sellingOrBuying = SELLING) renderSelling();
-			else renderBuying();	
+			if(trader.getTradeState() == TradeState.SELLING) renderSelling();
+			else if(trader.getTradeState() == TradeState.BUYING) renderBuying();	
 		}
 		
-		if(hasOffer)
+		if(trader.getHasOffer())
 		{
 			renderOffer();
 		}
@@ -80,8 +82,11 @@ public class TradeRenderer
 	
 	private void renderBuying()
 	{
+		String traderName = ((EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId())).getLogin();
+		
 		batch.begin();
 		batch.draw(tradeWindowTexture, 0, 0);
+		tradeFont.draw(batch, "Trading with " + traderName, tradeWindowTexture.getWidth()/10f, (tradeWindowTexture.getHeight() * 9f)/10f);
 		batch.end();
 		
 		stage.addActor(offerBtn);
@@ -117,7 +122,7 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(sellingOrBuying == SELLING)
+				if(trader.getTradeState() == TradeState.SELLING)
 				{
 					//send start trade;
 				}
@@ -136,7 +141,7 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(sellingOrBuying == BUYING)
+				if(trader.getTradeState() == TradeState.BUYING)
 				{
 					//check for correctness and send offer message
 				}
@@ -155,7 +160,7 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(sellingOrBuying == SELLING)
+				if(trader.getTradeState() == TradeState.SELLING)
 				{
 					//send accept message
 				}
@@ -174,7 +179,7 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(sellingOrBuying == SELLING)
+				if(trader.getTradeState() == TradeState.SELLING)
 				{
 					//send decline message
 				}
@@ -193,11 +198,11 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(sellingOrBuying == SELLING)
+				if(trader.getTradeState() == TradeState.SELLING)
 				{
 					//finish trade stop selling
 				}
-				else
+				else if(trader.getTradeState() == TradeState.BUYING)
 				{
 					//close trade window maybe only if you didn't put any offer?
 				}

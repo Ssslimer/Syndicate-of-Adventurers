@@ -17,6 +17,7 @@ import networking.MoveDirection;
 import networking.messages.fromserver.SpawnEntityMessage;
 import server.ConnectionToClient;
 import server.Server;
+import trade.TradeState;
 
 public class World implements Serializable
 {	
@@ -260,7 +261,7 @@ public class World implements Serializable
 		{
 			if(e instanceof EntityPlayer)
 			{
-				if(((EntityPlayer)e).getSellingOrBuying() == EntityPlayer.SELLING)
+				if(((EntityPlayer)e).getTradeState() == TradeState.SELLING)
 				{
 					if(e.getPosition().dst(pos) < maxDistance && e.getPosition().dst(pos) < currentDistance)
 					{

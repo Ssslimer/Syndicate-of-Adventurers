@@ -7,7 +7,7 @@ import networking.messages.fromclient.ClientMessage;
 public class TradeStartMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -7364912797737097249L;
-	private Item item;
+	private Item item; // check if this is necessary
 
 	public TradeStartMessage(long sessionId, Item item) 
 	{

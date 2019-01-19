@@ -100,24 +100,34 @@ public class ClientConnection extends Thread
 		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, item));
 	}
 	
-	public void sentTradeOfferMessage(int goldAmount)
+	public void sentTradeOfferMessage(long sellerId, int goldAmount, Item sellingItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, goldAmount));
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, goldAmount, sellingItem));
 	}
 	
-	public void sentTradeOfferMessage(Item item)
+	public void sentTradeOfferMessage(long sellerId, Item item, Item sellingItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, item));
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, item, sellingItem));
 	}
 	
-	public void sentTradeOfferMessage(Item item, int goldAmount)
+	public void sentTradeOfferMessage(long sellerId, Item item, int goldAmount, Item sellingItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, goldAmount, item));
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, goldAmount, item, sellingItem));
 	}
 	
-	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, TradeOfferMessage offer, Item item)
+	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount)
 	{
-		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, offer, item));
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount));
+	}
+	
+	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, Item item)
+	{
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, item));
+	}
+	
+	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount, Item item)
+	{
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount, item));
 	}
 	
 	public MessageStatus register(String login, String password)

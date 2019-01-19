@@ -3,29 +3,46 @@ package networking.messages.trade;
 import entities.Item;
 import networking.MessageType;
 import networking.messages.fromclient.ClientMessage;
+import trade.Offer;
 
 public class TradeDecisionMessage extends ClientMessage
 {
 	private static final long serialVersionUID = 6718610010753779173L;
 	
 	private boolean offerAccepted;
-	private long otherTraderId;
-	private TradeOfferMessage offer;
-	private Item sellingItem;
+	private Offer offer;
 	
-	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, TradeOfferMessage offer, Item sellingItem) 
+	
+	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, int goldAmount) 
 	{
 		super(MessageType.TRADE_DECISION, sessionId);
 		
-		this.otherTraderId = otherTraderId;
 		this.offerAccepted = offerAccepted;
-		this.offer = offer;
-		this.sellingItem = sellingItem;
+		this.offer = new Offer(sessionId, otherTraderId, sellingItem, goldAmount);
 	}
 	
-	public long getOtherTraderId()
+	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, Item item) 
 	{
-		return this.otherTraderId;
+		super(MessageType.TRADE_DECISION, sessionId);
+		
+		this.offerAccepted = offerAccepted;
+		this.offer = new Offer(sessionId, otherTraderId, sellingItem, item);
+	}
+	
+	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, int goldAmount, Item item) 
+	{
+		super(MessageType.TRADE_DECISION, sessionId);
+		
+		this.offerAccepted = offerAccepted;
+		this.offer = new Offer(sessionId, otherTraderId, sellingItem, goldAmount, item);
+	}
+	
+	public TradeDecisionMessage(boolean offerAccepted, Offer offer) 
+	{
+		super(MessageType.TRADE_DECISION, offer.getSellerId());
+		
+		this.offerAccepted = offerAccepted;
+		this.offer = offer;
 	}
 
 	public boolean getOfferAccepted()
@@ -33,13 +50,8 @@ public class TradeDecisionMessage extends ClientMessage
 		return this.offerAccepted;
 	}
 	
-	public TradeOfferMessage getOffer()
+	public Offer getOffer()
 	{
-		return offer;
-	}
-	
-	public Item getSellingItem()
-	{
-		return sellingItem;
+		return this.offer;
 	}
 }

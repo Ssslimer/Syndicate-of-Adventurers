@@ -9,6 +9,7 @@ import networking.MoveDirection;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.ConnectionToClient;
 import server.Server;
+import trade.TradeState;
 import world.World;
 
 public class EntityPlayer extends Entity implements Damageable
@@ -18,9 +19,6 @@ public class EntityPlayer extends Entity implements Damageable
 	private static final int BASE_PLAYER_ATTACK = 10;
 	private static final int BASE_PLAYER_DEFENCE = 5;
 	private static final int BASE_PLAYER_HP = 100;
-	
-	public static final boolean SELLING = true;
-	public static final boolean BUYING = false;
 
 	private String login;
 	
@@ -31,12 +29,11 @@ public class EntityPlayer extends Entity implements Damageable
 	private int gold;
 	
 	private List<Item> eqList = new ArrayList<>();
-	private Item sellingItem;
 	
 	boolean moveUp, moveDown, moveLeft, moveRight;
 	
-	private Boolean sellingOrBuying;
 	private Boolean hasOffer;
+	private TradeState tradeState;
 	private long tradingWithId = -1;
 	
 	public EntityPlayer(Vector3 position, String login) 
@@ -50,8 +47,8 @@ public class EntityPlayer extends Entity implements Damageable
 		defencePower = BASE_PLAYER_DEFENCE;
 		gold = 0;
 		
-		sellingOrBuying = null;
-		setHasOffer(false);
+		tradeState = TradeState.NOT_TRADING;
+		hasOffer = new Boolean(false);
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -61,7 +58,8 @@ public class EntityPlayer extends Entity implements Damageable
 		eqList = player.getItems();
 		determinePlayerStats();
 		
-		sellingOrBuying = null;
+		tradeState = TradeState.NOT_TRADING;
+		hasOffer = new Boolean(false);
 	}
 	
 	@Override
@@ -182,14 +180,14 @@ public class EntityPlayer extends Entity implements Damageable
 		return eqList;
 	}
 	
-	public Boolean getSellingOrBuying()
+	public TradeState getTradeState()
 	{
-		return sellingOrBuying;
+		return this.tradeState;
 	}
 	
-	public void setSellingOrBuying(Boolean sellingOrBuying)
+	public void setTrateState(TradeState state)
 	{
-		this.sellingOrBuying = sellingOrBuying;
+		this.tradeState = state;
 	}
 	
 	public Boolean getHasOffer() 
