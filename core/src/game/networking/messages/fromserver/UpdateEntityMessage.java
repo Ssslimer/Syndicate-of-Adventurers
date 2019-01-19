@@ -9,7 +9,7 @@ import networking.messages.Message;
 
 public class UpdateEntityMessage extends Message
 {
-	private static final long serialVersionUID = 7059769221328707957L;
+	private static final long serialVersionUID = 140712170672865378L;
 	
 	private final long entityId;
 	private final Vector3 velocity, position;

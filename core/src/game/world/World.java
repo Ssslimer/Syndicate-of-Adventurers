@@ -74,16 +74,19 @@ public class World implements Serializable
 
 	public void update(float delta)
 	{
-		for(Entity e : entities.values())
+		synchronized(entities)
 		{
-			e.update(delta);
+			for(Entity e : entities.values())
+			{
+				e.update(delta);
+			}
 		}
 		
-		if(!isLocal && Timer.getTickCount() % 500 == 0)
+		if(!isLocal && Timer.getTickCount() % 100 == 0)
 		{
-			int posX = -5 + Server.random.nextInt(10);
-			int posY = -5 + Server.random.nextInt(10);
-			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 0)));
+			int posX = Server.random.nextInt(4) - 2;
+			int posY = Server.random.nextInt(4) - 2;
+			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
 		}
 	}
 	

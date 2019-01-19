@@ -61,7 +61,7 @@ public class MessageSender extends Thread
 	{
 		if(!clientSocket.isClosed() && !clientSocket.isOutputShutdown())
 		{
-			System.out.println("NEW MESSAGE: " + message.getMessageType().toString());
+			//System.out.println("NEW MESSAGE: " + message.getMessageType().toString());
 			streamToServer.writeObject(message);
 			streamToServer.reset();
 			streamToServer.flush();

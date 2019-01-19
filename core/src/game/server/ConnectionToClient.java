@@ -55,12 +55,14 @@ public class ConnectionToClient extends Thread
 	    {
 	    	System.out.println(e.getMessage());
 	    	connectionManager.removeConnection(this);
+	    	stopCommunication();
 	    }
 	    catch(SocketException e)
 	    {
 	    	System.out.println(e.getMessage());
 	    	System.out.println("Lost connection with client");
 	    	connectionManager.removeConnection(this);
+	    	stopCommunication();
 	    	return;
 	    }
 	    catch(EOFException e)
@@ -72,16 +74,18 @@ public class ConnectionToClient extends Thread
 	    {
 			e.printStackTrace();
 			connectionManager.removeConnection(this);
+			stopCommunication();
 			return;
 		}
     }
 	
-	public void sendMessageToClient(Message message)
+	public synchronized void sendMessageToClient(Message message)
 	{
-		System.out.println("Sending: " + message.getMessageType());
+		if(streamToClient == null) return;
+		//System.out.println("Sending: " + message.getMessageType());
 		
 		try
-		{
+		{			
 			streamToClient.writeObject(message);
 			streamToClient.reset();
 			streamToClient.flush();
