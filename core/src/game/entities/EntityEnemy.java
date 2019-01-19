@@ -42,7 +42,7 @@ public class EntityEnemy extends Entity implements Damageable
 	@Override
 	public void update(float delta)
 	{
-		if(Timer.getTickCount() % 50 == 0) changeTarget();
+		if(Timer.getTickCount() % 10 == 0) changeTarget();
 		move(delta);
 		
 		//double attackProbability = Server.random.nextDouble();
