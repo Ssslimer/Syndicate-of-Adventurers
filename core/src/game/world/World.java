@@ -72,16 +72,15 @@ public class World implements Serializable
 		}
 	}
 
-	public void update(float delta)
+	public synchronized void update(float delta)
 	{
 		/** TODO change this shit */
-		synchronized(this)
-		{
+		
 			for(Entity e : entities.values())
 			{
 				e.update(delta);
 			}
-		}
+		
 		
 		if(!isLocal && Timer.getTickCount() % 100 == 0)
 		{
