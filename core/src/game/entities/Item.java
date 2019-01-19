@@ -1,9 +1,13 @@
 package entities;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Item 
+public class Item implements Serializable
 {
+	private static final long serialVersionUID = -5446185183517083909L;
+	
 	private int attack;
 	private int defence;
 	private int HPBonus;
