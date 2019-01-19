@@ -19,7 +19,7 @@ public class DesktopLauncher
 	{
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = true;
-		config.fullscreen = true;
+		config.fullscreen = false;
 		config.vSyncEnabled = true;
 		config.title = "Syndicate of Adventurers";
 		config.initialBackgroundColor = Color.BLACK;
