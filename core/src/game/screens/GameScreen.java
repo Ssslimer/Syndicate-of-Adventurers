@@ -43,6 +43,9 @@ public class GameScreen implements Screen, InputProcessor
 	
 	private InputMultiplexer inputMultiplexer;
 	private Stage stage;
+	private Stage tradeStage;
+	private Stage tradeOfferStage;
+	private Stage tradeDecisionStage;
 	      
     private SpriteBatch spriteBatch;
     private Texture chatTexture;
@@ -54,6 +57,8 @@ public class GameScreen implements Screen, InputProcessor
     
     private boolean usingChat;
     private boolean displayingChat;
+    
+    private boolean isTrading = false;
     
     private TradeRenderer tradeRenderer;
     
@@ -67,6 +72,9 @@ public class GameScreen implements Screen, InputProcessor
 		this.game = game;
 		
 		stage = new Stage();
+		tradeStage = new Stage();
+		tradeOfferStage = new Stage();
+		tradeDecisionStage = new Stage();
 		inputMultiplexer = new InputMultiplexer();	
     	
     	spriteBatch = new SpriteBatch();
@@ -85,7 +93,6 @@ public class GameScreen implements Screen, InputProcessor
 				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
-		//inputMultiplexer.addProcessor(tradeRenderer.getStage());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 		MyGame.getRenderer().initTerrain();
@@ -113,7 +120,7 @@ public class GameScreen implements Screen, InputProcessor
         MyGame.getRenderer().render();
         if(displayingChat) renderChat();
         
-        if(tradeRenderer != null) tradeRenderer.render();     
+        if(isTrading) tradeRenderer.render();     
 	}
 	
 	private void pingServer(float delta)
@@ -186,24 +193,29 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.C: displayingChat = !displayingChat; break;
 				
 				case Input.Keys.T: 
-					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT); 
-					inputMultiplexer.addProcessor(tradeRenderer.getStage());
-					Gdx.input.setInputProcessor(inputMultiplexer);
+					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
 					MyGame.getPlayer().setTrateState(TradeState.SELLING);
+					isTrading = true;
 				break;
 				
-				case Input.Keys.Y: 
-					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT); 
-					inputMultiplexer.addProcessor(tradeRenderer.getStage());
-					Gdx.input.setInputProcessor(inputMultiplexer);
-					
-					EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
-					if(seller != null)
+				case Input.Keys.Y:
+					if(isTrading)
 					{
-						MyGame.getPlayer().setTradingWithId(seller.getId());
+						isTrading = false;
 					}
-					MyGame.getPlayer().setTrateState(TradeState.BUYING);
-					
+					else
+					{
+						tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
+						
+						EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
+						if(seller != null)
+						{
+							MyGame.getPlayer().setTradingWithId(seller.getId());
+							MyGame.getPlayer().setTrateState(TradeState.BUYING);
+							isTrading = true;
+						}
+					}
+							
 				break;
 			}
 		}
@@ -212,7 +224,7 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			if(keycode == Input.Keys.ENTER)
 			{
-				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
+				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0 && chatText.getText().compareTo("") != 0)
 				{
 					MyGame.getClient().sentChatMessage(chatText.getText());
 					chatText.setText("");
@@ -246,12 +258,18 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
-		if(screenX >= ConfigConstants.WIDTH - CHAT_WIDTH &&
+		if(displayingChat && screenX >= ConfigConstants.WIDTH - CHAT_WIDTH &&
 				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
 		{
 			usingChat = true;
 			stage.setKeyboardFocus(null);
-		}		
+		}
+		else if(isTrading && screenX <= CHAT_WIDTH &&
+				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
+		{
+			tradeStage.touchDown(screenX, screenY, pointer, button);
+			return true;
+		}
 		else
 		{
 			usingChat = false;
@@ -266,6 +284,13 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{ 
+		if(isTrading && screenX <= CHAT_WIDTH &&
+				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
+		{
+			tradeStage.touchUp(screenX, screenY, pointer, button);
+			return true;
+		}
+		
 		return !usingChat; 
 	}
 
@@ -338,7 +363,7 @@ public class GameScreen implements Screen, InputProcessor
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0)
+				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0 && chatText.getText().compareTo("") != 0)
 				{
 					MyGame.getClient().sentChatMessage(chatText.getText());
 					chatText.setText("");
