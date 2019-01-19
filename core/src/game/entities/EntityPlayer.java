@@ -73,7 +73,7 @@ public class EntityPlayer extends Entity implements Damageable
 		{
 			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
 			{
-				connectionToClient.sendMessageToClient(new UpdateEntityMessage(id, velocity, position));
+				if(connectionToClient.isLogedIn()) connectionToClient.sendMessageToClient(new UpdateEntityMessage(id, velocity, position));
 			}
 		}
 	}

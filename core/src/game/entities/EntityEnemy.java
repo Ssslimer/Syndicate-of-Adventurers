@@ -5,7 +5,11 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 
+import networking.messages.fromserver.UpdateEntityMessage;
+import server.ConnectionToClient;
 import server.Server;
+import util.Timer;
+import world.World;
 
 public class EntityEnemy extends Entity implements Damageable
 {
@@ -15,7 +19,7 @@ public class EntityEnemy extends Entity implements Damageable
 	private static final int BASE_ENEMY_DEFENCE = 5;
 	private static final int BASE_ENEMY_HP = 50;
 	
-	private float speed = 5f;
+	private float walk_speed = 1f;
 	private int HP;
 	private int attackPower;
 	private int defencePower;
@@ -38,11 +42,11 @@ public class EntityEnemy extends Entity implements Damageable
 	@Override
 	public void update(float delta)
 	{
-		changeTarget();
+		if(Timer.getTickCount() % 50 == 0) changeTarget();
 		move(delta);
 		
-		double attackProbability = Server.random.nextDouble();
-		if(attackProbability <= 0.5d) attack();	
+		//double attackProbability = Server.random.nextDouble();
+		//if(attackProbability <= 0.5d) attack();	
 	}
 	
 	private void changeTarget()
@@ -51,17 +55,26 @@ public class EntityEnemy extends Entity implements Damageable
 		
 		if(player != null)
 		{
-			moveDirection = position.sub(player.getPosition()).nor(); /** TODO check if this is correct */
+			moveDirection = player.getPosition().cpy().sub(position).nor(); /** TODO check if this is correct */
 		}
 		else
 		{
-			moveDirection = new Vector3(Server.random.nextFloat(), 0, Server.random.nextFloat());
+			moveDirection = new Vector3(Server.random.nextFloat()*2 - 1, Server.random.nextFloat()*2 - 1, 0);
 		}
 	}
 	
 	private void move(float delta)
 	{	
-		position.add(moveDirection.cpy().scl(speed / delta));	
+		velocity = moveDirection.cpy().scl(walk_speed);
+		position.add(velocity.cpy().scl(1f/delta));
+		
+		if(!World.isLocal() && velocity.len() != 0)
+		{
+			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
+			{
+				if(connectionToClient.isLogedIn()) connectionToClient.sendMessageToClient(new UpdateEntityMessage(id, velocity, position));
+			}
+		}
 	}
 	
 	private List<EntityPlayer> findPlayersInRange() 
@@ -86,7 +99,7 @@ public class EntityEnemy extends Entity implements Damageable
 		
 		for(EntityPlayer player : Server.getMap().getPlayers().values())
 		{
-			float distance = player.getPosition().dst(getPosition());
+			float distance = player.getPosition().dst(position);
 			if(distance<= FOLLOW_RANGE && distance < smallestDistance)
 			{
 				closest = player;
