@@ -75,7 +75,7 @@ public class Resources
 		for(int i = 0; i < 8; i++)
 		{
 			String name = "PLAYER_" + i;
-			addTexture(name, Paths.get("assets", "textures", "entities", "player", "player_"+i+".png"));
+			addTexture(name, Paths.get("assets", "textures", "entities", "player", "Player_"+i+".png"));
 		}
 	}
 	

@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import entities.Entity;
 import entities.EntityPlayer;
+import util.MathHelper;
 import world.TerrainTile;
 
 public class WorldRenderer
@@ -89,7 +90,8 @@ public class WorldRenderer
 			ModelInstance[] instances = entityInstances.get(entity);
 			if(instances == null) instances = MyGame.getRenderer().initEntity(entity);
 			
-			ModelInstance instance = instances[getRotation(entity.getVelocity())];
+			int variant = MathHelper.getRotation(entity.getVelocity());
+			ModelInstance instance = instances[variant];
 			
 			instance.transform.setTranslation(entity.getPosition());
 	        modelBatch.render(instance, environment);
@@ -115,15 +117,5 @@ public class WorldRenderer
     	cam.position.set(0, -5, 5).add(player.getPosition());
     	cam.lookAt(player.getPosition());
     	cam.update();
-	}
-	
-	/** Returns int 0-7 coresponding to angle of rotation. Used by entities for texturing */
-	public static int getRotation(Vector3 vector)
-	{
-		Vector2 ref = new Vector2(0, -1);
-		Vector2 dir = new Vector2(vector.x, vector.y);
-		
-		int angle = ((int)ref.angle(dir));
-		return angle / (360/8);
 	}
 }

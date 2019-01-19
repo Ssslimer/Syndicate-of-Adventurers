@@ -22,7 +22,7 @@ public class EntityPlayer extends Entity implements Damageable
 
 	private String login;
 	
-	private float speed = 5f;
+	private float walk_speed = 5f;
 	private int health;
 	private int attackPower;
 	private int defencePower;
@@ -65,7 +65,9 @@ public class EntityPlayer extends Entity implements Damageable
 	@Override
 	public void update(float delta)
 	{	
-		position.add(moveDirection.cpy().scl(speed / delta));
+		velocity = moveDirection.cpy().scl(walk_speed);
+		
+		position.add(velocity.cpy().scl(1f/delta));
 		
 		if(!World.isLocal() && (moveUp || moveDown || moveRight || moveLeft))
 		{
