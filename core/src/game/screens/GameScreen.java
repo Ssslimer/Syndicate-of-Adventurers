@@ -32,6 +32,7 @@ import entities.EntityPlayer;
 import networking.MoveDirection;
 import trade.TradeState;
 import util.ConfigConstants;
+import util.GdxUtils;
 
 public class GameScreen implements Screen, InputProcessor 
 {
@@ -50,7 +51,9 @@ public class GameScreen implements Screen, InputProcessor
     private TextField chatText;
     private TextButton chatSendText;
     private BitmapFont chatFont;
+    
     private boolean usingChat;
+    private boolean displayingChat;
     
     private TradeRenderer tradeRenderer;
     
@@ -69,8 +72,8 @@ public class GameScreen implements Screen, InputProcessor
     	spriteBatch = new SpriteBatch();
     	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
     	
-    	CHAT_WIDTH = 2* chatTexture.getWidth()/3;
-    	CHAT_HEIGHT = 2 * chatTexture.getHeight()/3;
+    	CHAT_WIDTH = ConfigConstants.WIDTH/4;
+    	CHAT_HEIGHT = ConfigConstants.HEIGHT/2;
     	
     	chatFont = new BitmapFont();
     	
@@ -103,11 +106,12 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public void render(float delta)
 	{
+		GdxUtils.clearScreen();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       
         //pingServer(delta);
         MyGame.getRenderer().render();
-        renderChat();
+        if(displayingChat) renderChat();
         
         if(tradeRenderer != null) tradeRenderer.render();     
 	}
@@ -178,6 +182,8 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.S: MyGame.getClient().move(MoveDirection.DOWN,  false);	break;		
 				case Input.Keys.A: MyGame.getClient().move(MoveDirection.LEFT,  false);	break;
 				case Input.Keys.D: MyGame.getClient().move(MoveDirection.RIGHT, false);	break;	
+				
+				case Input.Keys.C: displayingChat = !displayingChat; break;
 				
 				case Input.Keys.T: 
 					tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT); 
@@ -322,7 +328,7 @@ public class GameScreen implements Screen, InputProcessor
 		chatSendText.setWidth(CHAT_WIDTH/8f);
 		chatSendText.setHeight(chatText.getHeight());
 
-		float posX = ConfigConstants.WIDTH - 40f;	
+		float posX = ConfigConstants.WIDTH - chatSendText.getWidth();	
 		float posY = 10f;
 		
 		chatSendText.setPosition(posX, posY);
