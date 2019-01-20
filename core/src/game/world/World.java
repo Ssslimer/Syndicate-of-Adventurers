@@ -36,7 +36,7 @@ public class World implements Serializable
 		generateMap();
 	}
 
-	public void spawnEntity(Entity entity)
+	public synchronized void spawnEntity(Entity entity)
 	{		
 		entities.put(entity.getId(), entity);
 		if(entity instanceof EntityPlayer) players.put(((EntityPlayer) entity).getLogin(), (EntityPlayer) entity);
@@ -72,14 +72,13 @@ public class World implements Serializable
 		}
 	}
 
-	public void update(float delta)
+	public synchronized void update(float delta)
 	{
 		/** TODO fix bug */	
 		for(Entity e : entities.values())
 		{
 			e.update(delta);
 		}
-		
 		
 		if(!isLocal && Timer.getTickCount() % 100 == 0)
 		{

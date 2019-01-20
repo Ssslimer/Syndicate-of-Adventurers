@@ -20,6 +20,7 @@ public class Server
 	public static final Random random = new Random();
 	private static World world;
 	private static ConnectionManager connectionManager;
+	private MessageHandler messageHandler;
 	
 	private static List<String> chat = Collections.synchronizedList(new ArrayList<>());
 	private static Map<Long, String> clientIDs = Collections.synchronizedMap(new HashMap<>());
@@ -42,8 +43,11 @@ public class Server
 		world = new World();
 		authManager = new AuthManager();
 		
+		messageHandler = new MessageHandler(this);
+		messageHandler.start();
+		
 		connectionManager = new ConnectionManager(this, serverProperties.getIP(), serverProperties.getPortNumber());
-		connectionManager.start();	
+		connectionManager.start();		
 	}
 
 	public void loop()
@@ -132,5 +136,10 @@ public class Server
 	public boolean isAdmin(String login)
 	{
 		return admins.contains(login);
+	}
+	
+	public MessageHandler getMessageHandler()
+	{
+		return messageHandler;
 	}
 }

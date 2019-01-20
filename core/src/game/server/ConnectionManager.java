@@ -29,10 +29,7 @@ public class ConnectionManager extends Thread
 
 	@Override
 	public void run()
-	{
-		MessageHandler messageHander = new MessageHandler(server);
-		messageHander.start();
-		
+	{	
 		SSLServerSocketFactory sslserversocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 		try(ServerSocket serverSocket = sslserversocketfactory.createServerSocket(port, 0, address))
 		{
@@ -42,7 +39,7 @@ public class ConnectionManager extends Thread
 			
 			while(true)
 			{
-				ConnectionToClient connectionToClient = new ConnectionToClient(this, serverSocket.accept(), messageHander);			     			
+				ConnectionToClient connectionToClient = new ConnectionToClient(this, serverSocket.accept(), server.getMessageHandler());			     			
 				connectionToClient.start();
 				connections.add(connectionToClient);
         	}

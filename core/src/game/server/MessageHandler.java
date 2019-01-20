@@ -2,17 +2,16 @@ package server;
 
 import java.io.IOException;
 import java.util.Queue;
-import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.math.Vector3;
 
 import entities.EntityPlayer;
 import entities.Item;
 import networking.MessageStatus;
-import networking.MessageType;
 import networking.MoveDirection;
 import networking.messages.Message;
 import networking.messages.fromclient.ChatMessage;
@@ -33,27 +32,24 @@ public class MessageHandler extends Thread
 {
 	private final Server server;
 	
+	private ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1); /** TODO add parameter from server config*/
 	private Queue<MessageTask> messages = new ConcurrentLinkedQueue<>();
-	private boolean shouldWait = true;
-	
-	private Random rand;
-	
+	private boolean shouldWait = false, isEmpty = true;
+
 	public MessageHandler(Server server)
 	{
 		super("Message Handler");		
 		this.server = server;
-		rand = new Random();
 	}
 	
 	@Override
 	public void run()
 	{
 		setPriority(10);
-		Executor executor = Executors.newFixedThreadPool(1);
-		
+
 		while(true)
 		{
-			if(shouldWait)
+			if(shouldWait || isEmpty)
 			{
 				synchronized(this)
 				{
@@ -67,7 +63,7 @@ public class MessageHandler extends Thread
 				try
 				{
 					MessageTask task = messages.poll();
-					if(task == null) shouldWait = true;
+					if(task == null) isEmpty = true;
 					else processMessage(task);
 				}
 				catch(IOException e)
@@ -75,13 +71,14 @@ public class MessageHandler extends Thread
 					System.out.println(e.getMessage());
 				}
 			});
+			
 		}
 	}
 	
 	void handleMessage(ConnectionToClient source, Message message)
 	{
 		messages.add(new MessageTask(source, message));
-		shouldWait = false;		
+		isEmpty = false;		
 		synchronized(this){notify();}
 	}
 	
@@ -140,7 +137,7 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	private void processRegister(ConnectionToClient connectionWithClient, RegisterMessage message) throws IOException
+	private synchronized void processRegister(ConnectionToClient connectionWithClient, RegisterMessage message) throws IOException
 	{		
 		connectionWithClient.stopCommunication();
 		
@@ -168,7 +165,7 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	private void processLogin(ConnectionToClient connectionWithClient, LoginMessage message) throws IOException
+	private synchronized void processLogin(ConnectionToClient connectionWithClient, LoginMessage message) throws IOException
 	{
 		String login = message.getLogin();
 		String password = message.getPassword();
@@ -211,7 +208,7 @@ public class MessageHandler extends Thread
 		if(connectionWithClient.isLogedIn())
 		{
 			String login = Server.getLogin(message.getSessionId());
-			//Server.getMap().getPlayer(login).attack();
+			Server.getMap().getPlayer(login).attack();
 		}
 	}
 	
@@ -270,7 +267,7 @@ public class MessageHandler extends Thread
 		
 		do
 		{
-			sessionID = rand.nextLong();
+			sessionID = Server.random.nextLong();
 			
 		}while(!Server.IdNotOccupied(sessionID));
 		
