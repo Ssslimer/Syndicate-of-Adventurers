@@ -12,10 +12,12 @@ import com.badlogic.gdx.math.Vector3;
 import entities.Entity;
 import entities.EntityEnemy;
 import entities.EntityPlayer;
+import entities.Item;
 import networking.messages.fromserver.SpawnEntityMessage;
 import server.Server;
+import trade.BuyerOffer;
+import trade.Offer;
 import trade.TradeState;
-import util.Timer;
 
 public class World implements Serializable
 {	
@@ -52,6 +54,30 @@ public class World implements Serializable
 		
 		entity.setPosition(position);
 		entity.setVelocity(velocity);
+	}
+	
+	public void setEntityTradeStart(String login, Item item)
+	{
+		EntityPlayer entity = getPlayer(login);
+		entity.setSellingOffer(new Offer(login, item));
+		entity.setTradeState(TradeState.SELLING);
+		System.out.println(entity.getLogin() + " TRADINGGGGGGGGGG");
+	}
+	
+	public void setEntityTradeStateBuying(String login, Item item)
+	{
+		EntityPlayer entity = getPlayer(login);
+		entity.setBuyingOffer(new BuyerOffer(login, item));
+		entity.setTradeState(TradeState.BUYING);
+	}
+	
+	public void setEntityTradeEnd(String login)
+	{
+		/** TODO check if correct */
+		EntityPlayer entity = getPlayer(login);
+		entity.setSellingOffer(null);
+		entity.setBuyingOffer(null);
+		entity.setTradeState(TradeState.NOT_TRADING);
 	}
 	
 	/** TODO tmp map for testing */

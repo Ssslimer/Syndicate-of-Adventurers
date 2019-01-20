@@ -26,6 +26,8 @@ import networking.messages.trade.TradeDecisionMessage;
 import networking.messages.trade.TradeEndMessage;
 import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
+import trade.Offer;
+import trade.TradeState;
 
 /** Thread for processing messages from clients */
 public class MessageHandler extends Thread
@@ -240,7 +242,13 @@ public class MessageHandler extends Thread
 	
 	private void processTradeStart(ConnectionToClient connectionWithClient, TradeStartMessage message)
 	{
+		String login = Server.getLogin(message.getSessionId());
 		
+		EntityPlayer player = (EntityPlayer)Server.getMap().getPlayer(login);
+		player.setSellingOffer(new Offer(message.getLogin(), message.getItem()));
+		player.setTradeState(TradeState.SELLING);
+		
+		Server.getConnectionManager().sendToAll(message);
 	}
 	
 	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
@@ -256,11 +264,11 @@ public class MessageHandler extends Thread
 			Item offeringItem = message.getDeal().getBuyerOffer().getTraderItem();
 			int offeringGold = message.getDeal().getBuyerOffer().getGoldAmount();
 			
-			long sellerId = message.getSessionId();
-			long buyerId = message.getDeal().getBuyerOffer().getTraderId();
+			String sellerLogin = message.getDeal().getSellerOffer().getLogin();
+			String buyerLogin = message.getDeal().getBuyerOffer().getLogin();
 			
-			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getEntity(sellerId);
-			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getEntity(buyerId);
+			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
+			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getPlayer(buyerLogin);
 			
 			sellerEntity.removeItem(sellingItem);
 			if(offeringItem != null) sellerEntity.addItem(offeringItem);
@@ -269,6 +277,8 @@ public class MessageHandler extends Thread
 			buyerEntity.addItem(sellingItem);
 			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
 			if(offeringGold > 0) buyerEntity.removeGold(offeringGold);
+			
+			/** TODO send to all this exchage */
 		}
 	}
 	

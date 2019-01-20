@@ -10,6 +10,8 @@ import networking.messages.fromserver.DamageEntityMessage;
 import networking.messages.fromserver.DeathEntityMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.Server;
+import trade.BuyerOffer;
+import trade.Offer;
 import trade.TradeState;
 import world.World;
 
@@ -34,6 +36,9 @@ public class EntityPlayer extends Entity implements Damageable
 	private Boolean hasOffer = new Boolean(false);
 	private TradeState tradeState = TradeState.NOT_TRADING;
 	private long tradingWithId = -1;
+	
+	private Offer sellingOffer;
+	private BuyerOffer buyingOffer;
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{
@@ -222,5 +227,25 @@ public class EntityPlayer extends Entity implements Damageable
 	public void setTradingWithId(long tradingWithId)
 	{
 		this.tradingWithId = tradingWithId;
+	}
+
+	public Offer getSellingOffer()
+	{
+		return this.sellingOffer;
+	}
+	
+	public void setSellingOffer(Offer offer)
+	{
+		this.sellingOffer = offer;
+	}
+	
+	public BuyerOffer getBuyingOffer()
+	{
+		return this.buyingOffer;
+	}
+	
+	public void setBuyingOffer(BuyerOffer offer)
+	{
+		this.buyingOffer = offer;
 	}
 }
