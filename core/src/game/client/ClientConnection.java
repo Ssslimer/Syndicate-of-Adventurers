@@ -27,6 +27,7 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
@@ -103,6 +104,7 @@ public class ClientConnection extends Thread
 	
 	public void sentTradeStartMessage(Item item)
 	{
+		System.out.println(login + "!!!!!!!!!!!!!!!!!");
 		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, login, item));
 	}
 	
@@ -231,6 +233,7 @@ public class ClientConnection extends Thread
 				World world = ((SendMapMessage) callback).getMap();
 				World.setLocal(true);
 				MyGame.setGameMap(world);
+				MyGame.loadPlayer(((SendMapMessage) callback).getPlayer());
 			break;
 
 			case UPDATE_ENTITY:
@@ -248,10 +251,9 @@ public class ClientConnection extends Thread
 				MyGame.getGameMap().spawnEntity(spawnMessage.getEntity());
 			break;
 			
-			case TRADE_START: // we get info that other player started trade
-				TradeStartMessage tradeStartMessage = (TradeStartMessage) callback;
-				MyGame.getGameMap().setEntityTradeStart(tradeStartMessage.getLogin(), tradeStartMessage.getItem());
-			break;
+			case UPDATE_TRADE_START: // we get info that other player started trade
+				UpdateTradeStartEntityMessage tradeStartMessage = (UpdateTradeStartEntityMessage) callback;
+				MyGame.getGameMap().setEntityTradeStart( tradeStartMessage.getLogin(), tradeStartMessage.getItem());
 			
 			case TRADE_OFFER: // we get info that other player send us an offer for our trade
 			break;

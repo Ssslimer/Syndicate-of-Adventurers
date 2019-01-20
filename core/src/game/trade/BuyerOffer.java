@@ -1,9 +1,11 @@
 package trade;
 
+
 import entities.Item;
 
 public class BuyerOffer extends Offer
 {
+	private static final long serialVersionUID = -3741444199214577822L;
 	private int goldAmount;
 	
 	public BuyerOffer(String login, int goldAmount) 

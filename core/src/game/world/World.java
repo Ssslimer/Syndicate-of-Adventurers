@@ -58,10 +58,11 @@ public class World implements Serializable
 	
 	public void setEntityTradeStart(String login, Item item)
 	{
-		EntityPlayer entity = getPlayer(login);
+		EntityPlayer entity = getPlayer(login);	
+		if(entity == null) return;
+		
 		entity.setSellingOffer(new Offer(login, item));
 		entity.setTradeState(TradeState.SELLING);
-		System.out.println(entity.getLogin() + " TRADINGGGGGGGGGG");
 	}
 	
 	public void setEntityTradeStateBuying(String login, Item item)
@@ -99,7 +100,8 @@ public class World implements Serializable
 		for(Entity e : entities.values())
 		{
 			e.update(delta);
-		}				
+		}
+					
 
 //		if(!isLocal && Timer.getTickCount() % 100 == 0)
 //		{

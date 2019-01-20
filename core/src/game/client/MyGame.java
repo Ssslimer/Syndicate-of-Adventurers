@@ -61,9 +61,9 @@ public class MyGame extends Game
 		return renderer;
 	}
 	
-	public static void loadPlayer()
+	public static void loadPlayer(EntityPlayer e)
 	{
-		player = gameMap.getPlayer(client.getLogin());
+		player = e;
 	}
 	
 	public static EntityPlayer getPlayer()

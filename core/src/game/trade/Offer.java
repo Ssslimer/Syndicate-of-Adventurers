@@ -1,9 +1,15 @@
 package trade;
 
+import java.io.Serializable;
+
 import entities.Item;
 
-public class Offer 
+public class Offer implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7098452146246928216L;
 	protected String login;
 	protected Item item;
 	

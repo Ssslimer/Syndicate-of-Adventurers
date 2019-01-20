@@ -59,8 +59,6 @@ public class GameScreen implements Screen, InputProcessor
 	
 	public GameScreen(MyGame game)
 	{	
-		MyGame.loadPlayer();
-		
 		stage = new Stage();
 		tradeStage = new Stage();
 		tradeOfferStage = new Stage();
