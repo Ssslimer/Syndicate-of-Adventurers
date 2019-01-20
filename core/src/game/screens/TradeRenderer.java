@@ -131,7 +131,7 @@ public class TradeRenderer
 		if(isDialogNotSetup)
 		{
 			setupTradeOffer();
-			isDialogNotSetup = false;
+			//isDialogNotSetup = false;
 		}
 		
 		offerDialog.show(decisionStage);
