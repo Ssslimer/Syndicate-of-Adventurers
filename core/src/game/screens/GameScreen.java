@@ -56,9 +56,12 @@ public class GameScreen implements Screen, InputProcessor
     private TradeRenderer tradeRenderer;
     
     private float timer; // for ping
+    
+    private MyGame game;
 	
 	public GameScreen(MyGame game)
 	{	
+		this.game = game;
 		stage = new Stage();
 		tradeStage = new Stage();
 		tradeOfferStage = new Stage();
@@ -103,7 +106,6 @@ public class GameScreen implements Screen, InputProcessor
 		GdxUtils.clearScreen();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       
-        //pingServer(delta);
         MyGame.getRenderer().render();
         if(displayingChat) renderChat();
         
@@ -111,10 +113,12 @@ public class GameScreen implements Screen, InputProcessor
                
         if(MyGame.getPlayer() != null && !MyGame.getPlayer().isAlive())
         {
-        	System.out.println("TEST");
     		respawnDialog.show(stage);
     		MyGame.setupPlayer(null);
         }
+        
+		stage.act();
+		stage.draw();
 	}
 	
 	private void pingServer(float delta)
@@ -129,8 +133,7 @@ public class GameScreen implements Screen, InputProcessor
 	
 	private void renderChat()
 	{
-		spriteBatch.begin();
-		
+		spriteBatch.begin();		
 		spriteBatch.draw(chatTexture, ConfigConstants.WIDTH - CHAT_WIDTH, 0, CHAT_WIDTH, CHAT_HEIGHT);
 		List<String> newChatMessages = Chat.getChatMessages();
 		
@@ -142,12 +145,8 @@ public class GameScreen implements Screen, InputProcessor
 				chatFont.setColor(Color.GOLD);
 				chatFont.draw(spriteBatch, str, chatText.getX(), chatText.getY() + 80f + i*20f);
 			}
-		}
-		
-		spriteBatch.end();
-		
-		stage.act();
-		stage.draw();		
+		}		
+		spriteBatch.end();				
 	}
 
 	@Override
@@ -173,29 +172,34 @@ public class GameScreen implements Screen, InputProcessor
 	}
 	
 	private void setupRespawnDialog()
-	{
+	{	
 		respawnDialog = new Dialog("You have been killed", skin, "dialog")
 		{
 			protected void result(Object object)
 			{
-				int result = (int) object;
-			
-				switch(result)
+				switch((RespawnChoice) object)
 				{
-					case 1:
+					case RESPAWN:
 						
 					break;
 					
-					case 2:
-					
+					case QUIT_SERVER:
+						MyGame.getClient().stopConnection();
+						game.setScreen(new MainMenuScreen(game));
+			    		dispose();
 					break;
 				}
 	        }
 		};
 		
-		respawnDialog.button("Respawn", 1);
-		respawnDialog.button("Quit game", 2);
+		respawnDialog.button("Respawn", RespawnChoice.RESPAWN);
+		respawnDialog.button("Quit game", RespawnChoice.QUIT_SERVER);
 		respawnDialog.setMovable(false);
+	}
+	
+	private enum RespawnChoice
+	{
+		RESPAWN, QUIT_SERVER
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ public class MessageSender extends Thread
 	
 	private Socket clientSocket;
 	private ObjectOutputStream streamToServer;
+	private boolean isRunning = true;
 	
 	public MessageSender(Socket clientSocket)
 	{
@@ -32,7 +33,7 @@ public class MessageSender extends Thread
 		} 
 		catch (IOException e1) { e1.printStackTrace(); }
 		
-		while(true)
+		while(isRunning)
 		{
 			if(shouldWait)
 			{
@@ -65,6 +66,21 @@ public class MessageSender extends Thread
 			streamToServer.writeObject(message);
 			streamToServer.reset();
 			streamToServer.flush();
+		}
+	}
+	
+	public synchronized void close()
+	{
+		shouldWait = false;
+		isRunning = false;
+		
+		try
+		{
+			streamToServer.close();
+		}
+		catch(IOException e)
+		{
+			System.out.println(e.getMessage());
 		}
 	}
 }
