@@ -207,7 +207,7 @@ public class TradeRenderer
 					{
 						String login = seller.getLogin();
 						Item sellerItem = seller.getSellingOffer().getTraderItem();
-						//MyGame.getClient().sentTradeOfferMessage(trader.getLogin(), login, buyerItem, sellerItem);
+						MyGame.getClient().sentTradeOfferMessage(trader.getLogin(), login, buyerItem, sellerItem);
 					}
 					MyGame.getClient().sentTradeOfferMessage(sellerId, buyerItem, sellerItem);
 				}

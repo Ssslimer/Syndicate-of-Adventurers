@@ -34,6 +34,7 @@ import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeEndMessage;
+import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
 import world.World;
 
@@ -108,6 +109,12 @@ public class ClientConnection extends Thread
 		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, login, item));
 	}
 	
+	public void sentTradeOfferMessage(String buyerLogin, String sellerLogin, Item buyerItem, Item sellerItem)
+	{
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerLogin, buyerLogin, buyerItem, sellerItem));
+	}
+	
+	/** TODO DELETE DEPRACIETED SHIEEET */
 	public void sentTradeOfferMessage(long sellerId, int goldAmount, Item sellingItem)
 	{
 		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, MyGame.getGameMap().get ,login, goldAmount, sellingItem));
