@@ -108,13 +108,12 @@ public class GameScreen implements Screen, InputProcessor
         if(displayingChat) renderChat();
         
         if(isTrading) tradeRenderer.render();
-        
-        System.out.println(MyGame.getPlayer());
-        if(MyGame.getPlayer() != null) System.out.println(MyGame.getPlayer().isAlive());
-        System.out.println();
+               
         if(MyGame.getPlayer() != null && !MyGame.getPlayer().isAlive())
         {
+        	System.out.println("TEST");
     		respawnDialog.show(stage);
+    		MyGame.setupPlayer(null);
         }
 	}
 	

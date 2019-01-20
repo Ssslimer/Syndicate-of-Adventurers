@@ -61,7 +61,7 @@ public class MyGame extends Game
 		return renderer;
 	}
 	
-	public static void loadPlayer(EntityPlayer e)
+	public static void setupPlayer(EntityPlayer e)
 	{
 		player = e;
 	}

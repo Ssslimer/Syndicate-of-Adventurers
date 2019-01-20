@@ -165,12 +165,10 @@ public class MessageHandler extends Thread
 			connectionWithClient.login();
 			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));		
 			
-			EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 2), login);
-			
-			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap(), e));
+			Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 2), login));
+			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
 			
 			System.out.println("Player: " + login + " has loged in for the first time");
-			Server.getMap().spawnEntity(e);
 		}
 	}
 	
@@ -191,13 +189,10 @@ public class MessageHandler extends Thread
 				Server.addClient(sessionID, login);
 				connectionWithClient.login();
 				connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.OK, sessionID));
-				
-				EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 2), login);
-				
-				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap(), e));
-				
+
+				Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 2), login));
+				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));				
 				System.out.println("Player: " + login + " has loged in");
-				Server.getMap().spawnEntity(e);
 			}
 			else connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.WRONG_PASSWORD, -1));
 		}

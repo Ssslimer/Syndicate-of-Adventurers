@@ -233,25 +233,29 @@ public class ClientConnection extends Thread
 				World world = ((SendMapMessage) callback).getMap();
 				World.setLocal(true);
 				MyGame.setGameMap(world);
-				MyGame.loadPlayer(((SendMapMessage) callback).getPlayer());
+				MyGame.setupPlayer(world.getPlayer(login));
 			break;
 
 			case UPDATE_ENTITY:
+				if(MyGame.getGameMap() == null) break;
 				UpdateEntityMessage message = (UpdateEntityMessage) callback;
 				MyGame.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
 			break;
 			
 			case UPDATE_CHAT:
+				if(MyGame.getGameMap() == null) break;
 				UpdateChatMessage updateChat = (UpdateChatMessage) callback;
 				Chat.updateChat(updateChat.getText());
 			break;
 			
 			case SPAWN_ENTITY:
+				if(MyGame.getGameMap() == null) break;
 				SpawnEntityMessage spawnMessage = (SpawnEntityMessage) callback;
 				MyGame.getGameMap().spawnEntity(spawnMessage.getEntity());
 			break;
 			
 			case UPDATE_TRADE_START: // we get info that other player started trade
+				if(MyGame.getGameMap() == null) break;
 				UpdateTradeStartEntityMessage tradeStartMessage = (UpdateTradeStartEntityMessage) callback;
 				MyGame.getGameMap().setEntityTradeStart( tradeStartMessage.getLogin(), tradeStartMessage.getItem());
 			
@@ -259,6 +263,7 @@ public class ClientConnection extends Thread
 			break;
 			
 			case DAMAGE_ENTITY:
+				if(MyGame.getGameMap() == null) break;
 				DamageEntityMessage damageEntity = (DamageEntityMessage) callback;
 				/** TODO add some graphical effect*/
 				Sound sound = MyGame.getResources().getSound("CLANG");
@@ -266,6 +271,7 @@ public class ClientConnection extends Thread
 			break;
 			
 			case ENTITY_DEATH:
+				if(MyGame.getGameMap() == null) break;
 				DeathEntityMessage deathMessage = (DeathEntityMessage) callback;
 				
 				Entity entity = MyGame.getGameMap().getEntity(deathMessage.getEntityId());
@@ -278,6 +284,7 @@ public class ClientConnection extends Thread
 			break;
 			
 			case PLAYER_LOGOUT:
+				if(MyGame.getGameMap() == null) break;
 				PlayerLogoutMessage logoutMessage = (PlayerLogoutMessage) callback;
 				EntityPlayer player = (EntityPlayer) MyGame.getGameMap().getEntity(logoutMessage.getPlayerId());
 				MyGame.getGameMap().removePlayer(player);				
