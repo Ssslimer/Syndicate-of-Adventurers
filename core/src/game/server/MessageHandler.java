@@ -24,6 +24,7 @@ import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeDecisionMessage;
+import networking.messages.trade.TradeEndMessage;
 import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
 
@@ -130,6 +131,10 @@ public class MessageHandler extends Thread
 			
 			case TRADE_DECISION:
 				if(connectionWithClient.isLogedIn()) processTradeDecision(connectionWithClient, (TradeDecisionMessage) message);
+			break;
+			
+			case TRADE_END:
+				if(connectionWithClient.isLogedIn()) processTradeEnd(connectionWithClient, (TradeEndMessage) message);
 			break;
 				
 			default:/** TODO maybe delete message to client ? */
@@ -259,6 +264,11 @@ public class MessageHandler extends Thread
 			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
 			if(offeringGold > 0) buyerEntity.removeGold(offeringGold);
 		}
+	}
+	
+	private void processTradeEnd(ConnectionToClient connectionWithClient, TradeEndMessage message)
+	{
+		
 	}
 	
 	private long generateSessionID() 
