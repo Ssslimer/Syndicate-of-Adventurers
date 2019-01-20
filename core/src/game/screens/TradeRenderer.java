@@ -98,7 +98,6 @@ public class TradeRenderer
 		
 		if(trader.getHasOffer())
 		{
-			System.out.println("PLAYER: " + trader.getLogin() + " HAS OFFER");
 			renderOffer();
 		}
 	}
@@ -142,6 +141,7 @@ public class TradeRenderer
 		if(isDialogNotSetup)
 		{
 			setupTradeOffer();
+			//isDialogNotSetup = false;
 		}
 		
 		offerDialog.show(decisionStage);
@@ -159,14 +159,15 @@ public class TradeRenderer
 		int def = buyerItem.getDefence();
 		int hp = buyerItem.getHPBonus();
 		
-		offerDialog = new Dialog("Player " + buyerLogin + " is offering you " +
-		buyerItem.getType().toString() + "(" + attack + "," + def + "," + hp + ")", skin)
+		offerDialog = new Dialog("Player " + buyerLogin + " is offering you " + buyerItem.getType().toString() + "(" + attack + "," + def + "," + hp + ")", skin, "dialog")
 		{
 			protected void result(Object object)
 			{
+				System.out.println("INSIDE DIALOGGGGGG");
 				switch((Decision) object)
 				{
 					case ACCEPT:
+						System.out.println("ACCEPTED FOR FUCK SAKE");
 						MyGame.getClient().sentTradeDecisionMessage(true, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
 					break;
 					
@@ -176,6 +177,8 @@ public class TradeRenderer
 				}
 			}
 		};
+		
+		
 		
 		offerDialog.button("Accept", Decision.ACCEPT);
 		offerDialog.button("Decline", Decision.DECLINE);

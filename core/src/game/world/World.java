@@ -82,6 +82,10 @@ public class World implements Serializable
 	
 	public void updateTradeDecision(boolean offerAccepted, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
 	{
+		System.out.println("DECISION BEGIN");
+		System.out.println(sellerItem.toString());
+		System.out.println(buyerItem.toString());
+		
 		EntityPlayer seller = getPlayer(sellerLogin);
 		EntityPlayer buyer = getPlayer(buyerLogin);
 		
@@ -95,6 +99,8 @@ public class World implements Serializable
 		buyer.setTradeState(TradeState.NOT_TRADING);
 		
 		seller.setHasOffer(false);
+		
+		System.out.println("DECISION ENDDDDDD");
 		
 	}
 	

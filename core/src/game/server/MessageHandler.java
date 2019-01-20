@@ -297,7 +297,7 @@ public class MessageHandler extends Thread
             Server.getConnectionManager().sendToAll(new UpdateTradeDecisionMessage(message.getOfferAccepted(), sellerLogin, buyerLogin, offeringItem, sellingItem));
         }
     }
-	
+
 	private void processTradeEnd(ConnectionToClient connectionWithClient, TradeEndMessage message)
 	{
 		
