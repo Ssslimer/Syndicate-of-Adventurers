@@ -49,11 +49,10 @@ public class EntityPlayer extends Entity implements Damageable
 		health = BASE_HEALTH;
 		attack = BASE_ATTACK;
 		defence = BASE_DEFENCE;
-		gold = 0;
 		
-		addItem(new Item(1, 2, 0, ItemType.SWORD));
-		addItem(new Item(2, 15, 3, ItemType.SHIELD));
-		addItem(new Item(10, 5, 8, ItemType.SWORD));			
+//		addItem(new Item(1, 2, 0, ItemType.SWORD));
+//		addItem(new Item(2, 15, 3, ItemType.SHIELD));
+//		addItem(new Item(10, 5, 8, ItemType.SWORD));			
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -63,9 +62,9 @@ public class EntityPlayer extends Entity implements Damageable
 		equipment = player.getItems();
 		determinePlayerStats();
 		
-		addItem(new Item(1, 2, 0, ItemType.SWORD));
-		addItem(new Item(2, 15, 3, ItemType.SHIELD));
-		addItem(new Item(10, 5, 8, ItemType.SWORD));
+//		addItem(new Item(1, 2, 0, ItemType.SWORD));
+//		addItem(new Item(2, 15, 3, ItemType.SHIELD));
+//		addItem(new Item(10, 5, 8, ItemType.SWORD));
 	}
 	
 	@Override
@@ -247,5 +246,10 @@ public class EntityPlayer extends Entity implements Damageable
 	public void setBuyingOffer(BuyerOffer offer)
 	{
 		this.buyingOffer = offer;
+	}
+
+	public void setDead()
+	{
+		isAlive = false;
 	}
 }

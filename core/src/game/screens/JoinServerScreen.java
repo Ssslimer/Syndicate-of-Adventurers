@@ -1,8 +1,5 @@
 package screens;
 
-import java.nio.file.Paths;
-
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;

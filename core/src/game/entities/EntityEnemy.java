@@ -15,7 +15,7 @@ public class EntityEnemy extends Entity implements Damageable
 {
 	private static final long serialVersionUID = -8463316271178712082L;
 	
-	private static final int BASE_ATTACK = 5;
+	private static final int BASE_ATTACK = 20;
 	private static final int BASE_DEFENCE = 0;
 	private static final int BASE_HEALTH = 50;
 	private static final float ATTACK_RANGE = 1f;	
