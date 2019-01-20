@@ -1,14 +1,13 @@
-package networking.messages.trade;
+package networking.messages.fromserver;
 
 import entities.Item;
 import networking.MessageType;
-import networking.messages.fromclient.ClientMessage;
-import trade.Deal;
+import networking.messages.Message;
 
-public class TradeDecisionMessage extends ClientMessage
+public class UpdateTradeDecisionMessage extends Message
 {
-	private static final long serialVersionUID = 6718610010753779173L;
-	
+	private static final long serialVersionUID = -570744921751856358L;
+
 	private boolean offerAccepted;
 	
 	private String sellerLogin;
@@ -16,45 +15,36 @@ public class TradeDecisionMessage extends ClientMessage
 	private Item sellerItem;
 	private Item buyerItem;
 	
-	public TradeDecisionMessage(long sessionId, boolean offerAccepted, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem) 
+	public UpdateTradeDecisionMessage(boolean offerAccepted, String sellerLogin, String buyerLogin, Item sellerItem, Item buyerItem) 
 	{
-		super(MessageType.TRADE_DECISION, sessionId);
+		super(MessageType.UPDATE_TRADE_DECISION);
 		
 		this.offerAccepted = offerAccepted;
-		
 		this.sellerLogin = sellerLogin;
 		this.buyerLogin = buyerLogin;
 		this.sellerItem = sellerItem;
 		this.buyerItem = buyerItem;
 	}
-	
 
-	public boolean getOfferAccepted()
-	{
-		return this.offerAccepted;
+	public boolean isOfferAccepted() {
+		return offerAccepted;
 	}
-
 
 	public String getSellerLogin() {
 		return sellerLogin;
 	}
 
-
 	public String getBuyerLogin() {
 		return buyerLogin;
 	}
-
 
 	public Item getSellerItem() {
 		return sellerItem;
 	}
 
-
 	public Item getBuyerItem() {
 		return buyerItem;
 	}
-	
-	
-	
+
 	
 }

@@ -34,6 +34,7 @@ import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
+import networking.messages.trade.TradeDecisionMessage;
 import networking.messages.trade.TradeEndMessage;
 import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
@@ -113,6 +114,11 @@ public class ClientConnection extends Thread
 	public void sentTradeOfferMessage(String buyerLogin, String sellerLogin, Item buyerItem, Item sellerItem)
 	{
 		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerLogin, buyerLogin, buyerItem, sellerItem));
+	}
+	
+	public void sentTradeDecisionMessage(boolean offerAccepted, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
+	{
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, offerAccepted, sellerLogin, buyerLogin, buyerItem, sellerItem));
 	}
 	
 	/** TODO DELETE DEPRACIETED SHIEEET */

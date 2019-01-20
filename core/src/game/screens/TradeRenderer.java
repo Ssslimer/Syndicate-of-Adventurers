@@ -39,8 +39,6 @@ public class TradeRenderer
 	
 	private TextButton startTradeBtn;
 	private TextButton offerBtn;
-	private TextButton acceptOffertBtn;
-	private TextButton declineOffertBtn;
 	private TextButton endTradeBtn;
 	private TextButton endOfferBtn;
 
@@ -85,8 +83,6 @@ public class TradeRenderer
 		setupToBuyItemButton();
 		setupOfferItemButton();
 		
-		setupAcceptOffertButton();
-		setupDeclineOffertButton();
 		setupEndTradeButton();
 		setupEndOfferButton();
 		setupSellItemButton();
@@ -171,7 +167,7 @@ public class TradeRenderer
 				switch((Decision) object)
 				{
 					case ACCEPT:
-						
+						MyGame.getClient().sentTradeDecisionMessage(true, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
 					break;
 					
 					case DECLINE:
@@ -299,58 +295,6 @@ public class TradeRenderer
 		});
 		
 		offerStage.addActor(offerItemBtn);
-	}
-	
-	private void setupAcceptOffertButton()
-	{
-		acceptOffertBtn = new TextButton("Accept", skin);
-		acceptOffertBtn.setWidth(startTradeBtn.getWidth());
-		acceptOffertBtn.setHeight(startTradeBtn.getHeight());
-		
-		float posX = startTradeBtn.getX();	
-		float posY = startTradeBtn.getY();
-		
-		acceptOffertBtn.setPosition(posX, posY);
-		
-		acceptOffertBtn.addListener(new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				if(trader.getTradeState() == TradeState.SELLING)
-				{
-					//send accept message
-				}
-			}
-		});
-		
-		decisionStage.addActor(acceptOffertBtn);
-	}
-	
-	private void setupDeclineOffertButton()
-	{
-		declineOffertBtn = new TextButton("Decline", skin);
-		declineOffertBtn.setWidth(startTradeBtn.getWidth());
-		declineOffertBtn.setHeight(startTradeBtn.getHeight());
-		
-		float posX = 2 * TRADE_SCREEN_WIDTH / 7f;	
-		float posY = startTradeBtn.getY();
-		
-		declineOffertBtn.setPosition(posX, posY);
-		
-		declineOffertBtn.addListener(new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				if(trader.getTradeState() == TradeState.SELLING)
-				{
-					//send decline message
-				}
-			}
-		});
-		
-		decisionStage.addActor(declineOffertBtn);
 	}
 	
 	private void setupEndTradeButton()

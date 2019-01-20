@@ -18,6 +18,7 @@ import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
+import networking.messages.fromserver.UpdateTradeDecisionMessage;
 import networking.messages.fromserver.UpdateTradeOfferMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
@@ -273,25 +274,23 @@ public class MessageHandler extends Thread
 	{
 		if(message.getOfferAccepted())
 		{
-			Item sellingItem = message.getDeal().getSellerOffer().getTraderItem();
-			Item offeringItem = message.getDeal().getBuyerOffer().getTraderItem();
-			int offeringGold = message.getDeal().getBuyerOffer().getGoldAmount();
+			Item sellingItem = message.getSellerItem();
+			Item offeringItem = message.getBuyerItem();
 			
-			String sellerLogin = message.getDeal().getSellerOffer().getLogin();
-			String buyerLogin = message.getDeal().getBuyerOffer().getLogin();
+			String sellerLogin = message.getSellerLogin();
+			String buyerLogin = message.getBuyerLogin();
 			
 			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
 			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getPlayer(buyerLogin);
 			
 			sellerEntity.removeItem(sellingItem);
-			if(offeringItem != null) sellerEntity.addItem(offeringItem);
-			if(offeringGold > 0) sellerEntity.addGold(offeringGold);
+			sellerEntity.addItem(offeringItem);
 			
 			buyerEntity.addItem(sellingItem);
-			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
-			if(offeringGold > 0) buyerEntity.removeGold(offeringGold);
+			buyerEntity.removeItem(offeringItem);
 			
-			/** TODO send to all this exchage */
+			Server.getConnectionManager().sendToAll(new UpdateTradeDecisionMessage(message.getOfferAccepted(), sellerLogin, buyerLogin, offeringItem, sellingItem));
+			
 		}
 	}
 	
