@@ -7,22 +7,23 @@ import networking.messages.fromclient.ClientMessage;
 public class TradeStartMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -7364912797737097249L;
-	private Item item; // check if this is necessary
-	private String login;
+	private final Item item; // check if this is necessary
+	private final String login;
 
 	public TradeStartMessage(long sessionId, String login, Item item) 
 	{
 		super(MessageType.TRADE_START, sessionId);
-		this.item = item;	
+		this.item = item;
+		this.login = login;
 	}
 	
 	public Item getItem()
 	{
-		return this.item;
+		return item;
 	}
 	
 	public String getLogin()
 	{
-		return this.login;
+		return login;
 	}
 }

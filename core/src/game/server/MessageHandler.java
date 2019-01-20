@@ -280,8 +280,8 @@ public class MessageHandler extends Thread
             String sellerLogin = message.getSellerLogin();
             String buyerLogin = message.getBuyerLogin();
 
-            EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
-            EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getPlayer(buyerLogin);
+            EntityPlayer sellerEntity = Server.getMap().getPlayer(sellerLogin);
+            EntityPlayer buyerEntity = Server.getMap().getPlayer(buyerLogin);
 
             sellerEntity.removeItem(sellingItem);
             sellerEntity.addItem(offeringItem);

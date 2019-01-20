@@ -10,6 +10,5 @@ public class TradeEndMessage extends ClientMessage
 	public TradeEndMessage(long sessionId) 
 	{
 		super(MessageType.TRADE_END, sessionId);
-		// TODO Auto-generated constructor stub
 	}
 }

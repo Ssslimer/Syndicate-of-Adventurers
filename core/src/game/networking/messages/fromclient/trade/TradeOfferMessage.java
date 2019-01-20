@@ -3,16 +3,13 @@ package networking.messages.fromclient.trade;
 import entities.Item;
 import networking.MessageType;
 import networking.messages.fromclient.ClientMessage;
-import trade.Deal;
 
 public class TradeOfferMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -4513990275032853847L;
 	
-	private String sellerLogin;
-	private String buyerLogin;
-	private Item buyerItem;
-	private Item sellerItem;
+	private final String sellerLogin, buyerLogin;
+	private final Item buyerItem, sellerItem;
 	
 	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem) 
 	{
@@ -24,21 +21,23 @@ public class TradeOfferMessage extends ClientMessage
 		this.buyerItem = buyerItem;
 	}
 
-	public String getSellerLogin() {
+	public String getSellerLogin() 
+	{
 		return sellerLogin;
 	}
 
-	public String getBuyerLogin() {
+	public String getBuyerLogin()
+	{
 		return buyerLogin;
 	}
 
-	public Item getBuyerItem() {
+	public Item getBuyerItem() 
+	{
 		return buyerItem;
 	}
 
-	public Item getSellerItem() {
+	public Item getSellerItem()
+	{
 		return sellerItem;
-	}
-	
-	
+	}	
 }
