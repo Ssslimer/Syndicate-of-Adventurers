@@ -23,6 +23,7 @@ import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeDecisionMessage;
+import networking.messages.trade.TradeEndMessage;
 import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
 
@@ -129,6 +130,10 @@ public class MessageHandler extends Thread
 			
 			case TRADE_DECISION:
 				if(connectionWithClient.isLogedIn()) processTradeDecision(connectionWithClient, (TradeDecisionMessage) message);
+			break;
+			
+			case TRADE_END:
+				if(connectionWithClient.isLogedIn()) processTradeEnd(connectionWithClient, (TradeEndMessage) message);
 			break;
 				
 			default:/** TODO maybe delete message to client ? */
@@ -237,12 +242,12 @@ public class MessageHandler extends Thread
 	{
 		if(message.getOfferAccepted())
 		{
-			Item sellingItem = message.getOffer().getSellingItem();
-			Item offeringItem = message.getOffer().getOfferedItem();
-			int offeringGold = message.getOffer().getOfferedGold();
+			Item sellingItem = message.getDeal().getSellerOffer().getTraderItem();
+			Item offeringItem = message.getDeal().getBuyerOffer().getTraderItem();
+			int offeringGold = message.getDeal().getBuyerOffer().getGoldAmount();
 			
 			long sellerId = message.getSessionId();
-			long buyerId = message.getOffer().getBuyerId();
+			long buyerId = message.getDeal().getBuyerOffer().getTraderId();
 			
 			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getEntity(sellerId);
 			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getEntity(buyerId);
@@ -255,6 +260,11 @@ public class MessageHandler extends Thread
 			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
 			if(offeringGold > 0) buyerEntity.removeGold(offeringGold);
 		}
+	}
+	
+	private void processTradeEnd(ConnectionToClient connectionWithClient, TradeEndMessage message)
+	{
+		
 	}
 	
 	private long generateSessionID() 

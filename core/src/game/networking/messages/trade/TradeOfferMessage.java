@@ -3,33 +3,33 @@ package networking.messages.trade;
 import entities.Item;
 import networking.MessageType;
 import networking.messages.fromclient.ClientMessage;
-import trade.Offer;
+import trade.Deal;
 
 public class TradeOfferMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -4513990275032853847L;
-	private Offer offer;
+	private Deal deal;
 	
 	public TradeOfferMessage(long sessionId, long sellerId, int goldAmount, Item sellingItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);	
-		offer = new Offer(sessionId, sellerId, sellingItem, goldAmount);
+		deal = new Deal(sessionId, sellerId, sellingItem, goldAmount);
 	}
 	
 	public TradeOfferMessage(long sessionId, long sellerId, Item item, Item sellingItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);
-		offer = new Offer(sessionId, sellerId, sellingItem, item);
+		deal = new Deal(sessionId, sellerId, sellingItem, item);
 	}
 	
 	public TradeOfferMessage(long sessionId, long sellerId, int goldAmount, Item item, Item sellingItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);
-		offer = new Offer(sessionId, sellerId, sellingItem, goldAmount, item);
+		deal = new Deal(sessionId, sellerId, sellingItem, goldAmount, item);
 	}
 	
-	public Offer getOffer()
+	public Deal getDeal()
 	{
-		return this.offer;
+		return this.deal;
 	}
 }

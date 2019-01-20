@@ -3,14 +3,14 @@ package networking.messages.trade;
 import entities.Item;
 import networking.MessageType;
 import networking.messages.fromclient.ClientMessage;
-import trade.Offer;
+import trade.Deal;
 
 public class TradeDecisionMessage extends ClientMessage
 {
 	private static final long serialVersionUID = 6718610010753779173L;
 	
 	private boolean offerAccepted;
-	private Offer offer;
+	private Deal deal;
 	
 	
 	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, int goldAmount) 
@@ -18,7 +18,7 @@ public class TradeDecisionMessage extends ClientMessage
 		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
-		this.offer = new Offer(sessionId, otherTraderId, sellingItem, goldAmount);
+		this.deal = new Deal(sessionId, otherTraderId, sellingItem, goldAmount);
 	}
 	
 	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, Item item) 
@@ -26,7 +26,7 @@ public class TradeDecisionMessage extends ClientMessage
 		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
-		this.offer = new Offer(sessionId, otherTraderId, sellingItem, item);
+		this.deal = new Deal(sessionId, otherTraderId, sellingItem, item);
 	}
 	
 	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, int goldAmount, Item item) 
@@ -34,15 +34,15 @@ public class TradeDecisionMessage extends ClientMessage
 		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
-		this.offer = new Offer(sessionId, otherTraderId, sellingItem, goldAmount, item);
+		this.deal = new Deal(sessionId, otherTraderId, sellingItem, goldAmount, item);
 	}
 	
-	public TradeDecisionMessage(boolean offerAccepted, Offer offer) 
+	public TradeDecisionMessage(boolean offerAccepted, Deal offer) 
 	{
-		super(MessageType.TRADE_DECISION, offer.getSellerId());
+		super(MessageType.TRADE_DECISION, offer.getSellerOffer().getTraderId());
 		
 		this.offerAccepted = offerAccepted;
-		this.offer = offer;
+		this.deal = offer;
 	}
 
 	public boolean getOfferAccepted()
@@ -50,8 +50,8 @@ public class TradeDecisionMessage extends ClientMessage
 		return this.offerAccepted;
 	}
 	
-	public Offer getOffer()
+	public Deal getDeal()
 	{
-		return this.offer;
+		return this.deal;
 	}
 }
