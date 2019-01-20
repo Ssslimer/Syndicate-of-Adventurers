@@ -31,6 +31,9 @@ public class Resources
 	public void loadAll()
 	{
 		addTexture("GUI_BACKGROUND", Paths.get("assets", "textures", "gui", "menu.png"));
+		addTexture("GUI_TRADE_WINDOW", Paths.get("assets", "textures", "gui", "chatbackground.png"));
+		addTexture("GUI_CHAT_WINDOW", Paths.get("assets", "textures", "gui", "chatbackground.png"));
+		
 		addSound("CLANG", Paths.get("assets", "sounds", "clangberserk.wav"));		
 		
 		loadTerrainTextures();
