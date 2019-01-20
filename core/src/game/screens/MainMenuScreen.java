@@ -175,7 +175,7 @@ public class MainMenuScreen implements Screen
 					dialog.button("OK");
 					dialog.key(Keys.ENTER, null);
 					dialog.setMovable(false);
-					dialog.text("Incorrect IP address format"); /** TODO add translations? */
+					dialog.text("Incorrect IP address format");
 					dialog.show(stage);
 					
 		    		return;
@@ -187,7 +187,7 @@ public class MainMenuScreen implements Screen
 					dialog.button("OK");
 					dialog.key(Keys.ENTER, null);
 					dialog.setMovable(false);
-					dialog.text("Port must be a number from range 0 to 65535"); /** TODO add translations? */
+					dialog.text("Port must be a number from range 0 to 65535");
 					dialog.show(stage);
 					return;
 		    	}
@@ -201,7 +201,7 @@ public class MainMenuScreen implements Screen
 					dialog.button("OK");
 					dialog.key(Keys.ENTER, null);
 					dialog.setMovable(false);
-					dialog.text("Server offline"); /** TODO add translations? */
+					dialog.text("Server offline");
 					dialog.show(stage);
 					return;
 		    	}

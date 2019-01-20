@@ -262,7 +262,7 @@ public class JoinServerScreen implements Screen
 				}
 				else
 				{
-					dialog.text(status.name()); /** TODO add translations? */
+					dialog.text(status.name());
 					dialog.show(stage);
 				}
 			}

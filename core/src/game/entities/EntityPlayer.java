@@ -16,20 +16,17 @@ public class EntityPlayer extends Entity implements Damageable
 {
 	private static final long serialVersionUID = 4071973552148454031L;
 	
-	private static final int BASE_PLAYER_ATTACK = 10;
-	private static final int BASE_PLAYER_DEFENCE = 5;
-	private static final int BASE_PLAYER_HP = 100;
-
-	private String login;
-	
+	private static final int BASE_ATTACK = 10;
+	private static final int BASE_DEFENCE = 5;
+	private static final int BASE_HEALTH = 100;
 	private static final float WALK_SPEED = 5f;
-	private static final float ATTACK_RANGE = 50f;
-	private int health;
-	private int attackPower;
-	private int defencePower;
+	private static final float ATTACK_RANGE = 2f;
+	
+	private String login;
+	private int health, attack, defence;
 	private int gold;
 	
-	private List<Item> eqList = new ArrayList<>();
+	private List<Item> equipment = new ArrayList<>();
 	
 	boolean moveUp, moveDown, moveLeft, moveRight;
 	
@@ -43,9 +40,9 @@ public class EntityPlayer extends Entity implements Damageable
 		
 		this.login = login;
 		
-		health = BASE_PLAYER_HP;
-		attackPower = BASE_PLAYER_ATTACK;
-		defencePower = BASE_PLAYER_DEFENCE;
+		health = BASE_HEALTH;
+		attack = BASE_ATTACK;
+		defence = BASE_DEFENCE;
 		gold = 0;
 		
 		addItem(new Item(1, 2, 0, ItemType.SWORD));
@@ -60,7 +57,7 @@ public class EntityPlayer extends Entity implements Damageable
 	{
 		super(player.getPosition());
 		
-		eqList = player.getItems();
+		equipment = player.getItems();
 		determinePlayerStats();
 		
 		addItem(new Item(1, 2, 0, ItemType.SWORD));
@@ -86,38 +83,38 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	public void addItem(Item item)
 	{
-		eqList.add(item);
+		equipment.add(item);
 		
 		health += item.getHPBonus();
-		attackPower += item.getAttack();
-		defencePower += item.getDefence();
+		attack += item.getAttack();
+		defence += item.getDefence();
 	}
 	
 	public void removeItem(Item item)
 	{
-		if(eqList.contains(item))
+		if(equipment.contains(item))
 		{
-			eqList.remove(item);
+			equipment.remove(item);
 			
 			health -= item.getHPBonus();
-			attackPower -= item.getAttack();
-			defencePower -= item.getDefence();
+			attack -= item.getAttack();
+			defence -= item.getDefence();
 		}
 	}
 
 	private void determinePlayerStats()
 	{
-		for(Item item : eqList)
+		for(Item item : equipment)
 		{
 			health += item.getHPBonus();
-			attackPower += item.getAttack();
-			defencePower += item.getDefence();
+			attack += item.getAttack();
+			defence += item.getDefence();
 		}
 	}
 
 	public void dealDamage(int damage, DamageSource source)
 	{
-		damage -= defencePower;		
+		damage -= defence;		
 		if(damage > 0) health -= damage;
 		
 		Server.getConnectionManager().sendToAll(new DamageEntityMessage(this, damage, source));
@@ -148,7 +145,7 @@ public class EntityPlayer extends Entity implements Damageable
 		{
 			if(entity instanceof Damageable && entity != this)
 			{				
-				((Damageable) entity).dealDamage(BASE_PLAYER_ATTACK, DamageSource.NORMAL);
+				((Damageable) entity).dealDamage(attack, DamageSource.NORMAL);
 			}
 		}
 	}
@@ -180,17 +177,17 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	public int getAttack()
 	{
-		return attackPower;
+		return attack;
 	}
 	
 	public int getDefence()
 	{
-		return defencePower;
+		return defence;
 	}
 	
 	public List<Item> getItems()
 	{
-		return eqList;
+		return equipment;
 	}
 	
 	public TradeState getTradeState()

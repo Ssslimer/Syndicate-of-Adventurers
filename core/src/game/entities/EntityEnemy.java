@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector3;
 
 import networking.messages.fromserver.DamageEntityMessage;
@@ -12,26 +14,24 @@ public class EntityEnemy extends Entity implements Damageable
 {
 	private static final long serialVersionUID = -8463316271178712082L;
 	
-	private static final int BASE_ENEMY_ATTACK = 5;
-	private static final int BASE_ENEMY_DEFENCE = 5;
-	private static final int BASE_ENEMY_HP = 50;
+	private static final int BASE_ATTACK = 5;
+	private static final int BASE_DEFENCE = 5;
+	private static final int BASE_HEALTH = 50;
+	private static final float ATTACK_RANGE = 1f;	
+	private static final float WALK_SPEED = 1f;
+	private static final int FOLLOW_RANGE = 20;
 	
-	private float walk_speed = 1f;
-	private int health;
-	private int attackPower;
-	private int defence;
+	private int health, attack, defence;	
 	
 	private Loot loot;
-	
-	private static final int FOLLOW_RANGE = 20;
 
 	public EntityEnemy(Vector3 position)
 	{
 		super(position);
 		
-		health = BASE_ENEMY_HP;
-		attackPower = BASE_ENEMY_ATTACK;
-		defence = BASE_ENEMY_DEFENCE;		
+		health = BASE_HEALTH;
+		attack = BASE_ATTACK;
+		defence = BASE_DEFENCE;		
 		
 		loot = new Loot();
 	}
@@ -42,27 +42,20 @@ public class EntityEnemy extends Entity implements Damageable
 		if(Timer.getTickCount() % 10 == 0) changeTarget();
 		move(delta);
 		
-		//double attackProbability = Server.random.nextDouble();
-		//if(attackProbability <= 0.5d) attack();	
+		if(Timer.getTickCount() % 50 == 0) attack();
 	}
 	
 	private void changeTarget()
 	{
 		EntityPlayer player = Server.getMap().getClosestPlayerInRange(this, FOLLOW_RANGE);
 		
-		if(player != null)
-		{
-			moveDirection = player.getPosition().cpy().sub(position).nor(); /** TODO check if this is correct */
-		}
-		else
-		{
-			moveDirection = new Vector3(Server.random.nextFloat()*2 - 1, Server.random.nextFloat()*2 - 1, 0);
-		}
+		if(player != null) 	moveDirection = player.getPosition().cpy().sub(position).nor();
+		else 				moveDirection = new Vector3(Server.random.nextFloat()*2 - 1, Server.random.nextFloat()*2 - 1, 0);
 	}
 	
 	private void move(float delta)
 	{	
-		velocity = moveDirection.cpy().scl(walk_speed);
+		velocity = moveDirection.cpy().scl(WALK_SPEED);
 		position.add(velocity.cpy().scl(1f/delta));
 		
 		if(!World.isLocal() && velocity.len() != 0)
@@ -78,7 +71,7 @@ public class EntityEnemy extends Entity implements Damageable
 	
 	public int getAttack()
 	{
-		return attackPower;
+		return attack;
 	}
 	
 	public int getDefence()
@@ -101,7 +94,14 @@ public class EntityEnemy extends Entity implements Damageable
 	/** TODO implement AI */
 	private void attack()
 	{
-		//Server.getMap().attackIfPlayerInFront(attackPower, position, moveDirection);
+		List<EntityPlayer> players = Server.getMap().getPlayersInRange(position, ATTACK_RANGE);
+		for(Entity player : players)
+		{
+			if(player instanceof Damageable && player != this)
+			{				
+				((Damageable) player).dealDamage(attack, DamageSource.NORMAL);
+			}
+		}
 	}	
 	
 	public Loot die()

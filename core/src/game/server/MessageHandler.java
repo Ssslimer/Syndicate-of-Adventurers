@@ -136,8 +136,7 @@ public class MessageHandler extends Thread
 				if(connectionWithClient.isLogedIn()) processTradeEnd(connectionWithClient, (TradeEndMessage) message);
 			break;
 				
-			default:/** TODO maybe delete message to client ? */
-				System.out.println("Client send wrong command!!");
+			default: System.out.println("Client send wrong command!!");
 		}
 	}
 	

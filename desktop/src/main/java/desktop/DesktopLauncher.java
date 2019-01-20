@@ -1,8 +1,5 @@
 package desktop;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 
 import com.badlogic.gdx.Files.FileType;
@@ -29,18 +26,5 @@ public class DesktopLauncher
 		config.width = ConfigConstants.WIDTH;
 		config.height = ConfigConstants.HEIGHT;
 		new LwjglApplication(new MyGame(), config);
-	}
-	
-	/** TODO place it in another file */
-	public static int sizeof(Object obj) throws IOException
-	{
-	    ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream);
-
-	    objectOutputStream.writeObject(obj);
-	    objectOutputStream.flush();
-	    objectOutputStream.close();
-
-	    return byteOutputStream.toByteArray().length;
 	}
 }
