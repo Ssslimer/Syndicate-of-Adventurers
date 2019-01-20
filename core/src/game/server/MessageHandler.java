@@ -289,6 +289,11 @@ public class MessageHandler extends Thread
 			buyerEntity.addItem(sellingItem);
 			buyerEntity.removeItem(offeringItem);
 			
+			sellerEntity.setHasOffer(false);
+			
+			sellerEntity.setTradeState(TradeState.NOT_TRADING);
+			buyerEntity.setTradeState(TradeState.NOT_TRADING);
+			
 			Server.getConnectionManager().sendToAll(new UpdateTradeDecisionMessage(message.getOfferAccepted(), sellerLogin, buyerLogin, offeringItem, sellingItem));
 			
 		}

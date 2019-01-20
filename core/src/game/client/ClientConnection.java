@@ -27,6 +27,7 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import networking.messages.fromserver.UpdateTradeDecisionMessage;
 import networking.messages.fromserver.UpdateTradeOfferMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
@@ -263,12 +264,13 @@ public class ClientConnection extends Thread
 			case UPDATE_TRADE_OFFER:
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeOfferMessage tradeOfferUpdate = (UpdateTradeOfferMessage) callback;
-				System.out.println("SELLER: " + tradeOfferUpdate.getSellerLogin());
-				System.out.println("BUYER: " + tradeOfferUpdate.getBuyerLogin());
 				MyGame.getGameMap().updateTradeOffer(tradeOfferUpdate.getSellerLogin(), tradeOfferUpdate.getBuyerLogin(), tradeOfferUpdate.getBuyerItem(), tradeOfferUpdate.getSellerItem());
 			break;
 			
-			case TRADE_OFFER: // we get info that other player send us an offer for our trade
+			case UPDATE_TRADE_DECISION:
+				if(MyGame.getGameMap() == null) break;
+				UpdateTradeDecisionMessage msg = (UpdateTradeDecisionMessage) callback;
+				MyGame.getGameMap().updateTradeDecision(msg.isOfferAccepted(), msg.getSellerLogin(), msg.getBuyerLogin(), msg.getBuyerItem(), msg.getSellerItem());
 			break;
 			
 			case DAMAGE_ENTITY:
