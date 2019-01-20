@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -29,6 +30,9 @@ public class TradeRenderer
 	private Stage decisionStage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
+	
+	private Dialog offerDialog;
+	private boolean isDialogNotSetup = true;
 	
 	private Skin skin;
 	private BitmapFont tradeFont;
@@ -139,11 +143,54 @@ public class TradeRenderer
 	
 	private void renderOffer()
 	{		
+		if(isDialogNotSetup)
+		{
+			setupTradeOffer();
+		}
+		
+		offerDialog.show(decisionStage);
 		
 		decisionStage.act();
 		decisionStage.draw();
 	}
 	
+	private void setupTradeOffer() 
+	{
+		String buyerLogin = trader.getBuyingOffer().getLogin();
+		Item buyerItem = trader.getBuyingOffer().getTraderItem();
+		
+		int attack = buyerItem.getAttack();
+		int def = buyerItem.getDefence();
+		int hp = buyerItem.getHPBonus();
+		
+		offerDialog = new Dialog("Player " + buyerLogin + " is offering you " +
+		buyerItem.getType().toString() + "(" + attack + "," + def + "," + hp + ")", skin)
+		{
+			protected void result(Object object)
+			{
+				switch((Decision) object)
+				{
+					case ACCEPT:
+						
+					break;
+					
+					case DECLINE:
+
+					break;
+				}
+			}
+		};
+		
+		offerDialog.button("Accept", Decision.ACCEPT);
+		offerDialog.button("Decline", Decision.DECLINE);
+		offerDialog.setMovable(false);		
+	}
+	
+	private enum Decision
+	{
+		ACCEPT, DECLINE
+	}
+
 	public Stage getSellingStage()
 	{
 		return sellingStage;

@@ -69,6 +69,7 @@ public class World implements Serializable
 	{
 		EntityPlayer seller = getPlayer(sellerLogin);
 		seller.setHasOffer(true);
+		seller.setBuyingOffer(new BuyerOffer(buyerLogin, buyerItem));
 		
 		System.out.println("PLAYER: " + seller.getLogin() + " HAS OFFER");
 		
