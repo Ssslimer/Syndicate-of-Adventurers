@@ -183,7 +183,7 @@ public class GameScreen implements Screen, InputProcessor
 				switch((RespawnChoice) object)
 				{
 					case RESPAWN:
-						
+						/** TODO implement it someday */
 					break;
 					
 					case QUIT_SERVER:
@@ -195,7 +195,7 @@ public class GameScreen implements Screen, InputProcessor
 	        }
 		};
 		
-		respawnDialog.button("Respawn", RespawnChoice.RESPAWN);
+		//respawnDialog.button("Respawn", RespawnChoice.RESPAWN);
 		respawnDialog.button("Quit game", RespawnChoice.QUIT_SERVER);
 		respawnDialog.setMovable(false);
 	}
