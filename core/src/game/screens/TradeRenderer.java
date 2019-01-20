@@ -1,9 +1,7 @@
 package screens;
 
-import java.nio.file.Paths;
 import java.util.List;
 
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -63,7 +61,7 @@ public class TradeRenderer
 		this.offerStage = offerStage;
 		this.decisionStage = decisionStage;
 		
-		tradeWindowTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
+		tradeWindowTexture = MyGame.getResources().getTexture("GUI_TRADE_WINDOW");
 		batch = new SpriteBatch();
 				
 		skin = new Skin(Gdx.files.internal("uiskin.json"));

@@ -16,11 +16,11 @@ import networking.messages.Message;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
-import networking.messages.fromserver.AuthLoginMessage;
-import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
+import networking.messages.fromserver.auth.AuthLoginMessage;
+import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeDecisionMessage;
@@ -211,7 +211,12 @@ public class MessageHandler extends Thread
 			boolean ifStop = message.getIfToStop();		
 			String login = Server.getLogin(message.getSessionId());
 			
-			Server.getMap().getPlayer(login).setMoveDirection(direction, ifStop);
+			EntityPlayer player = Server.getMap().getPlayer(login);
+			if(player == null) return;
+			synchronized(player)
+			{
+				player.setMoveDirection(direction, ifStop);
+			}
 		}
 	}
 	
@@ -220,7 +225,13 @@ public class MessageHandler extends Thread
 		if(connectionWithClient.isLogedIn())
 		{
 			String login = Server.getLogin(message.getSessionId());
-			Server.getMap().getPlayer(login).attack();
+			EntityPlayer player = Server.getMap().getPlayer(login);
+			
+			if(player == null) return;
+			synchronized(player)
+			{
+				Server.getMap().getPlayer(login).attack();
+			}
 		}
 	}
 	

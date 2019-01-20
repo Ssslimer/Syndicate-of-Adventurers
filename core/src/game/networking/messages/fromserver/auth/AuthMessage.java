@@ -1,4 +1,4 @@
-package networking.messages.fromserver;
+package networking.messages.fromserver.auth;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

@@ -40,14 +40,15 @@ public class Server
 		Thread.currentThread().setPriority(10);
 		Timer.setLogicFrequency(serverProperties.getTPS());
 		
-		world = new World();
 		authManager = new AuthManager();
 		
 		messageHandler = new MessageHandler(this);
 		messageHandler.start();
 		
 		connectionManager = new ConnectionManager(this, serverProperties.getIP(), serverProperties.getPortNumber());
-		connectionManager.start();		
+		connectionManager.start();
+		
+		world = new World();
 	}
 
 	public void loop()

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import networking.MoveDirection;
 import networking.messages.fromserver.DamageEntityMessage;
+import networking.messages.fromserver.DeathEntityMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.Server;
 import trade.BuyerOffer;
@@ -19,10 +20,10 @@ public class EntityPlayer extends Entity implements Damageable
 	private static final long serialVersionUID = 4071973552148454031L;
 	
 	private static final int BASE_ATTACK = 10;
-	private static final int BASE_DEFENCE = 5;
+	private static final int BASE_DEFENCE = 0;
 	private static final int BASE_HEALTH = 100;
 	private static final float WALK_SPEED = 5f;
-	private static final float ATTACK_RANGE = 2f;
+	private static final float ATTACK_RANGE = 5f;
 	
 	private String login;
 	private int health, attack, defence;
@@ -32,8 +33,8 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	boolean moveUp, moveDown, moveLeft, moveRight;
 	
-	private Boolean hasOffer;
-	private TradeState tradeState;
+	private Boolean hasOffer = new Boolean(false);
+	private TradeState tradeState = TradeState.NOT_TRADING;
 	private long tradingWithId = -1;
 	
 	private Offer sellingOffer = new Offer("", null);
@@ -52,10 +53,7 @@ public class EntityPlayer extends Entity implements Damageable
 		
 		addItem(new Item(1, 2, 0, ItemType.SWORD));
 		addItem(new Item(2, 15, 3, ItemType.SHIELD));
-		addItem(new Item(10, 5, 8, ItemType.SWORD));
-		
-		tradeState = TradeState.NOT_TRADING;
-		hasOffer = new Boolean(false);
+		addItem(new Item(10, 5, 8, ItemType.SWORD));			
 	}
 	
 	public EntityPlayer(EntityPlayer player)
@@ -68,9 +66,6 @@ public class EntityPlayer extends Entity implements Damageable
 		addItem(new Item(1, 2, 0, ItemType.SWORD));
 		addItem(new Item(2, 15, 3, ItemType.SHIELD));
 		addItem(new Item(10, 5, 8, ItemType.SWORD));
-		
-		tradeState = TradeState.NOT_TRADING;
-		hasOffer = new Boolean(false);
 	}
 	
 	@Override
@@ -122,7 +117,16 @@ public class EntityPlayer extends Entity implements Damageable
 		damage -= defence;		
 		if(damage > 0) health -= damage;
 		
-		Server.getConnectionManager().sendToAll(new DamageEntityMessage(this, damage, source));
+		if(health <= 0)
+		{
+			isAlive = false;
+			Server.getMap().removePlayer(this);
+			Server.getConnectionManager().sendToAll(new DeathEntityMessage(id));
+		}
+		else
+		{
+			Server.getConnectionManager().sendToAll(new DamageEntityMessage(this, damage, source));
+		}
 	}
 	
 	public void setMoveDirection(MoveDirection direction, boolean ifToStop)
@@ -224,7 +228,7 @@ public class EntityPlayer extends Entity implements Damageable
 	{
 		this.tradingWithId = tradingWithId;
 	}
-	
+
 	public Offer getSellingOffer()
 	{
 		return this.sellingOffer;
@@ -243,10 +247,5 @@ public class EntityPlayer extends Entity implements Damageable
 	public void setBuyingOffer(BuyerOffer offer)
 	{
 		this.buyingOffer = offer;
-	}
-	
-	public void die()
-	{
-		alive = false;
 	}
 }

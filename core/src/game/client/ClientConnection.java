@@ -11,6 +11,8 @@ import javax.net.ssl.SSLSocketFactory;
 
 import com.badlogic.gdx.audio.Sound;
 
+import entities.Entity;
+import entities.EntityPlayer;
 import entities.Item;
 import networking.MessageStatus;
 import networking.MoveDirection;
@@ -19,14 +21,16 @@ import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
-import networking.messages.fromserver.AuthLoginMessage;
-import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.DamageEntityMessage;
+import networking.messages.fromserver.DeathEntityMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
+import networking.messages.fromserver.auth.AuthLoginMessage;
+import networking.messages.fromserver.auth.AuthRegisterMessage;
+import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeDecisionMessage;
@@ -216,52 +220,70 @@ public class ClientConnection extends Thread
     	}
 	}
 
-	private void handleCallback(Message serverCallback)
+	private void handleCallback(Message callback)
 	{	
 		//System.out.println(serverCallback);
 		
-		switch(serverCallback.getMessageType())
+		switch(callback.getMessageType())
 		{
 			case PING:
-				long ping = System.currentTimeMillis() - ((PingMessage) serverCallback).getTime();
+				long ping = System.currentTimeMillis() - ((PingMessage) callback).getTime();
 				System.out.println("PING " + ping);
 			break;
 
 			case LOAD_MAP:
-				World world = ((SendMapMessage) serverCallback).getMap();
+				World world = ((SendMapMessage) callback).getMap();
 				World.setLocal(true);
 				MyGame.setGameMap(world);
-				MyGame.loadPlayer(((SendMapMessage) serverCallback).getPlayer());
+				MyGame.loadPlayer(((SendMapMessage) callback).getPlayer());
 			break;
 
 			case UPDATE_ENTITY:
-				UpdateEntityMessage message = (UpdateEntityMessage) serverCallback;
+				UpdateEntityMessage message = (UpdateEntityMessage) callback;
 				MyGame.getGameMap().updateEntityPos(message.getEntityId(), message.getPosition(), message.getVelocity());
 			break;
 			
 			case UPDATE_CHAT:
-				UpdateChatMessage updateChat = (UpdateChatMessage) serverCallback;
+				UpdateChatMessage updateChat = (UpdateChatMessage) callback;
 				Chat.updateChat(updateChat.getText());
 			break;
 			
 			case SPAWN_ENTITY:
-				SpawnEntityMessage spawnMessage = (SpawnEntityMessage) serverCallback;
+				SpawnEntityMessage spawnMessage = (SpawnEntityMessage) callback;
 				MyGame.getGameMap().spawnEntity(spawnMessage.getEntity());
 			break;
 			
 			case UPDATE_TRADE_START: // we get info that other player started trade
-				UpdateTradeStartEntityMessage tradeStartMessage = (UpdateTradeStartEntityMessage) serverCallback;
+				UpdateTradeStartEntityMessage tradeStartMessage = (UpdateTradeStartEntityMessage) callback;
 				MyGame.getGameMap().setEntityTradeStart( tradeStartMessage.getLogin(), tradeStartMessage.getItem());
-			break;
 			
 			case TRADE_OFFER: // we get info that other player send us an offer for our trade
 			break;
 			
 			case DAMAGE_ENTITY:
-				DamageEntityMessage damageEntity = (DamageEntityMessage) serverCallback;
+				DamageEntityMessage damageEntity = (DamageEntityMessage) callback;
 				/** TODO add some graphical effect*/
 				Sound sound = MyGame.getResources().getSound("CLANG");
 				sound.play(1f);
+			break;
+			
+			case ENTITY_DEATH:
+				DeathEntityMessage deathMessage = (DeathEntityMessage) callback;
+				
+				Entity entity = MyGame.getGameMap().getEntity(deathMessage.getEntityId());
+					
+				if(entity instanceof EntityPlayer) MyGame.getGameMap().removePlayer((EntityPlayer) entity);
+				else MyGame.getGameMap().removeEntity(entity);
+					
+				MyGame.getRenderer().removeEntity(entity);
+				/** TODO add some graphical effect and sound */
+			break;
+			
+			case PLAYER_LOGOUT:
+				PlayerLogoutMessage logoutMessage = (PlayerLogoutMessage) callback;
+				EntityPlayer player = (EntityPlayer) MyGame.getGameMap().getEntity(logoutMessage.getPlayerId());
+				MyGame.getGameMap().removePlayer(player);				
+				MyGame.getRenderer().removeEntity(player);
 			break;
 			
 			default:

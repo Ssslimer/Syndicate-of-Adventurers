@@ -7,6 +7,8 @@ import trade.Offer;
 
 public class UpdateTradeEntityMessage extends Message
 {
+	private static final long serialVersionUID = -2821541317122188346L;
+	
 	private final long entityId;
 	private Offer sellerOffer;
 	private BuyerOffer buyerOffer;

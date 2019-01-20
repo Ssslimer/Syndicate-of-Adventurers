@@ -9,7 +9,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -76,7 +75,7 @@ public class GameScreen implements Screen, InputProcessor
 		inputMultiplexer = new InputMultiplexer();	
     	
     	spriteBatch = new SpriteBatch();
-    	chatTexture = new Texture(Gdx.files.getFileHandle(Paths.get("assets", "textures", "gui", "chatbackground.png").toString(), FileType.Internal));
+    	chatTexture = MyGame.getResources().getTexture("GUI_CHAT_WINDOW");
     	
     	CHAT_WIDTH = ConfigConstants.WIDTH/4;
     	CHAT_HEIGHT = ConfigConstants.HEIGHT/2;
