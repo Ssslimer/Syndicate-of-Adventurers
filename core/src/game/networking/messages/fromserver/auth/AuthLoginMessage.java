@@ -1,4 +1,4 @@
-package networking.messages.fromserver;
+package networking.messages.fromserver.auth;
 
 import networking.MessageStatus;
 

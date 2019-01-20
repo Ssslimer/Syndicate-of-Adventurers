@@ -61,6 +61,11 @@ public class WorldRenderer
 		return instances;
     }
     
+	public void removeEntity(Entity entity)
+	{
+		entityInstances.remove(entity);
+	}
+    
 	public void initTerrain()
 	{
         List<TerrainTile> terrain = MyGame.getGameMap().getTerrain();
@@ -89,7 +94,7 @@ public class WorldRenderer
 	{
 		for(Entity entity : MyGame.getGameMap().getEntities().values())
 		{
-			ModelInstance[] instances = entityInstances.get(entity);
+			ModelInstance[] instances = entityInstances.get(entity);			
 			if(instances == null) instances = MyGame.getRenderer().initEntity(entity);
 			
 			int variant = MathHelper.getRotation(entity.getVelocity());

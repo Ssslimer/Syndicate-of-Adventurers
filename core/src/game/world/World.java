@@ -2,19 +2,17 @@ package world;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.math.Vector3;
 
 import entities.Entity;
 import entities.EntityEnemy;
 import entities.EntityPlayer;
-import networking.MoveDirection;
 import networking.messages.fromserver.SpawnEntityMessage;
-import server.ConnectionToClient;
 import server.Server;
 import trade.TradeState;
 import util.Timer;
@@ -23,8 +21,8 @@ public class World implements Serializable
 {	
 	private static final long serialVersionUID = -787730389424356815L;
 	
-	private Map<Long, Entity> entities = new HashMap<>();
-	private Map<String, EntityPlayer> players = new HashMap<>();
+	private Map<Long, Entity> entities = new ConcurrentHashMap<>();
+	private Map<String, EntityPlayer> players = new ConcurrentHashMap<>();
 	private List<TerrainTile> terrain = new ArrayList<>();
 	
 	private static boolean isLocal = false;
@@ -34,6 +32,9 @@ public class World implements Serializable
 	public World()
 	{
 		generateMap();
+		
+		if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
+		if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
 	}
 
 	public synchronized void spawnEntity(Entity entity)
@@ -72,14 +73,14 @@ public class World implements Serializable
 		for(Entity e : entities.values())
 		{
 			e.update(delta);
-		}
-		
-		if(!isLocal && Timer.getTickCount() % 100 == 0)
-		{
-			int posX = Server.random.nextInt(4) - 2;
-			int posY = Server.random.nextInt(4) - 2;
-			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
-		}
+		}				
+
+//		if(!isLocal && Timer.getTickCount() % 100 == 0)
+//		{
+//			int posX = Server.random.nextInt(4) - 2;
+//			int posY = Server.random.nextInt(4) - 2;
+//			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
+//		}
 	}
 
 	public EntityPlayer findClosestTradingEntity(Vector3 pos)
@@ -153,6 +154,17 @@ public class World implements Serializable
 		
 		return entitiesInRange;
 	}	
+	
+	public void removeEntity(Entity entity)
+	{
+		entities.remove(entity.getId());
+	}
+	
+	public void removePlayer(EntityPlayer player)
+	{
+		players.remove(player.getLogin());
+		entities.remove(player.getId());
+	}
 
 	public Map<Long, Entity> getEntities()
 	{
