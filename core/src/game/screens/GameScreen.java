@@ -66,7 +66,7 @@ public class GameScreen implements Screen, InputProcessor
 	
 	public GameScreen(MyGame game)
 	{	
-		MyGame.loadPlayer();
+		//MyGame.loadPlayer();
 		this.game = game;
 		
 		stage = new Stage();

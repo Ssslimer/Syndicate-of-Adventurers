@@ -58,10 +58,11 @@ public class World implements Serializable
 	
 	public void setEntityTradeStart(String login, Item item)
 	{
-		EntityPlayer entity = getPlayer(login);
+		EntityPlayer entity = getPlayer(login);	
+		if(entity == null) return;
+		
 		entity.setSellingOffer(new Offer(login, item));
 		entity.setTradeState(TradeState.SELLING);
-		System.out.println(entity.getLogin() + " TRADINGGGGGGGGGG");
 	}
 	
 	public void setEntityTradeStateBuying(String login, Item item)
@@ -105,7 +106,7 @@ public class World implements Serializable
 		{
 			int posX = Server.random.nextInt(4) - 2;
 			int posY = Server.random.nextInt(4) - 2;
-			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
+			//spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
 		}
 	}
 

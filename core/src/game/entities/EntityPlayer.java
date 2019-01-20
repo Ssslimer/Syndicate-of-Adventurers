@@ -36,8 +36,8 @@ public class EntityPlayer extends Entity implements Damageable
 	private TradeState tradeState;
 	private long tradingWithId = -1;
 	
-	private Offer sellingOffer;
-	private BuyerOffer buyingOffer;
+	private Offer sellingOffer = new Offer("", null);
+	private BuyerOffer buyingOffer = new BuyerOffer("", null);
 	
 	public EntityPlayer(Vector3 position, String login) 
 	{

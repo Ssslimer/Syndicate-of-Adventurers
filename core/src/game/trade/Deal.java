@@ -1,9 +1,15 @@
 package trade;
 
+import java.io.Serializable;
+
 import entities.Item;
 
-public class Deal 
+public class Deal implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6977324891878925183L;
 	private Offer sellerOffer;
 	private BuyerOffer buyerOffer;
 	

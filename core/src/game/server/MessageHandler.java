@@ -20,6 +20,7 @@ import networking.messages.fromserver.AuthLoginMessage;
 import networking.messages.fromserver.AuthRegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
+import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeDecisionMessage;
@@ -162,11 +163,14 @@ public class MessageHandler extends Thread
 			Server.addClient(sessionID, login);
 			
 			connectionWithClient.login();
-			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));			
-			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
+			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));		
+			
+			EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 2), login);
+			
+			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap(), e));
 			
 			System.out.println("Player: " + login + " has loged in for the first time");
-			Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 2), login));
+			Server.getMap().spawnEntity(e);
 		}
 	}
 	
@@ -187,10 +191,13 @@ public class MessageHandler extends Thread
 				Server.addClient(sessionID, login);
 				connectionWithClient.login();
 				connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.OK, sessionID));
-				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
+				
+				EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 2), login);
+				
+				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap(), e));
 				
 				System.out.println("Player: " + login + " has loged in");
-				Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 2), login));
+				Server.getMap().spawnEntity(e);
 			}
 			else connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.WRONG_PASSWORD, -1));
 		}
@@ -231,13 +238,16 @@ public class MessageHandler extends Thread
 	
 	private void processTradeStart(ConnectionToClient connectionWithClient, TradeStartMessage message)
 	{
-		String login = Server.getLogin(message.getSessionId());
 		
+		String login = Server.getLogin(message.getSessionId());
+		System.out.println(login + "!!!!!!!!!!!!!!!!!");
 		EntityPlayer player = (EntityPlayer)Server.getMap().getPlayer(login);
+		System.out.println(player.getLogin() + "   GEEEEEEEEET!!!!!!!!!!!!!!!!!");
 		player.setSellingOffer(new Offer(message.getLogin(), message.getItem()));
 		player.setTradeState(TradeState.SELLING);
 		
-		Server.getConnectionManager().sendToAll(message);
+		//Server.getConnectionManager().sendToAll(new TradeStartMessage(message.getSessionId(), login, message.getItem()));
+		Server.getConnectionManager().sendToAll(new UpdateTradeStartEntityMessage(login, message.getItem()));
 	}
 	
 	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
