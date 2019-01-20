@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 
+import networking.messages.fromserver.EntityHitMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.ConnectionToClient;
 import server.Server;
@@ -20,9 +21,9 @@ public class EntityEnemy extends Entity implements Damageable
 	private static final int BASE_ENEMY_HP = 50;
 	
 	private float walk_speed = 1f;
-	private int HP;
+	private int health;
 	private int attackPower;
-	private int defencePower;
+	private int defence;
 	
 	private Loot loot;
 	
@@ -32,9 +33,9 @@ public class EntityEnemy extends Entity implements Damageable
 	{
 		super(position);
 		
-		HP = BASE_ENEMY_HP;
+		health = BASE_ENEMY_HP;
 		attackPower = BASE_ENEMY_ATTACK;
-		defencePower = BASE_ENEMY_DEFENCE;		
+		defence = BASE_ENEMY_DEFENCE;		
 		
 		loot = new Loot();
 	}
@@ -51,7 +52,7 @@ public class EntityEnemy extends Entity implements Damageable
 	
 	private void changeTarget()
 	{
-		EntityPlayer player = getClosestPlayerInRange();
+		EntityPlayer player = Server.getMap().getClosestPlayerInRange(this, FOLLOW_RANGE);
 		
 		if(player != null)
 		{
@@ -70,49 +71,13 @@ public class EntityEnemy extends Entity implements Damageable
 		
 		if(!World.isLocal() && velocity.len() != 0)
 		{
-			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
-			{
-				if(connectionToClient.isLogedIn()) connectionToClient.sendMessageToClient(new UpdateEntityMessage(id, velocity, position));
-			}
+			Server.getConnectionManager().sendToAll(new UpdateEntityMessage(id, velocity, position));
 		}
 	}
-	
-	private List<EntityPlayer> findPlayersInRange() 
-	{	
-		List<EntityPlayer> playersInRange = new ArrayList<>();
-		
-		for(EntityPlayer player : Server.getMap().getPlayers().values())
-		{
-			if(player.getPosition().sub(getPosition()).len() <= FOLLOW_RANGE)
-			{
-				playersInRange.add(player);
-			}
-		}
-		
-		return playersInRange;
-	}
-	
-	private EntityPlayer getClosestPlayerInRange()
-	{
-		EntityPlayer closest = null;
-		float smallestDistance = Float.MAX_VALUE;
-		
-		for(EntityPlayer player : Server.getMap().getPlayers().values())
-		{
-			float distance = player.getPosition().dst(position);
-			if(distance<= FOLLOW_RANGE && distance < smallestDistance)
-			{
-				closest = player;
-				smallestDistance = distance;
-			}
-		}
-		
-		return closest;
-	}
-	
+
 	public int getHP()
 	{
-		return HP;
+		return health;
 	}
 	
 	public int getAttack()
@@ -122,7 +87,7 @@ public class EntityEnemy extends Entity implements Damageable
 	
 	public int getDefence()
 	{
-		return defencePower;
+		return defence;
 	}
 	
 	public Loot getLoot()
@@ -130,14 +95,12 @@ public class EntityEnemy extends Entity implements Damageable
 		return loot;
 	}
 
-	public void dealDamage(int damageAttack)
+	public void dealDamage(int damage, DamageSource source)
 	{
-		damageAttack -= defencePower;
+		damage -= defence;		
+		if(damage > 0) health -= damage;
 		
-		if(damageAttack > 0)
-		{
-			HP -= damageAttack;
-		}
+		Server.getConnectionManager().sendToAll(new EntityHitMessage(this, damage, source));
 	}
 	
 	private void attack()

@@ -41,13 +41,7 @@ public class World implements Serializable
 		entities.put(entity.getId(), entity);
 		if(entity instanceof EntityPlayer) players.put(((EntityPlayer) entity).getLogin(), (EntityPlayer) entity);
 		
-		if(!isLocal)
-		{
-			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
-			{
-				connectionToClient.sendMessageToClient(new SpawnEntityMessage(entity));
-			}
-		}
+		if(!isLocal) Server.getConnectionManager().sendToAll(new SpawnEntityMessage(entity));
 	}
 	
 	public void updateEntityPos(long id, Vector3 position, Vector3 velocity)
@@ -88,131 +82,131 @@ public class World implements Serializable
 		}
 	}
 	
-	public void attackIfEnemyInFront(int damageAttack, Vector3 attackerPosition, MoveDirection attackDirection)
-	{
-		for(Entity e : entities.values())
-		{
-			if(attackDirection == MoveDirection.UP_AND_RIGHT)
-			{
-				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.UP_AND_LEFT)
-			{
-				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
-			{
-				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
-			{
-				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.UP)
-			{
-				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.DOWN)
-			{
-				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.RIGHT)
-			{
-				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.LEFT)
-			{
-				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityEnemy)
-				{
-					((EntityEnemy)e).dealDamage(damageAttack);
-				}
-			}
-		}
-	}
-	
-	public void attackIfPlayerInFront(int damageAttack, Vector3 attackerPosition, MoveDirection attackDirection)
-	{
-		for(Entity e : entities.values())
-		{
-			if(attackDirection == MoveDirection.UP_AND_RIGHT)
-			{
-				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.UP_AND_LEFT)
-			{
-				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
-			{
-				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
-			{
-				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.UP)
-			{
-				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.DOWN)
-			{
-				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.RIGHT)
-			{
-				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-			else if(attackDirection == MoveDirection.LEFT)
-			{
-				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityPlayer)
-				{
-					((EntityPlayer)e).dealDamage(damageAttack);
-				}
-			}
-		}
-	}
+//	public void attackIfEnemyInFront(int damageAttack, Vector3 attackerPosition, MoveDirection attackDirection)
+//	{
+//		for(Entity e : entities.values())
+//		{
+//			if(attackDirection == MoveDirection.UP_AND_RIGHT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.UP_AND_LEFT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.UP)
+//			{
+//				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.DOWN)
+//			{
+//				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.RIGHT)
+//			{
+//				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.LEFT)
+//			{
+//				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityEnemy)
+//				{
+//					((EntityEnemy)e).dealDamage(damageAttack);
+//				}
+//			}
+//		}
+//	}
+//	
+//	public void attackIfPlayerInFront(int damageAttack, Vector3 attackerPosition, MoveDirection attackDirection)
+//	{
+//		for(Entity e : entities.values())
+//		{
+//			if(attackDirection == MoveDirection.UP_AND_RIGHT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.UP_AND_LEFT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y + 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.DOWN_AND_RIGHT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x + 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.DOWN_AND_LEFT)
+//			{
+//				if(e.getPosition().y == attackerPosition.y - 1 && e.getPosition().x == attackerPosition.x - 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.UP)
+//			{
+//				if(e.getPosition().y == attackerPosition.y + 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.DOWN)
+//			{
+//				if(e.getPosition().y == attackerPosition.y - 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.RIGHT)
+//			{
+//				if(e.getPosition().y == attackerPosition.x + 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//			else if(attackDirection == MoveDirection.LEFT)
+//			{
+//				if(e.getPosition().y == attackerPosition.x - 1 && e instanceof EntityPlayer)
+//				{
+//					((EntityPlayer)e).dealDamage(damageAttack);
+//				}
+//			}
+//		}
+//	}
 	
 	public EntityPlayer findClosestTradingEntity(Vector3 pos)
 	{
@@ -237,6 +231,40 @@ public class World implements Serializable
 		
 		return player == null ? null : player;
 	}
+	
+	public EntityPlayer getClosestPlayerInRange(Entity entity, float range)
+	{
+		EntityPlayer closest = null;
+		float smallestDistance = Float.MAX_VALUE;
+		
+		for(EntityPlayer player : players.values())
+		{
+			if(entity == player) continue;
+			
+			float distance = player.getPosition().dst(entity.getPosition());
+			if(distance <= range && distance < smallestDistance)
+			{
+				closest = player;
+				smallestDistance = distance;
+			}
+		}
+		
+		return closest;
+	}
+	
+	public List<Entity> getEntitiesInRange(Vector3 position, float range)
+	{
+		List<Entity> entitiesInRange = new ArrayList<>(); 
+		for(Entity entity : entities.values())
+		{
+			if(entity.getPosition().cpy().sub(position).len() <= range)
+			{
+				entitiesInRange.add(entity);
+			}
+		}
+		
+		return entitiesInRange;
+	}	
 
 	public Map<Long, Entity> getEntities()
 	{
@@ -281,5 +309,5 @@ public class World implements Serializable
 	public void setSpawnPoint(Vector3 spawnPoint)
 	{
 		this.spawnPoint = spawnPoint;
-	}	
+	}
 }

@@ -85,25 +85,10 @@ public class Server
 	{
 		
 	}
-	
-	public static World getMap()
-	{
-		return world;
-	}
 
-	public AuthManager getAuthManager()
-	{
-		return authManager;
-	}
-	
 	public static void addChatMessage(String chatMessageString)
 	{
 		chat.add(chatMessageString);
-	}
-	
-	public static ConnectionManager getConnectionManager()
-	{
-		return connectionManager;
 	}
 	
 	public static String getLogin(long sessionID)
@@ -141,5 +126,20 @@ public class Server
 	public MessageHandler getMessageHandler()
 	{
 		return messageHandler;
+	}
+	
+	public static World getMap()
+	{
+		return world;
+	}
+
+	public AuthManager getAuthManager()
+	{
+		return authManager;
+	}
+		
+	public static ConnectionManager getConnectionManager()
+	{
+		return connectionManager;
 	}
 }

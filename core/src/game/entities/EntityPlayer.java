@@ -1,14 +1,13 @@
 package entities;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 
 import networking.MoveDirection;
+import networking.messages.fromserver.EntityHitMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
-import server.ConnectionToClient;
 import server.Server;
 import trade.TradeState;
 import world.World;
@@ -23,7 +22,8 @@ public class EntityPlayer extends Entity implements Damageable
 
 	private String login;
 	
-	private float walk_speed = 5f;
+	private static final float WALK_SPEED = 5f;
+	private static final float ATTACK_RANGE = 50f;
 	private int health;
 	private int attackPower;
 	private int defencePower;
@@ -74,16 +74,13 @@ public class EntityPlayer extends Entity implements Damageable
 	@Override
 	public void update(float delta)
 	{	
-		velocity = moveDirection.cpy().scl(walk_speed);
+		velocity = moveDirection.cpy().scl(WALK_SPEED);
 		
 		position.add(velocity.cpy().scl(1f/delta));
 		
 		if(!World.isLocal() && (moveUp || moveDown || moveRight || moveLeft))
 		{
-			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
-			{
-				if(connectionToClient.isLogedIn()) connectionToClient.sendMessageToClient(new UpdateEntityMessage(id, velocity, position));
-			}
+			Server.getConnectionManager().sendToAll(new UpdateEntityMessage(id, velocity, position));
 		}
 	}
 	
@@ -118,14 +115,12 @@ public class EntityPlayer extends Entity implements Damageable
 		}
 	}
 
-	public void dealDamage(int damageAttack)
+	public void dealDamage(int damage, DamageSource source)
 	{
-		damageAttack -= defencePower;
+		damage -= defencePower;		
+		if(damage > 0) health -= damage;
 		
-		if(damageAttack > 0)
-		{
-			health -= damageAttack;
-		}
+		Server.getConnectionManager().sendToAll(new EntityHitMessage(this, damage, source));
 	}
 	
 	public void setMoveDirection(MoveDirection direction, boolean ifToStop)
@@ -148,7 +143,14 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	public void attack()
 	{
-		//Server.getMap().attackIfEnemyInFront(attackPower, position, moveDirection);
+		List<Entity> entities = Server.getMap().getEntitiesInRange(position, ATTACK_RANGE);
+		for(Entity entity : entities)
+		{
+			if(entity instanceof Damageable && entity != this)
+			{				
+				((Damageable) entity).dealDamage(BASE_PLAYER_ATTACK, DamageSource.NORMAL);
+			}
+		}
 	}
 	
 	public void addGold(int goldAmount)

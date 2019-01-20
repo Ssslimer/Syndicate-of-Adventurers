@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
 
+import entities.DamageSource;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemType;
@@ -103,7 +104,7 @@ public class EntityPlayerTest
 		e.addItem(item);
 		
 		int hpBeforeDamage = e.getHealth();
-		e.dealDamage(damage);
+		e.dealDamage(damage, DamageSource.NORMAL);
 		
 		int realDamage = Clamp.clampInt(damage - e.getDefence(), 0, damage);
 		

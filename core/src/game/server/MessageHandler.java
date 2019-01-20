@@ -5,7 +5,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.math.Vector3;
 
@@ -218,10 +217,7 @@ public class MessageHandler extends Thread
 		{
 			String nick = Server.getLogin(message.getSessionId());
 			
-			for(ConnectionToClient connectionToClient : Server.getConnectionManager().getAllConnections())
-			{
-				connectionToClient.sendMessageToClient(new UpdateChatMessage(nick + ": " + message.getText()));
-			}
+			Server.getConnectionManager().sendToAll(new UpdateChatMessage(nick + ": " + message.getText()));
 			Server.addChatMessage(nick + ": " + message.getText());
 			System.out.println("[" + nick + "]:" + message.getText());
 		}

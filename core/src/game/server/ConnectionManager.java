@@ -9,6 +9,9 @@ import java.util.List;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
+import networking.messages.Message;
+import networking.messages.fromserver.UpdateChatMessage;
+
 public class ConnectionManager extends Thread
 {
 	private final Server server;
@@ -50,11 +53,14 @@ public class ConnectionManager extends Thread
 		}
 	}
 	
-	public List<ConnectionToClient> getAllConnections()
+	public void sendToAll(Message message)
 	{
-		return connections;
+		for(ConnectionToClient client : connections)
+		{
+			if(client.isLogedIn()) client.sendMessageToClient(message);
+		}
 	}
-	
+
 	void removeConnection(ConnectionToClient connection)
 	{
 		synchronized(connections)
