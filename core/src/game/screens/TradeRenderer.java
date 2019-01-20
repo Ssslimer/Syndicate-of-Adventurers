@@ -203,6 +203,12 @@ public class TradeRenderer
 			{
 				if(trader.getTradeState() == TradeState.BUYING && sellerItem != null && buyerItem != null && sellerId != -1)
 				{
+					if(hasFoundSomeoneToTrade)
+					{
+						String login = seller.getLogin();
+						Item sellerItem = seller.getSellingOffer().getTraderItem();
+						//MyGame.getClient().sentTradeOfferMessage(trader.getLogin(), login, buyerItem, sellerItem);
+					}
 					MyGame.getClient().sentTradeOfferMessage(sellerId, buyerItem, sellerItem);
 				}
 			}
@@ -432,7 +438,7 @@ public class TradeRenderer
 				@Override
 				public void clicked(InputEvent event, float x, float y)
 				{
-					tradingItem = button.getItem();
+					buyerItem = button.getItem();
 					offerItemBtn.setText(tradingItem.getType().toString() + "(" + tradingItem.getAttack() + "," + tradingItem.getDefence() + "," + tradingItem.getHPBonus() + ")");
 				}
 			});

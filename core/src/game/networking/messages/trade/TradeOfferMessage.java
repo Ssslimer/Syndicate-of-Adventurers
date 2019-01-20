@@ -8,28 +8,33 @@ import trade.Deal;
 public class TradeOfferMessage extends ClientMessage
 {
 	private static final long serialVersionUID = -4513990275032853847L;
-	private Deal deal;
 	
-	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, int goldAmount, Item sellingItem) 
-	{
-		super(MessageType.TRADE_OFFER, sessionId);	
-		deal = new Deal(sellerLogin, buyerLogin, sellingItem, goldAmount);
-	}
+	private String sellerLogin;
+	private String buyerLogin;
+	private Item buyerItem;
+	private Item sellerItem;
 	
-	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, Item item, Item sellingItem) 
+	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);
-		deal = new Deal(sellerLogin, buyerLogin, sellingItem, item);
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getSellerLogin() {
+		return sellerLogin;
+	}
+
+	public String getBuyerLogin() {
+		return buyerLogin;
+	}
+
+	public Item getBuyerItem() {
+		return buyerItem;
+	}
+
+	public Item getSellerItem() {
+		return sellerItem;
 	}
 	
-	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, int goldAmount, Item item, Item sellingItem) 
-	{
-		super(MessageType.TRADE_OFFER, sessionId);
-		deal = new Deal(sellerLogin, buyerLogin, sellingItem, goldAmount, item);
-	}
 	
-	public Deal getDeal()
-	{
-		return this.deal;
-	}
 }
