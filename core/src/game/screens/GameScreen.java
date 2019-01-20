@@ -58,6 +58,8 @@ public class GameScreen implements Screen, InputProcessor
     private float timer; // for ping
     
     private MyGame game;
+    
+    private boolean showRespawnDialog = false;
 	
 	public GameScreen(MyGame game)
 	{	
@@ -113,6 +115,7 @@ public class GameScreen implements Screen, InputProcessor
                
         if(MyGame.getPlayer() != null && !MyGame.getPlayer().isAlive())
         {
+        	showRespawnDialog = true;
     		respawnDialog.show(stage);
     		MyGame.setupPlayer(null);
         }
@@ -277,6 +280,11 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
+		if(showRespawnDialog)
+		{
+			stage.touchDown(screenX, screenY, pointer, button);
+		}
+		
 		if(displayingChat && screenX >= ConfigConstants.WIDTH - CHAT_WIDTH &&
 				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
 		{
@@ -307,6 +315,10 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{ 
+		if(showRespawnDialog)
+		{
+			stage.touchUp(screenX, screenY, pointer, button);
+		}
 		if(isTrading && screenX <= CHAT_WIDTH &&
 				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
 		{
