@@ -22,6 +22,7 @@ import networking.messages.fromclient.trade.TradeOfferMessage;
 import networking.messages.fromclient.trade.TradeStartMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
+import networking.messages.fromserver.UpdateTradeDecisionMessage;
 import networking.messages.fromserver.UpdateTradeOfferMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
@@ -269,30 +270,33 @@ public class MessageHandler extends Thread
 	}
 	
 	private void processTradeDecision(ConnectionToClient connectionWithClient, TradeDecisionMessage message)
-	{
-		if(message.getOfferAccepted())
-		{
-			Item sellingItem = message.getDeal().getSellerOffer().getTraderItem();
-			Item offeringItem = message.getDeal().getBuyerOffer().getTraderItem();
-			int offeringGold = message.getDeal().getBuyerOffer().getGoldAmount();
-			
-			String sellerLogin = message.getDeal().getSellerOffer().getLogin();
-			String buyerLogin = message.getDeal().getBuyerOffer().getLogin();
-			
-			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
-			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getPlayer(buyerLogin);
-			
-			sellerEntity.removeItem(sellingItem);
-			if(offeringItem != null) sellerEntity.addItem(offeringItem);
-			if(offeringGold > 0) sellerEntity.changeGold(offeringGold);
-			
-			buyerEntity.addItem(sellingItem);
-			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
-			if(offeringGold > 0) buyerEntity.changeGold(-offeringGold);
-			
-			/** TODO send to all this exchage */
-		}
-	}
+    {
+        System.out.println("HANDLER OFFER: " + message.getOfferAccepted());
+        if(message.getOfferAccepted())
+        {
+            Item sellingItem = message.getSellerItem();
+            Item offeringItem = message.getBuyerItem();
+
+            String sellerLogin = message.getSellerLogin();
+            String buyerLogin = message.getBuyerLogin();
+
+            EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
+            EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getPlayer(buyerLogin);
+
+            sellerEntity.removeItem(sellingItem);
+            sellerEntity.addItem(offeringItem);
+
+            buyerEntity.addItem(sellingItem);
+            buyerEntity.removeItem(offeringItem);
+
+            sellerEntity.setHasOffer(false);
+
+            sellerEntity.setTradeState(TradeState.NOT_TRADING);
+            buyerEntity.setTradeState(TradeState.NOT_TRADING);
+
+            Server.getConnectionManager().sendToAll(new UpdateTradeDecisionMessage(message.getOfferAccepted(), sellerLogin, buyerLogin, offeringItem, sellingItem));
+        }
+    }
 	
 	private void processTradeEnd(ConnectionToClient connectionWithClient, TradeEndMessage message)
 	{

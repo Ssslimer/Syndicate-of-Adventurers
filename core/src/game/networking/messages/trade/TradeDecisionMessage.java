@@ -1,4 +1,4 @@
-package networking.messages.fromclient.trade;
+package networking.messages.trade;
 
 import entities.Item;
 import networking.MessageType;

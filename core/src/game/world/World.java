@@ -80,6 +80,26 @@ public class World implements Serializable
 		
 	}
 	
+	public void updateTradeDecision(boolean offerAccepted, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
+	{
+		EntityPlayer seller = getPlayer(sellerLogin);
+		EntityPlayer buyer = getPlayer(buyerLogin);
+		
+		seller.removeItem(sellerItem);
+		buyer.addItem(sellerItem);
+		
+		buyer.removeItem(buyerItem);
+		seller.addItem(buyerItem);
+		
+		seller.setTradeState(TradeState.NOT_TRADING);
+		buyer.setTradeState(TradeState.NOT_TRADING);
+		
+		seller.setHasOffer(false);
+		
+	}
+	
+	/**TODO REMOVE SHIEET BUT LATER */
+	
 	public void setEntityTradeStateBuying(String login, Item item)
 	{
 		EntityPlayer entity = getPlayer(login);
