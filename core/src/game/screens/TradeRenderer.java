@@ -51,7 +51,7 @@ public class TradeRenderer
 	
 	private Item buyerItem;
 	
-	private EntityPlayer trader;
+	public static EntityPlayer trader;
 	
 	private boolean wasStartTradeMessageSent = false;
 	
