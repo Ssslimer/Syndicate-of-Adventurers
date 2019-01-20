@@ -1,9 +1,7 @@
 package screens;
 
-import java.nio.file.Paths;
 import java.util.List;
 
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -17,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -35,17 +34,13 @@ import util.GdxUtils;
 
 public class GameScreen implements Screen, InputProcessor 
 {
-	private final float CHAT_WIDTH;
-	private final float CHAT_HEIGHT;
-	
-	private MyGame game;
+	private final float CHAT_WIDTH, CHAT_HEIGHT;
 	
 	private InputMultiplexer inputMultiplexer;
-	private Stage stage;
-	private Stage tradeStage;
-	private Stage tradeOfferStage;
-	private Stage tradeDecisionStage;
+	private Stage stage, tradeStage, tradeOfferStage, tradeDecisionStage;
 	      
+	private Dialog respawnDialog;
+	
     private SpriteBatch spriteBatch;
     private Texture chatTexture;
     
@@ -54,8 +49,7 @@ public class GameScreen implements Screen, InputProcessor
     private TextButton chatSendText;
     private BitmapFont chatFont;
     
-    private boolean usingChat;
-    private boolean displayingChat;
+    private boolean usingChat, displayingChat;
     
     public static boolean isTrading = false;
     
@@ -66,7 +60,6 @@ public class GameScreen implements Screen, InputProcessor
 	public GameScreen(MyGame game)
 	{	
 		MyGame.loadPlayer();
-		this.game = game;
 		
 		stage = new Stage();
 		tradeStage = new Stage();
@@ -85,6 +78,7 @@ public class GameScreen implements Screen, InputProcessor
     	skin = new Skin(Gdx.files.internal("uiskin.json"));
     	setupChatTextField();
     	setupChatSendTextButton();
+    	setupRespawnDialog();
     	
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
@@ -115,7 +109,15 @@ public class GameScreen implements Screen, InputProcessor
         MyGame.getRenderer().render();
         if(displayingChat) renderChat();
         
-        if(isTrading) tradeRenderer.render();     
+        if(isTrading) tradeRenderer.render();
+        
+        System.out.println(MyGame.getPlayer());
+        if(MyGame.getPlayer() != null) System.out.println(MyGame.getPlayer().isAlive());
+        System.out.println();
+        if(MyGame.getPlayer() != null && !MyGame.getPlayer().isAlive())
+        {
+    		respawnDialog.show(stage);
+        }
 	}
 	
 	private void pingServer(float delta)
@@ -171,6 +173,32 @@ public class GameScreen implements Screen, InputProcessor
 	{
 		spriteBatch.dispose();
 		MyGame.getRenderer().clear();
+	}
+	
+	private void setupRespawnDialog()
+	{
+		respawnDialog = new Dialog("You have been killed", skin, "dialog")
+		{
+			protected void result(Object object)
+			{
+				int result = (int) object;
+			
+				switch(result)
+				{
+					case 1:
+						
+					break;
+					
+					case 2:
+					
+					break;
+				}
+	        }
+		};
+		
+		respawnDialog.button("Respawn", 1);
+		respawnDialog.button("Quit game", 2);
+		respawnDialog.setMovable(false);
 	}
 	
 	@Override

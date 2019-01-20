@@ -32,9 +32,7 @@ import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
-import networking.messages.trade.TradeDecisionMessage;
 import networking.messages.trade.TradeEndMessage;
-import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
 import world.World;
 

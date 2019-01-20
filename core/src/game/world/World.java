@@ -188,6 +188,7 @@ public class World implements Serializable
 	
 	public void removePlayer(EntityPlayer player)
 	{
+		player.setDead();
 		players.remove(player.getLogin());
 		entities.remove(player.getId());
 	}
