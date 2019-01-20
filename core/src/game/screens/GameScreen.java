@@ -282,6 +282,12 @@ public class GameScreen implements Screen, InputProcessor
 		else if(isTrading && screenX <= CHAT_WIDTH &&
 				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
 		{
+			if(MyGame.getPlayer().getTradeState() == TradeState.BUYING)
+			{
+				tradeOfferStage.touchDown(screenX, screenY, pointer, button);
+				return true;
+			}
+			
 			tradeStage.touchDown(screenX, screenY, pointer, button);
 			return true;
 		}
@@ -300,6 +306,12 @@ public class GameScreen implements Screen, InputProcessor
 		if(isTrading && screenX <= CHAT_WIDTH &&
 				screenY >= ConfigConstants.HEIGHT - CHAT_HEIGHT)
 		{
+			if(MyGame.getPlayer().getTradeState() == TradeState.BUYING)
+			{
+				tradeOfferStage.touchUp(screenX, screenY, pointer, button);
+				return true;
+			}
+			
 			tradeStage.touchUp(screenX, screenY, pointer, button);
 			return true;
 		}

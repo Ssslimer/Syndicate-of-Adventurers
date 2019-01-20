@@ -243,16 +243,12 @@ public class MessageHandler extends Thread
 	}
 	
 	private void processTradeStart(ConnectionToClient connectionWithClient, TradeStartMessage message)
-	{
-		
+	{	
 		String login = Server.getLogin(message.getSessionId());
-		System.out.println(login + "!!!!!!!!!!!!!!!!!");
 		EntityPlayer player = (EntityPlayer)Server.getMap().getPlayer(login);
-		System.out.println(player.getLogin() + "   GEEEEEEEEET!!!!!!!!!!!!!!!!!");
 		player.setSellingOffer(new Offer(message.getLogin(), message.getItem()));
 		player.setTradeState(TradeState.SELLING);
 		
-		//Server.getConnectionManager().sendToAll(new TradeStartMessage(message.getSessionId(), login, message.getItem()));
 		Server.getConnectionManager().sendToAll(new UpdateTradeStartEntityMessage(login, message.getItem()));
 	}
 	

@@ -43,14 +43,21 @@ public class TradeRenderer
 	private TextButton sellItemBtn;
 	private Item tradingItem;
 	
+	private TextButton toBuyItemBtn; //btn with item from seller
+	private TextButton offerItemBtn;
+	
 	private Item sellerItem;
 	private long sellerId;
 	
 	private Item buyerItem;
 	
-	private EntityPlayer trader;
+	public static EntityPlayer trader;
 	
 	private boolean wasStartTradeMessageSent = false;
+	
+	//offer variables
+	private EntityPlayer seller;
+	private boolean hasFoundSomeoneToTrade = false;
 		
 	public TradeRenderer(float width, float height, Stage sellingStage, Stage offerStage, Stage decisionStage)
 	{
@@ -71,6 +78,9 @@ public class TradeRenderer
 		
 		setupStartTradeButton();
 		setupOfferButton();
+		setupToBuyItemButton();
+		setupOfferItemButton();
+		
 		setupAcceptOffertButton();
 		setupDeclineOffertButton();
 		setupEndTradeButton();
@@ -105,7 +115,17 @@ public class TradeRenderer
 	
 	private void renderBuying()
 	{
-		String traderName = ((EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId())).getLogin();
+		if(!hasFoundSomeoneToTrade)
+		{
+			seller = (EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId());
+			
+			hasFoundSomeoneToTrade = true;
+		}
+		//String traderName = ((EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId())).getLogin();
+		
+		String traderName = seller.getLogin();
+		Item item = seller.getSellingOffer().getTraderItem();
+		toBuyItemBtn.setText(item.getType().toString() + "(" + item.getAttack() + "," + item.getDefence() + "," + item.getHPBonus() + ")");
 		
 		batch.begin();
 		batch.draw(tradeWindowTexture, 0, 0, TRADE_SCREEN_WIDTH, TRADE_SCREEN_HEIGHT);
@@ -189,6 +209,43 @@ public class TradeRenderer
 		});
 		
 		offerStage.addActor(offerBtn);
+	}
+	
+	private void setupToBuyItemButton()
+	{
+		toBuyItemBtn = new TextButton("Item...", skin);
+		toBuyItemBtn.setWidth(startTradeBtn.getWidth() * 2);
+		toBuyItemBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = 5 * TRADE_SCREEN_WIDTH / 14;
+		float posY = TRADE_SCREEN_HEIGHT / 2;
+		
+		toBuyItemBtn.setPosition(posX, posY);
+		
+		offerStage.addActor(toBuyItemBtn);	
+	}
+	
+	private void setupOfferItemButton()
+	{
+		offerItemBtn = new TextButton("Item...", skin);
+		offerItemBtn.setWidth(startTradeBtn.getWidth() * 2);
+		offerItemBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = 0;
+		float posY = TRADE_SCREEN_HEIGHT / 2;
+		
+		offerItemBtn.setPosition(posX, posY);
+		
+		offerItemBtn.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				setupOfferItemButtons();
+			}
+		});
+		
+		offerStage.addActor(offerItemBtn);
 	}
 	
 	private void setupAcceptOffertButton()
@@ -352,6 +409,50 @@ public class TradeRenderer
 		}
 	}
 	
+	private void setupOfferItemButtons()
+	{
+		clearStageFromOfferItemButtons();
+		
+		List<Item> items = trader.getItems();	
+		
+		int index = 1;
+		for(Item item : items)
+		{
+			ItemButton button = new ItemButton(skin, item);
+			
+			button.setWidth(startTradeBtn.getWidth() * 2);
+			button.setHeight(startTradeBtn.getHeight());
+			
+			float posX = 5 * TRADE_SCREEN_WIDTH / 7f;
+			float posY = TRADE_SCREEN_HEIGHT - (index * button.getHeight());
+			button.setPosition(posX, posY);
+			
+			button.addListener(new ClickListener()
+			{
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					tradingItem = button.getItem();
+					offerItemBtn.setText(tradingItem.getType().toString() + "(" + tradingItem.getAttack() + "," + tradingItem.getDefence() + "," + tradingItem.getHPBonus() + ")");
+				}
+			});
+			
+			offerStage.addActor(button);
+			index++;
+		}
+	}
+	
+	private void clearStageFromOfferItemButtons() 
+	{
+		for(Actor actor : offerStage.getActors())
+		{
+			if(actor instanceof ItemButton)
+			{
+				actor.remove();
+			}
+		}
+	}
+
 	private void clearStageFromItemButtons()
 	{
 		for(Actor actor : sellingStage.getActors())
