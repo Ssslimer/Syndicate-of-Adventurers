@@ -57,6 +57,8 @@ public class JoinServerScreen implements Screen
 		setupLoginButton();
 		setupRegisterButton();
 		setupBackButton();
+		
+		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
@@ -70,8 +72,7 @@ public class JoinServerScreen implements Screen
 		spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		spriteBatch.end();
 		stage.act();
-		stage.draw();
-		Gdx.input.setInputProcessor(stage);		
+		stage.draw();	
 	}
 
 	@Override

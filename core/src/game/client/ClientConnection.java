@@ -306,10 +306,12 @@ public class ClientConnection extends Thread
 		sender.addMessage(new PingMessage(sessionId, System.currentTimeMillis()));
 	}
 	
-	public void stopConnection()
+	public synchronized void stopConnection()
 	{
 		try
 		{
+			sender.close();
+			streamFromServer.close();
 			clientSocket.close();
 		}
 		catch(IOException e) 
