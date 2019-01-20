@@ -21,6 +21,7 @@ import client.MyGame;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemButton;
+import trade.Offer;
 import trade.TradeState;
 import util.ConfigConstants;
 
@@ -43,12 +44,19 @@ public class TradeRenderer
 	private TextButton acceptOffertBtn;
 	private TextButton declineOffertBtn;
 	private TextButton endTradeBtn;
+	private TextButton endOfferBtn;
 
 	private TextButton sellItemBtn;
-	private Table itemButtons;
 	private Item tradingItem;
 	
+	private Item sellerItem;
+	private long sellerId;
+	
+	private Item buyerItem;
+	
 	private EntityPlayer trader;
+	
+	private boolean wasStartTradeMessageSent = false;
 		
 	public TradeRenderer(float width, float height, Stage sellingStage, Stage offerStage, Stage decisionStage)
 	{
@@ -67,13 +75,12 @@ public class TradeRenderer
 		
 		trader = MyGame.getPlayer();
 		
-		itemButtons = new Table();
-		
 		setupStartTradeButton();
 		setupOfferButton();
 		setupAcceptOffertButton();
 		setupDeclineOffertButton();
 		setupEndTradeButton();
+		setupEndOfferButton();
 		setupSellItemButton();
 	}
 	
@@ -81,7 +88,7 @@ public class TradeRenderer
 	{
 		if(trader.getTradeState() != TradeState.NOT_TRADING)
 		{
-			if(trader.getTradeState() == TradeState.SELLING) renderSelling();
+			if(trader.getTradeState() == TradeState.SELLING || trader.getTradeState() == TradeState.STARTING_SELLING) renderSelling();
 			else if(trader.getTradeState() == TradeState.BUYING) renderBuying();	
 		}
 		
@@ -117,6 +124,7 @@ public class TradeRenderer
 	
 	private void renderOffer()
 	{		
+		
 		decisionStage.act();
 		decisionStage.draw();
 	}
@@ -152,8 +160,10 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.SELLING)
+				if(trader.getTradeState() == TradeState.STARTING_SELLING && tradingItem != null)
 				{
+					trader.setTradeState(TradeState.SELLING); 
+					MyGame.getClient().sentTradeStartMessage(tradingItem);
 				}
 			}
 		});
@@ -177,9 +187,9 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.BUYING)
+				if(trader.getTradeState() == TradeState.BUYING && sellerItem != null && buyerItem != null && sellerId != -1)
 				{
-					//check for correctness and send offer message
+					MyGame.getClient().sentTradeOfferMessage(sellerId, buyerItem, sellerItem);
 				}
 			}
 		});
@@ -250,23 +260,46 @@ public class TradeRenderer
 		
 		endTradeBtn.setPosition(posX, posY);
 		
-		startTradeBtn.addListener(new ClickListener()
+		endTradeBtn.addListener(new ClickListener()
 		{
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.SELLING)
+				/** TODO send stop trade message*/
+				if(wasStartTradeMessageSent)
 				{
-					//finish trade stop selling
+					
 				}
-				else if(trader.getTradeState() == TradeState.BUYING)
-				{
-					//close trade window maybe only if you didn't put any offer?
-				}
+				GameScreen.isTrading = false;
+				trader.setTradeState(TradeState.NOT_TRADING);
 			}
 		});
 		
 		sellingStage.addActor(endTradeBtn);
+	}
+	
+	private void setupEndOfferButton()
+	{
+		endOfferBtn = new TextButton("Exit", skin);
+		endOfferBtn.setWidth(startTradeBtn.getWidth());
+		endOfferBtn.setHeight(startTradeBtn.getHeight());
+		
+		float posX = 2 * TRADE_SCREEN_WIDTH / 7f;
+		float posY = startTradeBtn.getY();
+		
+		endOfferBtn.setPosition(posX, posY);
+		
+		endOfferBtn.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				GameScreen.isTrading = false;
+				trader.setTradeState(TradeState.NOT_TRADING);
+			}
+		});
+		
+		offerStage.addActor(endOfferBtn);
 	}
 	
 	private void setupSellItemButton()
@@ -294,21 +327,9 @@ public class TradeRenderer
 	
 	private void setupItemButtons()
 	{
-		boolean itemsInStage = false;
 		clearStageFromItemButtons();
-		
-		if(!itemButtons.getCells().isEmpty())
-		{
-			itemButtons.clear();
-			itemsInStage = true;
-		}
-		
-		List<Item> items = trader.getItems();
-		
-		itemButtons.setWidth(startTradeBtn.getWidth() * 2);
-		itemButtons.setHeight(startTradeBtn.getHeight() * 5);
-		
-		itemButtons.setPosition(TRADE_SCREEN_WIDTH, sellItemBtn.getY());
+			
+		List<Item> items = trader.getItems();	
 		
 		int index = 1;
 		for(Item item : items)
@@ -332,15 +353,9 @@ public class TradeRenderer
 				}
 			});
 			
-			System.out.println(item.getType().toString() + "!!!!!!!!!!!!!!!!!!");
-			
-			//itemButtons.add(button);
 			sellingStage.addActor(button);
 			index++;
 		}
-		
-		//if(!itemsInStage)sellingStage.addActor(itemButtons);
-
 	}
 	
 	private void clearStageFromItemButtons()

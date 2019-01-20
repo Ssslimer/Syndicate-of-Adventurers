@@ -196,7 +196,7 @@ public class EntityPlayer extends Entity implements Damageable
 		return this.tradeState;
 	}
 	
-	public void setTrateState(TradeState state)
+	public void setTradeState(TradeState state)
 	{
 		this.tradeState = state;
 	}
