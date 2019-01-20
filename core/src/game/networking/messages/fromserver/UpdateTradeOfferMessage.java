@@ -1,22 +1,21 @@
-package networking.messages.trade;
+package networking.messages.fromserver;
 
 import entities.Item;
 import networking.MessageType;
-import networking.messages.fromclient.ClientMessage;
-import trade.Deal;
+import networking.messages.Message;
 
-public class TradeOfferMessage extends ClientMessage
+public class UpdateTradeOfferMessage extends Message
 {
-	private static final long serialVersionUID = -4513990275032853847L;
+	private static final long serialVersionUID = 6266859747843737975L;
 	
 	private String sellerLogin;
 	private String buyerLogin;
-	private Item buyerItem;
 	private Item sellerItem;
-	
-	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem) 
+	private Item buyerItem;
+
+	public UpdateTradeOfferMessage(String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem) 
 	{
-		super(MessageType.TRADE_OFFER, sessionId);
+		super(MessageType.UPDATE_TRADE_OFFER);
 		
 		this.sellerLogin = sellerLogin;
 		this.buyerLogin = buyerLogin;
@@ -32,12 +31,12 @@ public class TradeOfferMessage extends ClientMessage
 		return buyerLogin;
 	}
 
-	public Item getBuyerItem() {
-		return buyerItem;
-	}
-
 	public Item getSellerItem() {
 		return sellerItem;
+	}
+
+	public Item getBuyerItem() {
+		return buyerItem;
 	}
 	
 	

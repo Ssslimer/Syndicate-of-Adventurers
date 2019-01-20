@@ -98,6 +98,7 @@ public class TradeRenderer
 		
 		if(trader.getHasOffer())
 		{
+			System.out.println("PLAYER: " + trader.getLogin() + " HAS OFFER");
 			renderOffer();
 		}
 	}
@@ -201,15 +202,17 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.BUYING && sellerItem != null && buyerItem != null && sellerId != -1)
+				System.out.println("CLICKED FUUU");
+				if(trader.getTradeState() == TradeState.BUYING && seller.getSellingOffer().getTraderItem() != null && buyerItem != null)
 				{
+					System.out.println("CLICKED FUUU IF 1111111111");
 					if(hasFoundSomeoneToTrade)
 					{
+						System.out.println("CLICKED FUUU IF 22222222222");
 						String login = seller.getLogin();
 						Item sellerItem = seller.getSellingOffer().getTraderItem();
 						MyGame.getClient().sentTradeOfferMessage(trader.getLogin(), login, buyerItem, sellerItem);
 					}
-					MyGame.getClient().sentTradeOfferMessage(sellerId, buyerItem, sellerItem);
 				}
 			}
 		});
@@ -439,7 +442,7 @@ public class TradeRenderer
 				public void clicked(InputEvent event, float x, float y)
 				{
 					buyerItem = button.getItem();
-					offerItemBtn.setText(tradingItem.getType().toString() + "(" + tradingItem.getAttack() + "," + tradingItem.getDefence() + "," + tradingItem.getHPBonus() + ")");
+					offerItemBtn.setText(buyerItem.getType().toString() + "(" + buyerItem.getAttack() + "," + buyerItem.getDefence() + "," + buyerItem.getHPBonus() + ")");
 				}
 			});
 			

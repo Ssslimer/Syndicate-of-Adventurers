@@ -50,9 +50,9 @@ public class EntityPlayer extends Entity implements Damageable
 		attack = BASE_ATTACK;
 		defence = BASE_DEFENCE;
 		
-//		addItem(new Item(1, 2, 0, ItemType.SWORD));
-//		addItem(new Item(2, 15, 3, ItemType.SHIELD));
-//		addItem(new Item(10, 5, 8, ItemType.SWORD));			
+		addItem(new Item(1, 2, 0, ItemType.SWORD));
+		addItem(new Item(2, 15, 3, ItemType.SHIELD));
+		addItem(new Item(10, 5, 8, ItemType.SWORD));			
 	}
 	
 	public EntityPlayer(EntityPlayer player)

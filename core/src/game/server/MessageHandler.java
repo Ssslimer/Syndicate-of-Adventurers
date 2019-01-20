@@ -18,6 +18,7 @@ import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
+import networking.messages.fromserver.UpdateTradeOfferMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
@@ -254,7 +255,18 @@ public class MessageHandler extends Thread
 	
 	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
 	{
-
+		String sellerLogin = message.getSellerLogin();
+		String buyerLogin = message.getBuyerLogin();
+		Item sellerItem = message.getSellerItem();
+		Item buyerItem = message.getBuyerItem();
+		
+		System.out.println("SELLER: " + sellerLogin);
+		System.out.println("BUYER: " + buyerLogin);
+		
+		EntityPlayer player = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
+		player.setHasOffer(true);
+		
+		Server.getConnectionManager().sendToAll(new UpdateTradeOfferMessage(sellerLogin, buyerLogin, buyerItem, sellerItem));
 	}
 	
 	private void processTradeDecision(ConnectionToClient connectionWithClient, TradeDecisionMessage message)

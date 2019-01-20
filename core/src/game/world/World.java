@@ -35,8 +35,8 @@ public class World implements Serializable
 	{
 		generateMap();
 		
-		if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
-		if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
+		//if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
+		//if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
 	}
 
 	public synchronized void spawnEntity(Entity entity)
@@ -63,6 +63,19 @@ public class World implements Serializable
 		
 		entity.setSellingOffer(new Offer(login, item));
 		entity.setTradeState(TradeState.SELLING);
+	}
+	
+	public void updateTradeOffer(String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
+	{
+		EntityPlayer seller = getPlayer(sellerLogin);
+		seller.setHasOffer(true);
+		
+		System.out.println("PLAYER: " + seller.getLogin() + " HAS OFFER");
+		
+		/**TODO CHECK IF NECESSARY */
+		EntityPlayer buyer = getPlayer(buyerLogin);
+		buyer.setTradeState(TradeState.BUYING);
+		
 	}
 	
 	public void setEntityTradeStateBuying(String login, Item item)

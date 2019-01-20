@@ -27,6 +27,7 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import networking.messages.fromserver.UpdateTradeOfferMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
@@ -115,20 +116,6 @@ public class ClientConnection extends Thread
 	}
 	
 	/** TODO DELETE DEPRACIETED SHIEEET */
-	public void sentTradeOfferMessage(long sellerId, int goldAmount, Item sellingItem)
-	{
-		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, MyGame.getGameMap().get ,login, goldAmount, sellingItem));
-	}
-	
-	public void sentTradeOfferMessage(long sellerId, Item item, Item sellingItem)
-	{
-		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, item, sellingItem));
-	}
-	
-	public void sentTradeOfferMessage(long sellerId, Item item, int goldAmount, Item sellingItem)
-	{
-		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, goldAmount, item, sellingItem));
-	}
 	
 	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount)
 	{
@@ -265,6 +252,15 @@ public class ClientConnection extends Thread
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeStartEntityMessage tradeStartMessage = (UpdateTradeStartEntityMessage) callback;
 				MyGame.getGameMap().setEntityTradeStart( tradeStartMessage.getLogin(), tradeStartMessage.getItem());
+			break;
+			
+			case UPDATE_TRADE_OFFER:
+				if(MyGame.getGameMap() == null) break;
+				UpdateTradeOfferMessage tradeOfferUpdate = (UpdateTradeOfferMessage) callback;
+				System.out.println("SELLER: " + tradeOfferUpdate.getSellerLogin());
+				System.out.println("BUYER: " + tradeOfferUpdate.getBuyerLogin());
+				MyGame.getGameMap().updateTradeOffer(tradeOfferUpdate.getSellerLogin(), tradeOfferUpdate.getBuyerLogin(), tradeOfferUpdate.getBuyerItem(), tradeOfferUpdate.getSellerItem());
+			break;
 			
 			case TRADE_OFFER: // we get info that other player send us an offer for our trade
 			break;
