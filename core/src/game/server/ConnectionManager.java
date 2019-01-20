@@ -10,7 +10,6 @@ import java.util.List;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import networking.messages.Message;
-import networking.messages.fromserver.UpdateChatMessage;
 
 public class ConnectionManager extends Thread
 {
@@ -44,7 +43,7 @@ public class ConnectionManager extends Thread
 			{
 				ConnectionToClient connectionToClient = new ConnectionToClient(this, serverSocket.accept(), server.getMessageHandler());			     			
 				connectionToClient.start();
-				connections.add(connectionToClient);
+				connections.add(connectionToClient);			
         	}
         }
 		catch(IOException e)
@@ -57,7 +56,15 @@ public class ConnectionManager extends Thread
 	{
 		for(ConnectionToClient client : connections)
 		{
-			if(client.isLogedIn()) client.sendMessageToClient(message);
+			if(client.isLogedIn()) client.sendMessageToClient(message);		
+		}
+	}
+	
+	public void sendTo(long sessionID, Message message)
+	{
+		for(ConnectionToClient client : connections)
+		{
+			if(client.isLogedIn() && client.getSessionID() == sessionID) client.sendMessageToClient(message);		
 		}
 	}
 

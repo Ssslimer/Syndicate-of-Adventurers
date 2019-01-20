@@ -10,14 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.badlogic.gdx.math.Vector3;
 
 import entities.Entity;
-import entities.EntityEnemy;
 import entities.EntityPlayer;
 import entities.Item;
 import networking.messages.fromserver.SpawnEntityMessage;
+import networking.messages.fromserver.UpdateMoneyMessage;
 import server.Server;
 import trade.BuyerOffer;
 import trade.Offer;
 import trade.TradeState;
+import util.Timer;
 
 public class World implements Serializable
 {	
@@ -115,7 +116,15 @@ public class World implements Serializable
 		{
 			e.update(delta);
 		}
-					
+		
+		if(!isLocal && Timer.getTickCount() % 100 == 0)
+		{
+			for(EntityPlayer player : players.values())
+			{
+				player.changeGold(10);
+				Server.getConnectionManager().sendTo(Server.getSessionIDByLogin(player.getLogin()), new UpdateMoneyMessage(player.getGold()));
+			}
+		}
 
 //		if(!isLocal && Timer.getTickCount() % 100 == 0)
 //		{

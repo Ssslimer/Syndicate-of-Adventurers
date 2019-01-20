@@ -21,12 +21,16 @@ import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
+import networking.messages.fromclient.trade.TradeEndMessage;
+import networking.messages.fromclient.trade.TradeOfferMessage;
+import networking.messages.fromclient.trade.TradeStartMessage;
 import networking.messages.fromserver.DamageEntityMessage;
 import networking.messages.fromserver.DeathEntityMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
+import networking.messages.fromserver.UpdateMoneyMessage;
 import networking.messages.fromserver.UpdateTradeOfferMessage;
 import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
@@ -34,9 +38,6 @@ import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
-import networking.messages.trade.TradeEndMessage;
-import networking.messages.trade.TradeOfferMessage;
-import networking.messages.trade.TradeStartMessage;
 import world.World;
 
 public class ClientConnection extends Thread
@@ -292,6 +293,12 @@ public class ClientConnection extends Thread
 				EntityPlayer player = (EntityPlayer) MyGame.getGameMap().getEntity(logoutMessage.getPlayerId());
 				MyGame.getGameMap().removePlayer(player);				
 				MyGame.getRenderer().removeEntity(player);
+			break;
+			
+			case UPDATE_MONEY:
+				if(MyGame.getGameMap() == null) break;
+				UpdateMoneyMessage moneyMessage = (UpdateMoneyMessage) callback;
+				MyGame.getPlayer().setGold(moneyMessage.getMoney());
 			break;
 			
 			default:

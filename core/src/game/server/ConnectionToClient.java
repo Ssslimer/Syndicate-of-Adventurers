@@ -19,6 +19,7 @@ public class ConnectionToClient extends Thread
 	private boolean hasLogedIn, isRunning=true;
 	
 	private String login;
+	private long sessionID;
 
 	private final ConnectionManager connectionManager;
 	private final Socket clientSocket;
@@ -28,6 +29,7 @@ public class ConnectionToClient extends Thread
 	{
 		super("ClientConnectionThread");
 		
+		this.sessionID = messageHandler.generateSessionID();
 		this.connectionManager = connectionManager;
 		this.clientSocket = clientSocket;
 		this.messageHandler = messageHandler;
@@ -123,5 +125,20 @@ public class ConnectionToClient extends Thread
 	public boolean isClosed()
 	{
 		return clientSocket.isOutputShutdown();
+	}
+
+	public void setLogin(String login)
+	{
+		this.login = login;
+	}
+	
+	public String getLogin()
+	{
+		return login;
+	}
+
+	public Long getSessionID()
+	{
+		return sessionID;
 	}
 }

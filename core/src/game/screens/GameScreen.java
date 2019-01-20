@@ -45,9 +45,9 @@ public class GameScreen implements Screen, InputProcessor
     private Texture chatTexture;
     
     private Skin skin;
-    private TextField chatText;
+    private TextField moneyText;
     private TextButton chatSendText;
-    private BitmapFont chatFont;
+    private BitmapFont chatFont, moneyFont;
     
     private boolean usingChat, displayingChat;
     
@@ -77,6 +77,7 @@ public class GameScreen implements Screen, InputProcessor
     	CHAT_HEIGHT = ConfigConstants.HEIGHT/2;
     	
     	chatFont = new BitmapFont();
+    	moneyFont = new BitmapFont();
     	
     	skin = new Skin(Gdx.files.internal("uiskin.json"));
     	setupChatTextField();
@@ -110,6 +111,7 @@ public class GameScreen implements Screen, InputProcessor
       
         MyGame.getRenderer().render();
         if(displayingChat) renderChat();
+        renderHUD();
         
         if(isTrading) tradeRenderer.render();
                
@@ -146,7 +148,7 @@ public class GameScreen implements Screen, InputProcessor
 			{
 				String str = newChatMessages.get(index);
 				chatFont.setColor(Color.GOLD);
-				chatFont.draw(spriteBatch, str, chatText.getX(), chatText.getY() + 80f + i*20f);
+				chatFont.draw(spriteBatch, str, moneyText.getX(), moneyText.getY() + 80f + i*20f);
 			}
 		}		
 		spriteBatch.end();				
@@ -172,6 +174,20 @@ public class GameScreen implements Screen, InputProcessor
 	{
 		spriteBatch.dispose();
 		MyGame.getRenderer().clear();
+	}
+	
+	private void renderHUD()
+	{
+		spriteBatch.begin();		
+
+		String str = String.valueOf(MyGame.getPlayer().getGold()) + "$";
+		moneyFont.setColor(Color.GOLD);
+			
+		float posX = ConfigConstants.WIDTH-50;
+		float posY = ConfigConstants.HEIGHT;
+		moneyFont.draw(spriteBatch, str, posX, posY);
+		
+		spriteBatch.end();	
 	}
 	
 	private void setupRespawnDialog()
@@ -246,10 +262,10 @@ public class GameScreen implements Screen, InputProcessor
 		{
 			if(keycode == Input.Keys.ENTER)
 			{
-				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0 && chatText.getText().compareTo("") != 0)
+				if(moneyText.getText() != null && moneyText.getText().compareTo("Type message...") != 0 && moneyText.getText().compareTo("") != 0)
 				{
-					MyGame.getClient().sentChatMessage(chatText.getText());
-					chatText.setText("");
+					MyGame.getClient().sentChatMessage(moneyText.getText());
+					moneyText.setText("");
 				}
 			}
 		}
@@ -367,40 +383,40 @@ public class GameScreen implements Screen, InputProcessor
 		style.fontColor = Color.BLACK;
 		style.font = new BitmapFont();
 		
-		chatText = new TextField("", style);
-		chatText.setText("Type message...");
+		moneyText = new TextField("", style);
+		moneyText.setText("Type message...");
 		
-		chatText.setWidth((CHAT_WIDTH/10f)*8f);
-		chatText.setHeight(CHAT_WIDTH / 10f);
+		moneyText.setWidth((CHAT_WIDTH/10f)*8f);
+		moneyText.setHeight(CHAT_WIDTH / 10f);
 		
 		float posX = ConfigConstants.WIDTH - CHAT_WIDTH + 10f;
 		float posY = 10f;
 		
-		chatText.setPosition(posX, posY);
+		moneyText.setPosition(posX, posY);
 		
 		Pixmap background = new Pixmap((int)posX, (int)posY, Pixmap.Format.RGB888);
 		background.setColor(Color.GRAY);
 		background.fill();
 		
-		chatText.getStyle().background = new Image(new Texture(background)).getDrawable();
+		moneyText.getStyle().background = new Image(new Texture(background)).getDrawable();
 
-		chatText.addListener(new ClickListener()
+		moneyText.addListener(new ClickListener()
 		{
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 		    {
-				chatText.setText("");
+				moneyText.setText("");
 		    }
 		});
 		
-		stage.addActor(chatText);
+		stage.addActor(moneyText);
 	}
 	
 	private void setupChatSendTextButton() 
 	{
 		chatSendText = new TextButton("Send", skin);
 		chatSendText.setWidth(CHAT_WIDTH/8f);
-		chatSendText.setHeight(chatText.getHeight());
+		chatSendText.setHeight(moneyText.getHeight());
 
 		float posX = ConfigConstants.WIDTH - chatSendText.getWidth();	
 		float posY = 10f;
@@ -412,10 +428,10 @@ public class GameScreen implements Screen, InputProcessor
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(chatText.getText() != null && chatText.getText().compareTo("Type message...") != 0 && chatText.getText().compareTo("") != 0)
+				if(moneyText.getText() != null && moneyText.getText().compareTo("Type message...") != 0 && moneyText.getText().compareTo("") != 0)
 				{
-					MyGame.getClient().sentChatMessage(chatText.getText());
-					chatText.setText("");
+					MyGame.getClient().sentChatMessage(moneyText.getText());
+					moneyText.setText("");
 				}
 			}
 		});

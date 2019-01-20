@@ -157,16 +157,6 @@ public class EntityPlayer extends Entity implements Damageable
 			}
 		}
 	}
-	
-	public void addGold(int goldAmount)
-	{
-		gold += goldAmount;
-	}
-	
-	public void removeGold(int goldAmount)
-	{
-		gold -= goldAmount;
-	}
 
 	public boolean canAfford(int expense)
 	{
@@ -230,7 +220,7 @@ public class EntityPlayer extends Entity implements Damageable
 
 	public Offer getSellingOffer()
 	{
-		return this.sellingOffer;
+		return sellingOffer;
 	}
 	
 	public void setSellingOffer(Offer offer)
@@ -240,7 +230,7 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	public BuyerOffer getBuyingOffer()
 	{
-		return this.buyingOffer;
+		return buyingOffer;
 	}
 	
 	public void setBuyingOffer(BuyerOffer offer)
@@ -251,5 +241,20 @@ public class EntityPlayer extends Entity implements Damageable
 	public void setDead()
 	{
 		isAlive = false;
+	}
+
+	public void setGold(int money)
+	{
+		gold = money;
+	}
+
+	public void changeGold(int change)
+	{
+		gold += change;
+	}
+
+	public int getGold()
+	{
+		return gold;
 	}
 }

@@ -16,6 +16,10 @@ import networking.messages.Message;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
+import networking.messages.fromclient.trade.TradeDecisionMessage;
+import networking.messages.fromclient.trade.TradeEndMessage;
+import networking.messages.fromclient.trade.TradeOfferMessage;
+import networking.messages.fromclient.trade.TradeStartMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateTradeOfferMessage;
@@ -24,10 +28,6 @@ import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
-import networking.messages.trade.TradeDecisionMessage;
-import networking.messages.trade.TradeEndMessage;
-import networking.messages.trade.TradeOfferMessage;
-import networking.messages.trade.TradeStartMessage;
 import trade.Offer;
 import trade.TradeState;
 
@@ -160,11 +160,10 @@ public class MessageHandler extends Thread
 		{
 			server.getAuthManager().registerPlayerIfNotRegistered(login, hashedPassword);
 			
-			long sessionID = generateSessionID();
-			Server.addClient(sessionID, login);
+			Server.addClient(connectionWithClient.getSessionID(), login);
 			
 			connectionWithClient.login();
-			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, sessionID));		
+			connectionWithClient.sendMessageToClient(new AuthRegisterMessage(MessageStatus.OK, connectionWithClient.getSessionID()));		
 			
 			Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 2), login));
 			connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));
@@ -186,10 +185,10 @@ public class MessageHandler extends Thread
 		{
 			if(server.getAuthManager().checkPassword(login, password))
 			{
-				long sessionID = generateSessionID();
-				Server.addClient(sessionID, login);
+				Server.addClient(connectionWithClient.getSessionID(), login);
+				connectionWithClient.setLogin(login);
 				connectionWithClient.login();
-				connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.OK, sessionID));
+				connectionWithClient.sendMessageToClient(new AuthLoginMessage(MessageStatus.OK, connectionWithClient.getSessionID()));
 
 				Server.getMap().spawnEntity(new EntityPlayer(new Vector3(0, 0, 2), login));
 				connectionWithClient.sendMessageToClient(new SendMapMessage(Server.getMap()));				
@@ -246,7 +245,7 @@ public class MessageHandler extends Thread
 	private void processTradeStart(ConnectionToClient connectionWithClient, TradeStartMessage message)
 	{	
 		String login = Server.getLogin(message.getSessionId());
-		EntityPlayer player = (EntityPlayer)Server.getMap().getPlayer(login);
+		EntityPlayer player = Server.getMap().getPlayer(login);
 		player.setSellingOffer(new Offer(message.getLogin(), message.getItem()));
 		player.setTradeState(TradeState.SELLING);
 		
@@ -263,7 +262,7 @@ public class MessageHandler extends Thread
 		System.out.println("SELLER: " + sellerLogin);
 		System.out.println("BUYER: " + buyerLogin);
 		
-		EntityPlayer player = (EntityPlayer)Server.getMap().getPlayer(sellerLogin);
+		EntityPlayer player = Server.getMap().getPlayer(sellerLogin);
 		player.setHasOffer(true);
 		
 		Server.getConnectionManager().sendToAll(new UpdateTradeOfferMessage(sellerLogin, buyerLogin, buyerItem, sellerItem));
@@ -285,11 +284,11 @@ public class MessageHandler extends Thread
 			
 			sellerEntity.removeItem(sellingItem);
 			if(offeringItem != null) sellerEntity.addItem(offeringItem);
-			if(offeringGold > 0) sellerEntity.addGold(offeringGold);
+			if(offeringGold > 0) sellerEntity.changeGold(offeringGold);
 			
 			buyerEntity.addItem(sellingItem);
 			if(offeringItem != null) buyerEntity.removeItem(offeringItem);
-			if(offeringGold > 0) buyerEntity.removeGold(offeringGold);
+			if(offeringGold > 0) buyerEntity.changeGold(-offeringGold);
 			
 			/** TODO send to all this exchage */
 		}
@@ -300,7 +299,7 @@ public class MessageHandler extends Thread
 		
 	}
 	
-	private long generateSessionID() 
+	long generateSessionID() 
 	{
 		long sessionID;
 		
