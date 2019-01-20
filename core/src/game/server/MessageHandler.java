@@ -272,6 +272,7 @@ public class MessageHandler extends Thread
 	
 	private void processTradeDecision(ConnectionToClient connectionWithClient, TradeDecisionMessage message)
 	{
+		System.out.println("HANDLER OFFER: " + message.getOfferAccepted());
 		if(message.getOfferAccepted())
 		{
 			Item sellingItem = message.getSellerItem();
