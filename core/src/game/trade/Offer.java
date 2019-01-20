@@ -4,63 +4,22 @@ import entities.Item;
 
 public class Offer 
 {
-	private long sellerId;
-	private long buyerId;
+	protected long sessionId;
+	protected Item item;
 	
-	private Item offeredItem;
-	private int offeredGold;
-	
-	private Item sellingItem;
-	
-	public Offer(long sellerId, long buyerId, Item sellingItem, int offeredGold)
+	public Offer(long sessionId, Item item)
 	{
-		this.sellerId = sellerId;
-		this.buyerId = buyerId;
-		this.offeredGold = offeredGold;
-		this.offeredItem = null;
-		this.sellingItem = sellingItem;
-	}
-
-	public Offer(long sellerId, long buyerId, Item sellingItem, Item item)
-	{
-		this.sellerId = sellerId;
-		this.buyerId = buyerId;
-		this.offeredGold = 0;
-		this.offeredItem = item;
-		this.sellingItem = sellingItem;
+		this.sessionId = sessionId;
+		this.item = item;
 	}
 	
-	public Offer(long sellerId, long buyerId, Item sellingItem, int offeredGold, Item item)
+	public long getTraderId()
 	{
-		this.sellerId = sellerId;
-		this.buyerId = buyerId;
-		this.offeredGold = offeredGold;
-		this.offeredItem = item;
-		this.sellingItem = sellingItem;
+		return sessionId;
 	}
 	
-	public long getSellerId() 
+	public Item getTraderItem()
 	{
-		return sellerId;
-	}
-
-	public long getBuyerId() 
-	{
-		return buyerId;
-	}
-
-	public Item getOfferedItem() 
-	{
-		return offeredItem;
-	}
-
-	public int getOfferedGold() 
-	{
-		return offeredGold;
-	}
-	
-	public Item getSellingItem()
-	{
-		return this.sellingItem;
+		return this.item;
 	}
 }

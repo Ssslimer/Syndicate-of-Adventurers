@@ -21,7 +21,7 @@ import client.MyGame;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemButton;
-import trade.Offer;
+import trade.Deal;
 import trade.TradeState;
 import util.ConfigConstants;
 

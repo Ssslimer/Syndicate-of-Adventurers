@@ -241,12 +241,12 @@ public class MessageHandler extends Thread
 	{
 		if(message.getOfferAccepted())
 		{
-			Item sellingItem = message.getOffer().getSellingItem();
-			Item offeringItem = message.getOffer().getOfferedItem();
-			int offeringGold = message.getOffer().getOfferedGold();
+			Item sellingItem = message.getDeal().getSellerOffer().getTraderItem();
+			Item offeringItem = message.getDeal().getBuyerOffer().getTraderItem();
+			int offeringGold = message.getDeal().getBuyerOffer().getGoldAmount();
 			
 			long sellerId = message.getSessionId();
-			long buyerId = message.getOffer().getBuyerId();
+			long buyerId = message.getDeal().getBuyerOffer().getTraderId();
 			
 			EntityPlayer sellerEntity = (EntityPlayer)Server.getMap().getEntity(sellerId);
 			EntityPlayer buyerEntity = (EntityPlayer)Server.getMap().getEntity(buyerId);
