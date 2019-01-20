@@ -280,6 +280,10 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
+		if(MyGame.getPlayer().getHasOffer())
+		{
+			tradeDecisionStage.touchDown(screenX, screenY, pointer, button);
+		}
 		if(showRespawnDialog)
 		{
 			stage.touchDown(screenX, screenY, pointer, button);
@@ -315,6 +319,10 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{ 
+		if(MyGame.getPlayer().getHasOffer())
+		{
+			tradeDecisionStage.touchUp(screenX, screenY, pointer, button);
+		}
 		if(showRespawnDialog)
 		{
 			stage.touchUp(screenX, screenY, pointer, button);
