@@ -7,22 +7,22 @@ public class Deal
 	private Offer sellerOffer;
 	private BuyerOffer buyerOffer;
 	
-	public Deal(long sellerId, long buyerId, Item sellingItem, int offeredGold)
+	public Deal(String sellerLogin, String buyerLogin, Item sellingItem, int offeredGold)
 	{
-		sellerOffer = new Offer(sellerId, sellingItem);
-		buyerOffer = new BuyerOffer(buyerId, offeredGold);
+		sellerOffer = new Offer(sellerLogin, sellingItem);
+		buyerOffer = new BuyerOffer(buyerLogin, offeredGold);
 	}
 
-	public Deal(long sellerId, long buyerId, Item sellingItem, Item item)
+	public Deal(String sellerLogin, String buyerLogin, Item sellingItem, Item item)
 	{
-		sellerOffer = new Offer(sellerId, sellingItem);
-		buyerOffer = new BuyerOffer(buyerId, item);
+		sellerOffer = new Offer(sellerLogin, sellingItem);
+		buyerOffer = new BuyerOffer(buyerLogin, item);
 	}
 	
-	public Deal(long sellerId, long buyerId, Item sellingItem, int offeredGold, Item item)
+	public Deal(String sellerLogin, String buyerLogin, Item sellingItem, int offeredGold, Item item)
 	{
-		sellerOffer = new Offer(sellerId, sellingItem);
-		buyerOffer = new BuyerOffer(buyerId, item, offeredGold);
+		sellerOffer = new Offer(sellerLogin, sellingItem);
+		buyerOffer = new BuyerOffer(buyerLogin, item, offeredGold);
 	}
 	
 	public Offer getSellerOffer()

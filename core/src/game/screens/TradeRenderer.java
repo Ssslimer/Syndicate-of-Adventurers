@@ -158,7 +158,7 @@ public class TradeRenderer
 			{
 				if(trader.getTradeState() == TradeState.STARTING_SELLING && tradingItem != null)
 				{
-					trader.setTradeState(TradeState.SELLING); 
+					//trader.setTradeState(TradeState.SELLING); 
 					MyGame.getClient().sentTradeStartMessage(tradingItem);
 				}
 			}

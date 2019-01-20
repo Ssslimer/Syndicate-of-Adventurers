@@ -101,37 +101,37 @@ public class ClientConnection extends Thread
 	
 	public void sentTradeStartMessage(Item item)
 	{
-		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, item));
+		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, login, item));
 	}
 	
 	public void sentTradeOfferMessage(long sellerId, int goldAmount, Item sellingItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, goldAmount, sellingItem));
+		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, MyGame.getGameMap().get ,login, goldAmount, sellingItem));
 	}
 	
 	public void sentTradeOfferMessage(long sellerId, Item item, Item sellingItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, item, sellingItem));
+		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, item, sellingItem));
 	}
 	
 	public void sentTradeOfferMessage(long sellerId, Item item, int goldAmount, Item sellingItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, goldAmount, item, sellingItem));
+		//if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerId, goldAmount, item, sellingItem));
 	}
 	
 	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount)
 	{
-		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount));
+		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount));
 	}
 	
 	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, Item item)
 	{
-		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, item));
+		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, item));
 	}
 	
 	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount, Item item)
 	{
-		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount, item));
+		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount, item));
 	}
 	
 	public void sentEndTradeMessage()
@@ -247,6 +247,8 @@ public class ClientConnection extends Thread
 			break;
 			
 			case TRADE_START: // we get info that other player started trade
+				TradeStartMessage tradeStartMessage = (TradeStartMessage) serverCallback;
+				MyGame.getGameMap().setEntityTradeStart(tradeStartMessage.getLogin(), tradeStartMessage.getItem());
 			break;
 			
 			case TRADE_OFFER: // we get info that other player send us an offer for our trade

@@ -10,22 +10,22 @@ public class TradeOfferMessage extends ClientMessage
 	private static final long serialVersionUID = -4513990275032853847L;
 	private Deal deal;
 	
-	public TradeOfferMessage(long sessionId, long sellerId, int goldAmount, Item sellingItem) 
+	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, int goldAmount, Item sellingItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);	
-		deal = new Deal(sessionId, sellerId, sellingItem, goldAmount);
+		deal = new Deal(sellerLogin, buyerLogin, sellingItem, goldAmount);
 	}
 	
-	public TradeOfferMessage(long sessionId, long sellerId, Item item, Item sellingItem) 
+	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, Item item, Item sellingItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);
-		deal = new Deal(sessionId, sellerId, sellingItem, item);
+		deal = new Deal(sellerLogin, buyerLogin, sellingItem, item);
 	}
 	
-	public TradeOfferMessage(long sessionId, long sellerId, int goldAmount, Item item, Item sellingItem) 
+	public TradeOfferMessage(long sessionId, String sellerLogin, String buyerLogin, int goldAmount, Item item, Item sellingItem) 
 	{
 		super(MessageType.TRADE_OFFER, sessionId);
-		deal = new Deal(sessionId, sellerId, sellingItem, goldAmount, item);
+		deal = new Deal(sellerLogin, buyerLogin, sellingItem, goldAmount, item);
 	}
 	
 	public Deal getDeal()

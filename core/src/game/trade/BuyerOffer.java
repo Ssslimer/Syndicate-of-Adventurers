@@ -6,21 +6,21 @@ public class BuyerOffer extends Offer
 {
 	private int goldAmount;
 	
-	public BuyerOffer(long sessionId, int goldAmount) 
+	public BuyerOffer(String login, int goldAmount) 
 	{
-		super(sessionId, null);
+		super(login, null);
 		this.goldAmount = 0;
 	}
 	
-	public BuyerOffer(long sessionId, Item item) 
+	public BuyerOffer(String login, Item item) 
 	{
-		super(sessionId, item);
+		super(login, item);
 		this.goldAmount = 0;
 	}
 	
-	public BuyerOffer(long sessionId, Item item, int goldAmount) 
+	public BuyerOffer(String login, Item item, int goldAmount) 
 	{
-		super(sessionId, item);
+		super(login, item);
 		this.goldAmount = goldAmount;
 	}
 	

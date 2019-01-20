@@ -13,33 +13,33 @@ public class TradeDecisionMessage extends ClientMessage
 	private Deal deal;
 	
 	
-	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, int goldAmount) 
+	public TradeDecisionMessage(long sessionId, String sellerLogin, String buyerLogin, boolean offerAccepted, Item sellingItem, int goldAmount) 
 	{
 		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
-		this.deal = new Deal(sessionId, otherTraderId, sellingItem, goldAmount);
+		this.deal = new Deal(sellerLogin, buyerLogin, sellingItem, goldAmount);
 	}
 	
-	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, Item item) 
+	public TradeDecisionMessage(long sessionId, String sellerLogin, String buyerLogin, boolean offerAccepted, Item sellingItem, Item item) 
 	{
 		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
-		this.deal = new Deal(sessionId, otherTraderId, sellingItem, item);
+		this.deal = new Deal(sellerLogin, buyerLogin, sellingItem, item);
 	}
 	
-	public TradeDecisionMessage(long sessionId, long otherTraderId, boolean offerAccepted, Item sellingItem, int goldAmount, Item item) 
+	public TradeDecisionMessage(long sessionId, String sellerLogin, String buyerLogin, boolean offerAccepted, Item sellingItem, int goldAmount, Item item) 
 	{
 		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
-		this.deal = new Deal(sessionId, otherTraderId, sellingItem, goldAmount, item);
+		this.deal = new Deal(sellerLogin, buyerLogin, sellingItem, goldAmount, item);
 	}
 	
-	public TradeDecisionMessage(boolean offerAccepted, Deal offer) 
+	public TradeDecisionMessage(long sessionId, boolean offerAccepted, Deal offer) 
 	{
-		super(MessageType.TRADE_DECISION, offer.getSellerOffer().getTraderId());
+		super(MessageType.TRADE_DECISION, sessionId);
 		
 		this.offerAccepted = offerAccepted;
 		this.deal = offer;

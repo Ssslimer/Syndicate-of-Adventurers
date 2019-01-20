@@ -4,18 +4,18 @@ import entities.Item;
 
 public class Offer 
 {
-	protected long sessionId;
+	protected String login;
 	protected Item item;
 	
-	public Offer(long sessionId, Item item)
+	public Offer(String login, Item item)
 	{
-		this.sessionId = sessionId;
+		this.login= login;
 		this.item = item;
 	}
 	
-	public long getTraderId()
+	public String getLogin()
 	{
-		return sessionId;
+		return login;
 	}
 	
 	public Item getTraderItem()
