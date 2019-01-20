@@ -9,6 +9,8 @@ import java.net.SocketException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.badlogic.gdx.audio.Sound;
+
 import entities.Item;
 import networking.MessageStatus;
 import networking.MoveDirection;
@@ -19,6 +21,7 @@ import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
 import networking.messages.fromserver.AuthLoginMessage;
 import networking.messages.fromserver.AuthRegisterMessage;
+import networking.messages.fromserver.DamageEntityMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
@@ -213,7 +216,7 @@ public class ClientConnection extends Thread
 
 	private void handleCallback(Message serverCallback)
 	{	
-		System.out.println(serverCallback);
+		//System.out.println(serverCallback);
 		
 		switch(serverCallback.getMessageType())
 		{
@@ -247,6 +250,13 @@ public class ClientConnection extends Thread
 			break;
 			
 			case TRADE_OFFER: // we get info that other player send us an offer for our trade
+			break;
+			
+			case DAMAGE_ENTITY:
+				DamageEntityMessage damageEntity = (DamageEntityMessage) serverCallback;
+				/** TODO add some graphical effect*/
+				Sound sound = MyGame.getResources().getSound("CLANG");
+				sound.play(1f);
 			break;
 			
 			default:

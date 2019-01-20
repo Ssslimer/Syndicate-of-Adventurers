@@ -42,9 +42,7 @@ public class JoinServerScreen implements Screen
 	
 	private final Texture background;
 	private final SpriteBatch spriteBatch = new SpriteBatch();
-	
-	private Sound CLANG;
-	
+
 	public JoinServerScreen(MyGame game, String ip, int port)
 	{	
 		this.game = game;
@@ -54,8 +52,7 @@ public class JoinServerScreen implements Screen
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		background = MyGame.getResources().getTexture("GUI_BACKGROUND");
-		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
+		background = MyGame.getResources().getTexture("GUI_BACKGROUND");		
 		
 		setupPlayerNameTextField();
 		setupPasswordTextField();
@@ -194,6 +191,7 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				Sound CLANG = MyGame.getResources().getSound("CLANG");
 				CLANG.play(1.0f);
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
@@ -248,6 +246,7 @@ public class JoinServerScreen implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				Sound CLANG = MyGame.getResources().getSound("CLANG");
 				CLANG.play(1.0f);
 				String login = playerNameField.getText();
 				String password = passwordField.getText();
@@ -286,7 +285,8 @@ public class JoinServerScreen implements Screen
 			@Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
-				CLANG .play(1.0f);
+				Sound CLANG = MyGame.getResources().getSound("CLANG");
+				CLANG.play(1.0f);
 		    	game.setScreen(new MainMenuScreen(game));
 		    	dispose();
 		    }

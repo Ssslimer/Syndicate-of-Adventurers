@@ -62,8 +62,6 @@ public class GameScreen implements Screen, InputProcessor
     
     private TradeRenderer tradeRenderer;
     
-    private Sound CLANG;
-
     private float timer; // for ping
 	
 	public GameScreen(MyGame game)
@@ -89,8 +87,6 @@ public class GameScreen implements Screen, InputProcessor
     	setupChatTextField();
     	setupChatSendTextButton();
     	
-    	CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
-				
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -268,8 +264,6 @@ public class GameScreen implements Screen, InputProcessor
 		else
 		{
 			usingChat = false;
-			
-			CLANG.play(1.0f);
 			MyGame.getClient().attack();	
 		}
 		

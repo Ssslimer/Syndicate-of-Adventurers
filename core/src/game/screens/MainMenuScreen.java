@@ -1,8 +1,5 @@
 package screens;
 
-import java.nio.file.Paths;
-
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -40,8 +37,6 @@ public class MainMenuScreen implements Screen
 	private final Texture background;
 	private final SpriteBatch spriteBatch = new SpriteBatch();
 		
-	private Sound CLANG;
-	
 	public MainMenuScreen(MyGame game)
 	{
 		this.game = game;
@@ -49,8 +44,7 @@ public class MainMenuScreen implements Screen
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		background = MyGame.getResources().getTexture("GUI_BACKGROUND");
-		CLANG = Gdx.audio.newSound(Gdx.files.getFileHandle(Paths.get("assets", "sounds", "clangberserk.wav").toString(), FileType.Internal));
+		background = MyGame.getResources().getTexture("GUI_BACKGROUND");		
 		
 		setupServerIPField();
 		setupServerPortField();
@@ -172,6 +166,7 @@ public class MainMenuScreen implements Screen
 		    @Override
 		    public void clicked(InputEvent event, float x, float y)
 		    {
+		    	Sound CLANG = MyGame.getResources().getSound("CLANG");
 		    	CLANG.play(1.0f);
 		    	String ip = serverIPField.getText();
 		    	if(!ServerAddressValidator.isIPAddressCorrect(ip))

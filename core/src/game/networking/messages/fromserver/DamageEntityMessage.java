@@ -5,7 +5,7 @@ import entities.Entity;
 import networking.MessageType;
 import networking.messages.Message;
 
-public class EntityHitMessage extends Message
+public class DamageEntityMessage extends Message
 {
 	private static final long serialVersionUID = -175246173202315055L;
 
@@ -13,7 +13,7 @@ public class EntityHitMessage extends Message
 	private final int damage;
 	private final DamageSource source;
 	
-	public EntityHitMessage(Entity entity, int damage, DamageSource source)
+	public DamageEntityMessage(Entity entity, int damage, DamageSource source)
 	{
 		super(MessageType.DAMAGE_ENTITY);
 		this.entity = entity;

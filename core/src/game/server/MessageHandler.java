@@ -87,7 +87,7 @@ public class MessageHandler extends Thread
 		ConnectionToClient connectionWithClient = task.getMessageOwner();			
 		Message message = task.getMessage();
 		
-		System.out.println("NEW MESSAGE: " + message.getMessageType().toString()); /** TODO remove in the future */
+		//System.out.println("NEW MESSAGE: " + message.getMessageType().toString()); /** TODO remove in the future */
 		
 		switch(message.getMessageType())
 		{			

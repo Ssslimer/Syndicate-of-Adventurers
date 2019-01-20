@@ -6,7 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector3;
 
 import networking.MoveDirection;
-import networking.messages.fromserver.EntityHitMessage;
+import networking.messages.fromserver.DamageEntityMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import server.Server;
 import trade.TradeState;
@@ -120,7 +120,7 @@ public class EntityPlayer extends Entity implements Damageable
 		damage -= defencePower;		
 		if(damage > 0) health -= damage;
 		
-		Server.getConnectionManager().sendToAll(new EntityHitMessage(this, damage, source));
+		Server.getConnectionManager().sendToAll(new DamageEntityMessage(this, damage, source));
 	}
 	
 	public void setMoveDirection(MoveDirection direction, boolean ifToStop)

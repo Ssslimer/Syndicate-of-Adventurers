@@ -5,8 +5,11 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -23,10 +26,12 @@ public class Resources
 	
 	private static final Map<String, AssetDescriptor<Texture>> textures = new HashMap<>();
 	private static final Map<String, Model> models = new HashMap<>();
+	private static final Map<String, Sound> sounds = new HashMap<>();
 	
 	public void loadAll()
 	{
 		addTexture("GUI_BACKGROUND", Paths.get("assets", "textures", "gui", "menu.png"));
+		addSound("CLANG", Paths.get("assets", "sounds", "clangberserk.wav"));		
 		
 		loadTerrainTextures();
 		assetManager.finishLoading();
@@ -70,6 +75,16 @@ public class Resources
 		AssetDescriptor<Texture> ad = new AssetDescriptor<>(path.toString(), Texture.class);
 		textures.put(name, ad);
 		assetManager.load(ad);
+	}
+	
+	private void addSound(String name, Path path)
+	{
+		sounds.put(name, Gdx.audio.newSound(Gdx.files.getFileHandle(path.toString(), FileType.Internal)));
+	}
+	
+	public Sound getSound(String name)
+	{
+		return sounds.get(name);
 	}
 	
 	private void loadPlayerTextures()
