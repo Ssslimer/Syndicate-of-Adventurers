@@ -1,7 +1,5 @@
 package screens;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,12 +20,9 @@ import trade.TradeState;
 
 public class TradeRenderer 
 {
-	private final float TRADE_SCREEN_WIDTH;
-	private final float TRADE_SCREEN_HEIGHT;
+	private final float TRADE_SCREEN_WIDTH, TRADE_SCREEN_HEIGHT;
 	
-	private Stage sellingStage;
-	private Stage offerStage;
-	private Stage decisionStage;
+	private Stage sellingStage, offerStage, decisionStage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
 	
@@ -37,12 +32,7 @@ public class TradeRenderer
 	private Skin skin;
 	private BitmapFont tradeFont;
 	
-	private TextButton startTradeBtn;
-	private TextButton offerBtn;
-	private TextButton endTradeBtn;
-	private TextButton endOfferBtn;
-
-	private TextButton sellItemBtn;
+	private TextButton startTradeBtn, offerBtn, endTradeBtn, endOfferBtn, sellItemBtn;
 	private Item tradingItem;
 	
 	private TextButton toBuyItemBtn; //btn with item from seller
@@ -141,7 +131,7 @@ public class TradeRenderer
 		if(isDialogNotSetup)
 		{
 			setupTradeOffer();
-			//isDialogNotSetup = false;
+			isDialogNotSetup = false;
 		}
 		
 		offerDialog.show(decisionStage);
@@ -176,9 +166,7 @@ public class TradeRenderer
 					break;
 				}
 			}
-		};
-		
-		
+		};	
 		
 		offerDialog.button("Accept", Decision.ACCEPT);
 		offerDialog.button("Decline", Decision.DECLINE);
@@ -380,10 +368,8 @@ public class TradeRenderer
 	{
 		clearStageFromItemButtons();
 			
-		List<Item> items = trader.getItems();	
-		
 		int index = 1;
-		for(Item item : items)
+		for(Item item : trader.getItems())
 		{
 			ItemButton button = new ItemButton(skin, item);
 			
@@ -413,10 +399,8 @@ public class TradeRenderer
 	{
 		clearStageFromOfferItemButtons();
 		
-		List<Item> items = trader.getItems();	
-		
 		int index = 1;
-		for(Item item : items)
+		for(Item item : trader.getItems())
 		{
 			ItemButton button = new ItemButton(skin, item);
 			
@@ -446,10 +430,7 @@ public class TradeRenderer
 	{
 		for(Actor actor : offerStage.getActors())
 		{
-			if(actor instanceof ItemButton)
-			{
-				actor.remove();
-			}
+			if(actor instanceof ItemButton) actor.remove();
 		}
 	}
 
@@ -457,10 +438,7 @@ public class TradeRenderer
 	{
 		for(Actor actor : sellingStage.getActors())
 		{
-			if(actor instanceof ItemButton)
-			{
-				actor.remove();
-			}
+			if(actor instanceof ItemButton) actor.remove();
 		}
 	}
 }

@@ -46,7 +46,6 @@ public class GameScreen implements Screen, InputProcessor
     
     private Skin skin;
     private TextField moneyText;
-    private TextButton chatSendText;
     private BitmapFont chatFont, moneyFont;
     
     private boolean usingChat, displayingChat;
@@ -418,7 +417,7 @@ public class GameScreen implements Screen, InputProcessor
 	
 	private void setupChatSendTextButton() 
 	{
-		chatSendText = new TextButton("Send", skin);
+		TextButton chatSendText = new TextButton("Send", skin);
 		chatSendText.setWidth(CHAT_WIDTH/8f);
 		chatSendText.setHeight(moneyText.getHeight());
 
