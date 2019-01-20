@@ -40,7 +40,7 @@ import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
-import networking.messages.trade.TradeDecisionMessage;
+import networking.messages.fromclient.trade.TradeDecisionMessage;
 //github.com/Ssslimer/Syndicate-of-Adventurers.git
 import world.World;
 
