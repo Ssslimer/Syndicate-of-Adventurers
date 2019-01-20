@@ -202,13 +202,10 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				System.out.println("CLICKED FUUU");
 				if(trader.getTradeState() == TradeState.BUYING && seller.getSellingOffer().getTraderItem() != null && buyerItem != null)
 				{
-					System.out.println("CLICKED FUUU IF 1111111111");
 					if(hasFoundSomeoneToTrade)
 					{
-						System.out.println("CLICKED FUUU IF 22222222222");
 						String login = seller.getLogin();
 						Item sellerItem = seller.getSellingOffer().getTraderItem();
 						MyGame.getClient().sentTradeOfferMessage(trader.getLogin(), login, buyerItem, sellerItem);
