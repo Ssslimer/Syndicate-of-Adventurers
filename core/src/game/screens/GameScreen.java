@@ -194,7 +194,7 @@ public class GameScreen implements Screen, InputProcessor
 				
 				case Input.Keys.T: 
 					if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
-					MyGame.getPlayer().setTrateState(TradeState.SELLING);
+					MyGame.getPlayer().setTradeState(TradeState.STARTING_SELLING);
 					isTrading = true;
 				break;
 				
@@ -206,7 +206,7 @@ public class GameScreen implements Screen, InputProcessor
 						if(seller != null)
 						{
 							MyGame.getPlayer().setTradingWithId(seller.getId());
-							MyGame.getPlayer().setTrateState(TradeState.BUYING);
+							MyGame.getPlayer().setTradeState(TradeState.BUYING);
 							isTrading = true;
 						}
 					

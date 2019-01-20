@@ -21,6 +21,7 @@ import client.MyGame;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemButton;
+import trade.Offer;
 import trade.TradeState;
 import util.ConfigConstants;
 
@@ -47,6 +48,11 @@ public class TradeRenderer
 
 	private TextButton sellItemBtn;
 	private Item tradingItem;
+	
+	private Item sellerItem;
+	private long sellerId;
+	
+	private Item buyerItem;
 	
 	private EntityPlayer trader;
 	
@@ -82,7 +88,7 @@ public class TradeRenderer
 	{
 		if(trader.getTradeState() != TradeState.NOT_TRADING)
 		{
-			if(trader.getTradeState() == TradeState.SELLING) renderSelling();
+			if(trader.getTradeState() == TradeState.SELLING || trader.getTradeState() == TradeState.STARTING_SELLING) renderSelling();
 			else if(trader.getTradeState() == TradeState.BUYING) renderBuying();	
 		}
 		
@@ -154,9 +160,10 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.SELLING)
+				if(trader.getTradeState() == TradeState.STARTING_SELLING && tradingItem != null)
 				{
-					/** TODO send start trade message*/
+					trader.setTradeState(TradeState.SELLING); 
+					MyGame.getClient().sentTradeStartMessage(tradingItem);
 				}
 			}
 		});
@@ -180,9 +187,9 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.BUYING)
+				if(trader.getTradeState() == TradeState.BUYING && sellerItem != null && buyerItem != null && sellerId != -1)
 				{
-					//check for correctness and send offer message
+					MyGame.getClient().sentTradeOfferMessage(sellerId, buyerItem, sellerItem);
 				}
 			}
 		});
@@ -264,7 +271,7 @@ public class TradeRenderer
 					
 				}
 				GameScreen.isTrading = false;
-				trader.setTrateState(TradeState.NOT_TRADING);
+				trader.setTradeState(TradeState.NOT_TRADING);
 			}
 		});
 		
@@ -288,7 +295,7 @@ public class TradeRenderer
 			public void clicked(InputEvent event, float x, float y)
 			{
 				GameScreen.isTrading = false;
-				trader.setTrateState(TradeState.NOT_TRADING);
+				trader.setTradeState(TradeState.NOT_TRADING);
 			}
 		});
 		

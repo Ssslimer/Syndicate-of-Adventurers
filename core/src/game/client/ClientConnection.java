@@ -26,6 +26,7 @@ import networking.messages.fromserver.UpdateEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.trade.TradeDecisionMessage;
+import networking.messages.trade.TradeEndMessage;
 import networking.messages.trade.TradeOfferMessage;
 import networking.messages.trade.TradeStartMessage;
 import world.World;
@@ -128,6 +129,11 @@ public class ClientConnection extends Thread
 	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount, Item item)
 	{
 		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount, item));
+	}
+	
+	public void sentEndTradeMessage()
+	{
+		if(isLogedIn) sender.addMessage(new TradeEndMessage(sessionId));
 	}
 	
 	public MessageStatus register(String login, String password)
