@@ -43,6 +43,11 @@ public class Item implements Serializable
 		return type;
 	}
 	
+	public String getName()
+	{
+		return type.toString() + "(" + attack + "," + defence + "," + HPBonus + ")";
+	}
+	
 	@Override
 	public String toString()
 	{		

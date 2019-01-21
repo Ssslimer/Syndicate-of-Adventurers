@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -147,6 +148,8 @@ public class TradeRenderer
 	private void renderOffer()
 	{		
 		if(decision == null) setupDecisionDialog();
+		
+		decision.addActor(new Label("Player " + trader.getBuyingOffer().getLogin() + " is offering you " + trader.getBuyingOffer().getTraderItem().getName(), skin));
 			
 		decisionStage.act();
 		decisionStage.draw();
@@ -180,6 +183,7 @@ public class TradeRenderer
 			public void clicked(InputEvent event, float x, float y)
 			{
 				MyGame.getClient().sentTradeDecisionMessage(true, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
+				refreshDecisionDialog();
 			}
 		});
 		
@@ -198,13 +202,35 @@ public class TradeRenderer
 			public void clicked(InputEvent event, float x, float y)
 			{
 				MyGame.getClient().sentTradeDecisionMessage(false, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
+				refreshDecisionDialog();
 			}
 		});
 		decision.getContentTable().add(noBtn);
+		decision.row();
+	}
+	
+	private void refreshDecisionDialog()
+	{
+		for(Actor actor : decision.getChildren())
+		{
+			if(actor instanceof Label)
+			{
+				actor.addAction(Actions.removeActor());
+			}
+		}
 	}
 	
 	private void renderResponse()
 	{
+		if(response == TradeResponse.ACCEPTED)
+		{
+			responseDialog.addActor(new Label("Offer accepted!", skin));
+		}
+		else if(response == TradeResponse.NOT_ACCEPTED)
+		{
+			responseDialog.addActor(new Label("Offer declined!", skin));
+		}
+		
 		responseStage.act();
 		responseStage.draw();
 	}
@@ -235,8 +261,24 @@ public class TradeRenderer
 			public void clicked(InputEvent event, float x, float y)
 			{
 				displayResponse = false;
+				response = TradeResponse.NOT_SPECIFIED;
+				refreshResponseDialog();
 			}
 		});
+		
+		responseDialog.getContentTable().addActor(okBtn);
+		responseDialog.row();
+	}
+	
+	private void refreshResponseDialog()
+	{
+		for(Actor actor : responseDialog.getChildren())
+		{
+			if(actor instanceof Label)
+			{
+				actor.addAction(Actions.removeActor());
+			}
+		}
 	}
 
 	public Stage getSellingStage()

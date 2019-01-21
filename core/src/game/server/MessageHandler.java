@@ -32,6 +32,7 @@ import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
 import networking.messages.fromserver.trade.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
+import trade.BuyerOffer;
 import trade.Offer;
 import trade.TradeState;
 
@@ -287,6 +288,7 @@ public class MessageHandler extends Thread
 		
 		EntityPlayer player = Server.getMap().getPlayer(sellerLogin);
 		player.setHasOffer(true);
+		player.setBuyingOffer(new BuyerOffer(buyerLogin, buyerItem));
 		
 		Server.getConnectionManager().sendToAll(new UpdateTradeOfferMessage(sellerLogin, buyerLogin, buyerItem, sellerItem));
 	}
