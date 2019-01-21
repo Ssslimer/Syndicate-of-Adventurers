@@ -17,6 +17,7 @@ import client.MyGame;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemButton;
+import trade.TradeResponse;
 import trade.TradeState;
 import util.ConfigConstants;
 
@@ -24,7 +25,7 @@ public class TradeRenderer
 {
 	private final float TRADE_SCREEN_WIDTH, TRADE_SCREEN_HEIGHT;
 	
-	private Stage sellingStage, offerStage, decisionStage;
+	private Stage sellingStage, offerStage, decisionStage, responseStage;
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
 	
@@ -53,8 +54,13 @@ public class TradeRenderer
 	//offer variables
 	private EntityPlayer seller;
 	private boolean hasFoundSomeoneToTrade = false;
+	
+	public static boolean displayResponse = false;
+	public static TradeResponse response = TradeResponse.NOT_SPECIFIED;
+	private Dialog responseDialog;
+	private TextButton okBtn;
 		
-	public TradeRenderer(float width, float height, Stage sellingStage, Stage offerStage, Stage decisionStage)
+	public TradeRenderer(float width, float height, Stage sellingStage, Stage offerStage, Stage decisionStage, Stage responseStage)
 	{
 		TRADE_SCREEN_WIDTH = width;
 		TRADE_SCREEN_HEIGHT = height;
@@ -62,6 +68,7 @@ public class TradeRenderer
 		this.sellingStage = sellingStage;
 		this.offerStage = offerStage;
 		this.decisionStage = decisionStage;
+		this.responseStage = responseStage;
 		
 		tradeWindowTexture = MyGame.getResources().getTexture("GUI_TRADE_WINDOW");
 		batch = new SpriteBatch();
@@ -81,6 +88,7 @@ public class TradeRenderer
 		setupSellItemButton();
 		
 		setupDecisionDialog();
+		setupResponseDialog();
 	}
 	
 	public void render()
@@ -94,6 +102,11 @@ public class TradeRenderer
 		if(trader.getHasOffer())
 		{
 			renderOffer();
+		}
+		
+		if(displayResponse)
+		{
+			renderResponse();
 		}
 	}
 	
@@ -184,10 +197,46 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				System.out.println("ACCEPTED FOR FUCK SAKE");
+				MyGame.getClient().sentTradeDecisionMessage(false, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
 			}
 		});
 		decision.getContentTable().add(noBtn);
+	}
+	
+	private void renderResponse()
+	{
+		responseStage.act();
+		responseStage.draw();
+	}
+	
+	private void setupResponseDialog()
+	{
+		responseDialog = new Dialog("Dialog", skin);
+		
+		float centerX = ConfigConstants.WIDTH/2;
+		float centerY = ConfigConstants.HEIGHT/2;
+		
+		responseDialog.setPosition(centerX - responseDialog.getWidth()/2, centerY - responseDialog.getHeight()/2);
+		
+		responseDialog.setModal(true);
+		responseDialog.setMovable(false);
+		
+		setupOkButton();
+		responseStage.addActor(responseDialog);
+	}
+	
+	private void setupOkButton()
+	{
+		okBtn = new TextButton("Ok", skin);
+		
+		okBtn.addListener(new ClickListener()	
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				displayResponse = false;
+			}
+		});
 	}
 
 	public Stage getSellingStage()

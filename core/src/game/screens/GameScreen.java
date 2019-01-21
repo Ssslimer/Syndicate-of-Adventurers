@@ -59,6 +59,8 @@ public class GameScreen implements Screen, InputProcessor
     private MyGame game;
     
     private boolean showRespawnDialog = false;
+    
+    private Stage responseStage;
 	
 	public GameScreen(MyGame game)
 	{	
@@ -67,6 +69,7 @@ public class GameScreen implements Screen, InputProcessor
 		tradeStage = new Stage();
 		tradeOfferStage = new Stage();
 		tradeDecisionStage = new Stage();
+		responseStage = new Stage();
 		inputMultiplexer = new InputMultiplexer();	
     	
     	spriteBatch = new SpriteBatch();
@@ -235,14 +238,14 @@ public class GameScreen implements Screen, InputProcessor
 				case Input.Keys.C: displayingChat = !displayingChat; break;
 				
 				case Input.Keys.T: 
-					if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
+					if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage, responseStage); 
 					MyGame.getPlayer().setTradeState(TradeState.STARTING_SELLING);
 					isTrading = true;
 				break;
 				
 				case Input.Keys.Y:
 
-						if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage); 
+						if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage, responseStage); 
 						
 						EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
 						if(seller != null)

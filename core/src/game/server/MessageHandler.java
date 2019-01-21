@@ -317,6 +317,15 @@ public class MessageHandler extends Thread
             buyerEntity.setTradeState(TradeState.NOT_TRADING);
 
             Server.getConnectionManager().sendToAll(new UpdateTradeDecisionMessage(message.getOfferAccepted(), sellerLogin, buyerLogin, offeringItem, sellingItem));
+        }        
+        else
+        {
+        	String sellerLogin = message.getSellerLogin();
+        	EntityPlayer seller = Server.getMap().getPlayer(sellerLogin);
+        	seller.setHasOffer(false);
+        	
+        	Server.getConnectionManager().sendToAll(new UpdateTradeDecisionMessage(message.getOfferAccepted(), sellerLogin, message.getBuyerLogin(), message.getBuyerItem(), message.getSellerItem()));
+        	
         }
     }
 
