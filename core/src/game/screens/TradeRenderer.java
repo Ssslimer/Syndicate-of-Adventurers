@@ -205,6 +205,7 @@ public class TradeRenderer
 				refreshDecisionDialog();
 				sellItemBtn.setText("Item...");
 				tradingItem = null;
+				setupOfferItemButtons();
 			}
 		});
 		
@@ -302,6 +303,8 @@ public class TradeRenderer
 				displayResponse = false;
 				response = TradeResponse.NOT_SPECIFIED;
 				refreshResponseDialog();
+				buyerItem = null;
+				setupOfferItemButtons();
 			}
 		});
 		
@@ -315,7 +318,7 @@ public class TradeRenderer
 	
 	private void refreshResponseDialog()
 	{
-		for(Actor actor : responseDialog.getChildren())
+		for(Actor actor : responseDialog.getContentTable().getChildren())
 		{
 			if(actor instanceof Label)
 			{
@@ -487,6 +490,7 @@ public class TradeRenderer
 			{
 				GameScreen.isTrading = false;
 				trader.setTradeState(TradeState.NOT_TRADING);
+				offerItemBtn.setText("Item...");
 			}
 		});
 		
