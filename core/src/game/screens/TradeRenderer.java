@@ -205,7 +205,7 @@ public class TradeRenderer
 			}
 		});
 		
-		decisionStage.addActor(yesBtn);
+		//decisionStage.addActor(yesBtn);
 				
 		decision.getContentTable().add(yesBtn);
 	}

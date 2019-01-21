@@ -298,6 +298,12 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
+		if(TradeRenderer.displayResponse)
+		{
+			responseStage.touchDown(screenX, screenY, pointer, button);
+			return true;
+		}
+		
 		if(MyGame.getPlayer().getHasOffer())
 		{
 			tradeDecisionStage.touchDown(screenX, screenY, pointer, button);
@@ -339,6 +345,11 @@ public class GameScreen implements Screen, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{ 
+		if(TradeRenderer.displayResponse)
+		{
+			responseStage.touchUp(screenX, screenY, pointer, button);
+			return true;
+		}
 		if(MyGame.getPlayer().getHasOffer())
 		{
 			tradeDecisionStage.touchUp(screenX, screenY, pointer, button);
