@@ -21,11 +21,7 @@ import server.Server;
 import util.Clamp;
 
 public class EntityPlayerTest 
-{
-	private static final int BASE_ATTACK = 10;
-	private static final int BASE_DEFENCE = 0;
-	private static final int BASE_HEALTH = 100;
-	
+{	
 	@Test
 	public void test() 
 	{
@@ -75,17 +71,21 @@ public class EntityPlayerTest
 		EntityPlayer e = new EntityPlayer(new Vector3(0, 0, 0), "test");
 		Item item = new Item(itemAttackPower, itemDefencePower, itemHPPower, ItemType.SWORD);	
 		
+		int originalAtk = e.getAttack();
+		int originalDef = e.getDefence();
+		int originalHp = e.getHealth();
+		
 		e.addItem(item);
 		assertTrue(e.getItems().contains(item));
-		assertTrue(e.getAttack() == BASE_ATTACK + itemAttackPower);
-		assertTrue(e.getDefence() == BASE_DEFENCE + itemDefencePower);
-		assertTrue(e.getHealth() == BASE_HEALTH + itemHPPower);
+		assertTrue(e.getAttack() == originalAtk + itemAttackPower);
+		assertTrue(e.getDefence() == originalDef + itemDefencePower);
+		assertTrue(e.getHealth() == originalHp + itemHPPower);
 		
 		e.removeItem(item);
 		assertTrue(!e.getItems().contains(item));
-		assertTrue(e.getAttack() == BASE_ATTACK);
-		assertTrue(e.getDefence() == BASE_DEFENCE);
-		assertTrue(e.getHealth() == BASE_HEALTH);
+		assertTrue(e.getAttack() == originalAtk);
+		assertTrue(e.getDefence() == originalDef);
+		assertTrue(e.getHealth() == originalHp);
 		
 	}
 
