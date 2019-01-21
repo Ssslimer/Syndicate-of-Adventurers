@@ -225,6 +225,7 @@ public class TradeRenderer
 				{
 					//trader.setTradeState(TradeState.SELLING); 
 					MyGame.getClient().sentTradeStartMessage(tradingItem);
+					wasStartTradeMessageSent = true;
 				}
 			}
 		});
@@ -319,7 +320,7 @@ public class TradeRenderer
 				/** TODO send stop trade message*/
 				if(wasStartTradeMessageSent)
 				{
-					
+					MyGame.getClient().sentEndTradeMessage(tradingItem);
 				}
 				GameScreen.isTrading = false;
 				trader.setTradeState(TradeState.NOT_TRADING);
