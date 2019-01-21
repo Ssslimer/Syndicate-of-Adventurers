@@ -11,7 +11,7 @@ public class BuyerOffer extends Offer
 	public BuyerOffer(String login, int goldAmount) 
 	{
 		super(login, null);
-		this.goldAmount = 0;
+		this.goldAmount = goldAmount;
 	}
 	
 	public BuyerOffer(String login, Item item) 
