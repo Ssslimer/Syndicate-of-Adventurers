@@ -149,15 +149,33 @@ public class TradeRenderer
 	{		
 		if(decision == null) setupDecisionDialog();
 		
-		decision.addActor(new Label("Player " + trader.getBuyingOffer().getLogin() + " is offering you " + trader.getBuyingOffer().getTraderItem().getName(), skin));
-			
+		if(!hasLabels())
+		{
+			Label l1 = new Label(trader.getBuyingOffer().getLogin() + ":" + trader.getBuyingOffer().getTraderItem().getName(), skin);		
+			decision.addActor(l1);
+		}
+		
 		decisionStage.act();
 		decisionStage.draw();
+	}
+	
+	private boolean hasLabels()
+	{
+		for(Actor actor : decision.getChildren())
+		{
+			if(actor instanceof Label)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void setupDecisionDialog()
 	{
 		decision = new Dialog("Dialog", skin);
+		
+		decision.setHeight(ConfigConstants.HEIGHT/3);
 		
 		float centerX = ConfigConstants.WIDTH/2;
 		float centerY = ConfigConstants.HEIGHT/2;
