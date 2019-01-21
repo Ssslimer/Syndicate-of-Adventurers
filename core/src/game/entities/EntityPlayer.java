@@ -100,6 +100,24 @@ public class EntityPlayer extends Entity implements Damageable
 			defence -= item.getDefence();
 		}
 	}
+	
+	public void removeItem(ItemType type, int attack, int def, int hp)
+	{
+		int indexToDelete = -1;
+		
+		for(int i = 0; i < equipment.size(); i++)
+		{
+			Item curr = equipment.get(i);
+			
+			if(curr.getType() == type && curr.getAttack() == attack
+					&& curr.getDefence() == def && curr.getHPBonus() == hp)
+			{
+				indexToDelete = i;
+			}
+		}
+		
+		if(indexToDelete != -1) equipment.remove(indexToDelete);
+	}
 
 	private void determinePlayerStats()
 	{

@@ -80,28 +80,21 @@ public class World implements Serializable
 		
 	}
 	
-	public void updateTradeDecision(boolean offerAccepted, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
-	{
-		System.out.println("DECISION BEGIN");
-		System.out.println(sellerItem.toString());
-		System.out.println(buyerItem.toString());
-		
+	public void updateTradeDecision(boolean offerAccepted, String sellerLogin, String buyerLogin, Item sellerItem, Item buyerItem)
+	{	
 		EntityPlayer seller = getPlayer(sellerLogin);
 		EntityPlayer buyer = getPlayer(buyerLogin);
 		
-		seller.removeItem(sellerItem);
+		seller.removeItem(sellerItem.getType(), sellerItem.getAttack(), sellerItem.getDefence(), sellerItem.getHPBonus());
 		buyer.addItem(sellerItem);
 		
-		buyer.removeItem(buyerItem);
+		buyer.removeItem(buyerItem.getType(), buyerItem.getAttack(), buyerItem.getDefence(), buyerItem.getHPBonus());
 		seller.addItem(buyerItem);
 		
 		seller.setTradeState(TradeState.NOT_TRADING);
 		buyer.setTradeState(TradeState.NOT_TRADING);
 		
 		seller.setHasOffer(false);
-		
-		System.out.println("DECISION ENDDDDDD");
-		
 	}
 	
 	/**TODO REMOVE SHIEET BUT LATER */
