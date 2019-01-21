@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 
 import client.MyGame;
 import entities.EntityPlayer;
@@ -202,6 +203,8 @@ public class TradeRenderer
 			{
 				MyGame.getClient().sentTradeDecisionMessage(true, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
 				refreshDecisionDialog();
+				sellItemBtn.setText("Item...");
+				tradingItem = null;
 			}
 		});
 		
@@ -272,6 +275,8 @@ public class TradeRenderer
 	private void setupOkButton()
 	{
 		okBtn = new TextButton("Ok", skin);
+		
+		okBtn.align(Align.center);
 		
 		okBtn.addListener(new ClickListener()	
 		{
@@ -358,13 +363,16 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(trader.getTradeState() == TradeState.BUYING && seller.getSellingOffer().getTraderItem() != null && buyerItem != null)
+				if(trader.getTradeState() == TradeState.BUYING && seller.getSellingOffer().getTraderItem() != null && buyerItem != null &&
+						offerItemBtn.getText().toString().compareTo("Item...") != 0 &&
+						toBuyItemBtn.getText().toString().compareTo("Item...") != 0)
 				{
 					if(hasFoundSomeoneToTrade)
 					{
 						String login = seller.getLogin();
 						Item sellerItem = seller.getSellingOffer().getTraderItem();
 						MyGame.getClient().sentTradeOfferMessage(trader.getLogin(), login, buyerItem, sellerItem);
+						offerItemBtn.setText("Item...");
 					}
 				}
 			}
@@ -433,6 +441,8 @@ public class TradeRenderer
 				}
 				GameScreen.isTrading = false;
 				trader.setTradeState(TradeState.NOT_TRADING);
+				sellItemBtn.setText("Item...");
+				tradingItem = null;
 			}
 		});
 		
