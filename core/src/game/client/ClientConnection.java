@@ -35,6 +35,7 @@ import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
 import networking.messages.fromserver.trade.UpdateTradeDecisionMessage;
+import networking.messages.fromserver.trade.UpdateTradeEndMessage;
 import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
 import networking.messages.fromserver.trade.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
@@ -141,9 +142,9 @@ public class ClientConnection extends Thread
 		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount, item));
 	}
 	
-	public void sentEndTradeMessage()
+	public void sentEndTradeMessage(Item item)
 	{
-		if(isLogedIn) sender.addMessage(new TradeEndMessage(sessionId));
+		if(isLogedIn) sender.addMessage(new TradeEndMessage(sessionId, login, item));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -273,6 +274,12 @@ public class ClientConnection extends Thread
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeDecisionMessage msg = (UpdateTradeDecisionMessage) callback;
 				MyGame.getGameMap().updateTradeDecision(msg.isOfferAccepted(), msg.getSellerLogin(), msg.getBuyerLogin(), msg.getBuyerItem(), msg.getSellerItem());
+			break;
+			
+			case UPDATE_TRADE_END:
+				if(MyGame.getGameMap() == null) break;
+				UpdateTradeEndMessage tradeEndMsg = (UpdateTradeEndMessage) callback;
+				MyGame.getGameMap().updateTradeEnd(tradeEndMsg.getLogin());
 			break;
 			
 			case DAMAGE_ENTITY:

@@ -27,6 +27,7 @@ import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.trade.UpdateTradeDecisionMessage;
+import networking.messages.fromserver.trade.UpdateTradeEndMessage;
 import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
 import networking.messages.fromserver.trade.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
@@ -321,7 +322,11 @@ public class MessageHandler extends Thread
 
 	private void processTradeEnd(ConnectionToClient connectionWithClient, TradeEndMessage message)
 	{
+		String login = message.getLogin();
+		EntityPlayer player = Server.getMap().getPlayer(login);
+		player.setTradeState(TradeState.NOT_TRADING);
 		
+		Server.getConnectionManager().sendToAll(new UpdateTradeEndMessage(message.getLogin(), message.getItem()));
 	}
 	
 	long generateSessionID() 

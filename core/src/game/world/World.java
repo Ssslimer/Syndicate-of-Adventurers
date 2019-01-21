@@ -97,6 +97,12 @@ public class World implements Serializable
 		seller.setHasOffer(false);
 	}
 	
+	public void updateTradeEnd(String login)
+	{
+		EntityPlayer player = getPlayer(login);
+		player.setTradeState(TradeState.NOT_TRADING);
+	}
+	
 	/**TODO REMOVE SHIEET BUT LATER */
 	
 	public void setEntityTradeStateBuying(String login, Item item)
