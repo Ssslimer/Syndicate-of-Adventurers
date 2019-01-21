@@ -17,6 +17,7 @@ import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemButton;
 import trade.TradeState;
+import util.ConfigConstants;
 
 public class TradeRenderer 
 {
@@ -26,8 +27,9 @@ public class TradeRenderer
 	private Texture tradeWindowTexture;
 	private SpriteBatch batch;
 	
-	private Dialog offerDialog;
-	private boolean isDialogNotSetup = true;
+	private Dialog decision;
+	private TextButton yesBtn;
+	private TextButton noBtn;
 	
 	private Skin skin;
 	private BitmapFont tradeFont;
@@ -76,6 +78,8 @@ public class TradeRenderer
 		setupEndTradeButton();
 		setupEndOfferButton();
 		setupSellItemButton();
+		
+		setupDecisionDialog();
 	}
 	
 	public void render()
@@ -128,54 +132,61 @@ public class TradeRenderer
 	
 	private void renderOffer()
 	{		
-		if(isDialogNotSetup)
-		{
-			setupTradeOffer();
-			//isDialogNotSetup = false;
-		}
-		
-		offerDialog.show(decisionStage);
-		
+		if(decision == null) setupDecisionDialog();
+			
 		decisionStage.act();
 		decisionStage.draw();
 	}
 	
-	private void setupTradeOffer() 
+	private void setupDecisionDialog()
 	{
-		String buyerLogin = trader.getBuyingOffer().getLogin();
-		Item buyerItem = trader.getBuyingOffer().getTraderItem();
+		decision = new Dialog("Dialog", skin);
 		
-		int attack = buyerItem.getAttack();
-		int def = buyerItem.getDefence();
-		int hp = buyerItem.getHPBonus();
+		float centerX = ConfigConstants.WIDTH/2;
+		float centerY = ConfigConstants.HEIGHT/2;
 		
-		offerDialog = new Dialog("Player " + buyerLogin + " is offering you " + buyerItem.getType().toString() + "(" + attack + "," + def + "," + hp + ")", skin, "dialog")
-		{
-			protected void result(Object object)
-			{
-				System.out.println("INSIDE DIALOGGGGGG");
-				switch((Decision) object)
-				{
-					case ACCEPT:
-						System.out.println("ACCEPTED FOR FUCK SAKE");
-						MyGame.getClient().sentTradeDecisionMessage(true, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
-					break;
-					
-					case DECLINE:
-
-					break;
-				}
-			}
-		};	
+		decision.setPosition(centerX - decision.getWidth()/2, centerY - decision.getHeight()/2);
 		
-		offerDialog.button("Accept", Decision.ACCEPT);
-		offerDialog.button("Decline", Decision.DECLINE);
-		offerDialog.setMovable(false);		
+		decision.setModal(true);
+	    decision.setMovable(false);
+	    
+	    setupYesButton();
+	    setupNoButton();
+	    
+	    decisionStage.addActor(decision);
 	}
 	
-	private enum Decision
+	private void setupYesButton() 
 	{
-		ACCEPT, DECLINE
+		yesBtn = new TextButton("Yes", skin);
+		
+		yesBtn.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				MyGame.getClient().sentTradeDecisionMessage(true, trader.getLogin(), trader.getBuyingOffer().getLogin(), trader.getBuyingOffer().getTraderItem(), tradingItem);
+			}
+		});
+		
+		decisionStage.addActor(yesBtn);
+				
+		decision.getContentTable().add(yesBtn);
+	}
+	
+	private void setupNoButton() 
+	{
+		noBtn = new TextButton("No", skin);
+		
+		noBtn.addListener(new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				System.out.println("ACCEPTED FOR FUCK SAKE");
+			}
+		});
+		decision.getContentTable().add(noBtn);
 	}
 
 	public Stage getSellingStage()
