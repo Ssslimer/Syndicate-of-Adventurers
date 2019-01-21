@@ -243,27 +243,44 @@ public class TradeRenderer
 	
 	private void renderResponse()
 	{
-		if(response == TradeResponse.ACCEPTED)
+		if(!hasResponseLabel())
 		{
-			responseDialog.addActor(new Label("Offer accepted!", skin));
-		}
-		else if(response == TradeResponse.NOT_ACCEPTED)
-		{
-			responseDialog.addActor(new Label("Offer declined!", skin));
+			if(response == TradeResponse.ACCEPTED)
+			{
+				responseDialog.getContentTable().add(new Label("\nOffer accepted!", skin));
+			}
+			else if(response == TradeResponse.NOT_ACCEPTED)
+			{
+				responseDialog.getContentTable().add(new Label("\nOffer declined!", skin));
+			}
 		}
 		
 		responseStage.act();
 		responseStage.draw();
 	}
 	
+	private boolean hasResponseLabel() 
+	{
+		for(Actor actor : responseDialog.getContentTable().getChildren())
+		{
+			if(actor instanceof Label)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void setupResponseDialog()
 	{
 		responseDialog = new Dialog("Dialog", skin);
 		
+		decision.setHeight(ConfigConstants.HEIGHT/3);
+		
 		float centerX = ConfigConstants.WIDTH/2;
 		float centerY = ConfigConstants.HEIGHT/2;
 		
-		responseDialog.setPosition(centerX - responseDialog.getWidth()/2, centerY - responseDialog.getHeight()/2);
+		responseDialog.setPosition(centerX - decision.getWidth()/2, centerY );
 		
 		responseDialog.setModal(true);
 		responseDialog.setMovable(false);
@@ -276,7 +293,6 @@ public class TradeRenderer
 	{
 		okBtn = new TextButton("Ok", skin);
 		
-		okBtn.align(Align.center);
 		
 		okBtn.addListener(new ClickListener()	
 		{
@@ -289,8 +305,12 @@ public class TradeRenderer
 			}
 		});
 		
-		responseDialog.getContentTable().addActor(okBtn);
+		responseDialog.getButtonTable().align(Align.top);
+		responseDialog.getButtonTable().add(okBtn);
+		//responseDialog.getContentTable().addActor(okBtn);
 		responseDialog.row();
+		
+		//responseDialog.getButtonTable().align(Align.top);
 	}
 	
 	private void refreshResponseDialog()
