@@ -16,17 +16,19 @@ import networking.messages.Message;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
+import networking.messages.fromclient.trade.AuctionOfferPriceMessage;
+import networking.messages.fromclient.trade.AuctionOpenMessage;
 import networking.messages.fromclient.trade.TradeDecisionMessage;
 import networking.messages.fromclient.trade.TradeEndMessage;
 import networking.messages.fromclient.trade.TradeOfferMessage;
 import networking.messages.fromclient.trade.TradeStartMessage;
 import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
-import networking.messages.fromserver.UpdateTradeDecisionMessage;
-import networking.messages.fromserver.UpdateTradeOfferMessage;
-import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
+import networking.messages.fromserver.trade.UpdateTradeDecisionMessage;
+import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
+import networking.messages.fromserver.trade.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import trade.Offer;
@@ -141,10 +143,29 @@ public class MessageHandler extends Thread
 				if(connectionWithClient.isLogedIn()) processTradeEnd(connectionWithClient, (TradeEndMessage) message);
 			break;
 				
+			case AUCTION_OFFER_PRICE:
+				if(connectionWithClient.isLogedIn()) processAuctionOffer(connectionWithClient, (AuctionOfferPriceMessage) message);
+			break;
+			
+			case AUCTION_OPEN:
+				if(connectionWithClient.isLogedIn()) processAuctionOpen(connectionWithClient, (AuctionOpenMessage) message);
+			break;
+			
 			default: System.out.println("Client send wrong command!!");
 		}
 	}
 	
+	private void processAuctionOpen(ConnectionToClient connectionWithClient, AuctionOpenMessage message)
+	{
+		EntityPlayer owner = Server.getMap().getPlayer(connectionWithClient.getLogin());
+		Server.getTradeManager().openAuction(owner, message.getItem(), message.getMinimalPrice());
+	}
+
+	private void processAuctionOffer(ConnectionToClient connectionWithClient, AuctionOfferPriceMessage message)
+	{
+		
+	}
+
 	private synchronized void processRegister(ConnectionToClient connectionWithClient, RegisterMessage message) throws IOException
 	{		
 		connectionWithClient.stopCommunication();

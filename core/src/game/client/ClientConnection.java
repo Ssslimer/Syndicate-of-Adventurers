@@ -31,13 +31,12 @@ import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.UpdateEntityMessage;
 import networking.messages.fromserver.UpdateMoneyMessage;
-import networking.messages.fromserver.UpdateTradeDecisionMessage;
-//github.com/Ssslimer/Syndicate-of-Adventurers.git
-import networking.messages.fromserver.UpdateTradeOfferMessage;
-import networking.messages.fromserver.UpdateTradeStartEntityMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
+import networking.messages.fromserver.trade.UpdateTradeDecisionMessage;
+import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
+import networking.messages.fromserver.trade.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
 import networking.messages.fromclient.trade.TradeDecisionMessage;

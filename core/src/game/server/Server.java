@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import trade.TradeManager;
+
 import java.util.HashMap;
 
 import util.Timer;
@@ -21,10 +24,10 @@ public class Server
 	private static World world;
 	private static ConnectionManager connectionManager;
 	private MessageHandler messageHandler;
+	private static TradeManager tradeManager = new TradeManager();
 	
 	private static List<String> chat = Collections.synchronizedList(new ArrayList<>());
 	private static Map<Long, String> clientIDs = Collections.synchronizedMap(new HashMap<>());
-
 	
 	public Server()
 	{
@@ -140,5 +143,10 @@ public class Server
 	public static ConnectionManager getConnectionManager()
 	{
 		return connectionManager;
+	}
+	
+	public static TradeManager getTradeManager()
+	{
+		return tradeManager;
 	}
 }

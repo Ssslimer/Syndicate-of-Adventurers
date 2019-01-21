@@ -248,7 +248,7 @@ public class EntityPlayer extends Entity implements Damageable
 		gold = money;
 	}
 
-	public void changeGold(int change)
+	public synchronized void changeGold(int change)
 	{
 		gold += change;
 	}
