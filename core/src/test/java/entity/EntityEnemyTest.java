@@ -71,9 +71,6 @@ class EntityEnemyTest
 		Loot loot = e.getLoot();
 		assertNotNull(loot);
 		
-		Item item = loot.getItem();
-		assertNotNull(item);
-		
 		int atk = e.getAttack();
 		int def = e.getDefence();
 		int hp = e.getHP();
