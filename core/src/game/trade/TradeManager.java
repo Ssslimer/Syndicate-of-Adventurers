@@ -16,8 +16,23 @@ public class TradeManager
 		auctions.add(auction);
 	}
 	
-	public void update()
+	public synchronized void update()
 	{
 		for(Auction a : auctions) a.update();
+	}
+
+	public List<Auction> getAuctions()
+	{
+		return auctions;
+	}
+	
+	public synchronized void setAuctions(List<Auction> auctions)
+	{
+		this.auctions = auctions;
+	}
+	
+	public void resetAuctions()
+	{
+		auctions.clear();
 	}
 }

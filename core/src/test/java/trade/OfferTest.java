@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import entities.Item;
 import entities.ItemType;
 
-class OfferTest {
+public class OfferTest {
 
 	@Test
-	void test() 
+	public void test() 
 	{
 		String login = "login";
 		Item item = new Item(15, 21, 4, ItemType.SWORD);

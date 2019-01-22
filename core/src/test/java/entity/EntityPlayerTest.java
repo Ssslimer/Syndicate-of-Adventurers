@@ -5,20 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.net.UnknownHostException;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
 
-import entities.DamageSource;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemType;
-import networking.MoveDirection;
-import server.Server;
-import util.Clamp;
 
 public class EntityPlayerTest 
 {	

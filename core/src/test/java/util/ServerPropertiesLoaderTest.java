@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import server.ServerProperties;
 import server.ServerPropertiesLoader;
 
-class ServerPropertiesLoaderTest
+public class ServerPropertiesLoaderTest
 {
 	@Test
 	public void loadServerPropertiesTest() 

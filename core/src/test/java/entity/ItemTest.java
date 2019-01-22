@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import entities.Item;
 import entities.ItemType;
 
-class ItemTest 
+public class ItemTest 
 {
 	Random rand = new Random();
 	

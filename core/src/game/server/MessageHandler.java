@@ -26,6 +26,7 @@ import networking.messages.fromserver.SendMapMessage;
 import networking.messages.fromserver.UpdateChatMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
+import networking.messages.fromserver.trade.AuctionUpdateListMessage;
 import networking.messages.fromserver.trade.UpdateTradeDecisionMessage;
 import networking.messages.fromserver.trade.UpdateTradeEndMessage;
 import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
@@ -151,6 +152,10 @@ public class MessageHandler extends Thread
 			
 			case AUCTION_OPEN:
 				if(connectionWithClient.isLogedIn()) processAuctionOpen(connectionWithClient, (AuctionOpenMessage) message);
+			break;
+			
+			case AUCTION_OPEN_LIST:
+				if(connectionWithClient.isLogedIn()) connectionWithClient.sendMessageToClient(new AuctionUpdateListMessage(Server.getTradeManager().getAuctions()));
 			break;
 			
 			default: System.out.println("Client send wrong command!!");

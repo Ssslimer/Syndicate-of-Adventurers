@@ -32,8 +32,7 @@ public class TradeRenderer
 	private SpriteBatch batch;
 	
 	private Dialog decision;
-	private TextButton yesBtn;
-	private TextButton noBtn;
+	private TextButton yesBtn, noBtn;
 	
 	private Skin skin;
 	private BitmapFont tradeFont;
@@ -43,10 +42,7 @@ public class TradeRenderer
 	
 	private TextButton toBuyItemBtn; //btn with item from seller
 	private TextButton offerItemBtn;
-	
-	private Item sellerItem;
-	private long sellerId;
-	
+
 	private Item buyerItem;
 	
 	public static EntityPlayer trader;

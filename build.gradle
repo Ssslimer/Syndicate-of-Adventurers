@@ -56,21 +56,14 @@ allprojects
 		testRuntimeOnly    "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 		testRuntimeOnly    "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	    testRuntimeOnly    "org.junit.platform:junit-platform-runner:$junitPlatformVersion"
-    }	    
+    }
 }
 
-task allTests(type: Test) {
-	outputs.upToDateWhen {false}
-	dependsOn 'clean'
-	dependsOn 'cleanTest'
-	dependsOn 'test'
-}
-
-test
-{
-	useJUnitPlatform()	
-	test.testLogging
+    test
 	{
-		events "passed", "skipped", "failed", "standardOut", "standardError"
+		useJUnitPlatform()	
+		testLogging
+		{
+			events "passed", "skipped", "failed", "standardOut", "standardError"
+		}
 	}
-}

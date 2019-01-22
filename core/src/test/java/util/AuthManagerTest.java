@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import server.AuthManager;
 
-class AuthManagerTest
+public class AuthManagerTest
 {
 	private static final Path PATH_TO_FILES = Paths.get("src", "test", "res", "save", "auth");	
 	

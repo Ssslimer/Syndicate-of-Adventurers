@@ -10,7 +10,7 @@ import entities.Item;
 import entities.ItemType;
 import entities.Loot;
 
-class LootTest 
+public class LootTest 
 {
 	Random rand = new Random();
 	

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 
 import entities.EntityPlayer;
 import screens.MainMenuScreen;
+import trade.TradeManager;
 import world.World;
 
 public class MyGame extends Game
@@ -16,6 +17,8 @@ public class MyGame extends Game
 	private static final Resources resources = new Resources();
 	private static World gameMap;
 	private static EntityPlayer player;
+	
+	private static final TradeManager tradeManager = new TradeManager();
 
 	@Override
 	public void create()
@@ -69,5 +72,10 @@ public class MyGame extends Game
 	public static EntityPlayer getPlayer()
 	{
 		return player;
+	}
+
+	public static TradeManager getTradeManager()
+	{
+		return tradeManager;
 	}
 }

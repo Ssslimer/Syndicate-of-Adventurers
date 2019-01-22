@@ -10,10 +10,9 @@ import org.junit.jupiter.api.Test;
 import com.badlogic.gdx.math.Vector3;
 
 import entities.EntityEnemy;
-import entities.Item;
 import entities.Loot;
 
-class EntityEnemyTest 
+public class EntityEnemyTest 
 {
 	private static final int BASE_ATTACK = 20;
 	private static final int BASE_DEFENCE = 0;

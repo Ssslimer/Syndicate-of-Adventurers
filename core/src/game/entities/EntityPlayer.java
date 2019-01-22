@@ -35,8 +35,7 @@ public class EntityPlayer extends Entity implements Damageable
 	
 	private Boolean hasOffer = new Boolean(false);
 	private TradeState tradeState = TradeState.NOT_TRADING;
-	private long tradingWithId = -1;
-	
+	private long tradingWithId = -1;	
 	private Offer sellingOffer = new Offer("", null);
 	private BuyerOffer buyingOffer = new BuyerOffer("", null);
 	

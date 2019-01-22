@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import networking.messages.fromclient.ClientMessage;
 
-class MessageTest 
+public class MessageTest 
 {
 	Random rand = new Random();
 	
 	/**TODO add other messages tests */
 	
 	@Test
-	void test() 
+	public void test() 
 	{
 		MessageType type = MessageType.QUIT;
 		long id = rand.nextLong();

@@ -21,6 +21,7 @@ import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.PingMessage;
 import networking.messages.fromclient.RegisterMessage;
+import networking.messages.fromclient.trade.TradeDecisionMessage;
 import networking.messages.fromclient.trade.TradeEndMessage;
 import networking.messages.fromclient.trade.TradeOfferMessage;
 import networking.messages.fromclient.trade.TradeStartMessage;
@@ -34,13 +35,13 @@ import networking.messages.fromserver.UpdateMoneyMessage;
 import networking.messages.fromserver.auth.AuthLoginMessage;
 import networking.messages.fromserver.auth.AuthRegisterMessage;
 import networking.messages.fromserver.auth.PlayerLogoutMessage;
+import networking.messages.fromserver.trade.AuctionUpdateListMessage;
 import networking.messages.fromserver.trade.UpdateTradeDecisionMessage;
 import networking.messages.fromserver.trade.UpdateTradeEndMessage;
 import networking.messages.fromserver.trade.UpdateTradeOfferMessage;
 import networking.messages.fromserver.trade.UpdateTradeStartEntityMessage;
 import networking.messages.ingame.AttackMessage;
 import networking.messages.ingame.MoveMessage;
-import networking.messages.fromclient.trade.TradeDecisionMessage;
 //github.com/Ssslimer/Syndicate-of-Adventurers.git
 import world.World;
 
@@ -54,7 +55,7 @@ public class ClientConnection extends Thread
 	
 	private boolean isLogedIn;
 	private String login;
-	private long sessionId;
+	private long sessionID;
 	
 	private MessageSender sender;
 
@@ -96,55 +97,37 @@ public class ClientConnection extends Thread
 	
 	public void move(MoveDirection direction, boolean toStop)
 	{
-		if(isLogedIn) sender.addMessage(new MoveMessage(sessionId, direction, toStop));
+		if(isLogedIn) sender.addMessage(new MoveMessage(sessionID, direction, toStop));
 	}
 
 	public void attack()
 	{
-		if(isLogedIn) sender.addMessage(new AttackMessage(sessionId));
+		if(isLogedIn) sender.addMessage(new AttackMessage(sessionID));
 	}
 	
 	public void sentChatMessage(String chatMessageString)
 	{
-		if(isLogedIn) sender.addMessage(new ChatMessage(sessionId, chatMessageString));
+		if(isLogedIn) sender.addMessage(new ChatMessage(sessionID, chatMessageString));
 	}
 	
 	public void sentTradeStartMessage(Item item)
 	{
-		System.out.println(login + "!!!!!!!!!!!!!!!!!");
-		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionId, login, item));
+		if(isLogedIn) sender.addMessage(new TradeStartMessage(sessionID, login, item));
 	}
 	
 	public void sentTradeOfferMessage(String buyerLogin, String sellerLogin, Item buyerItem, Item sellerItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionId, sellerLogin, buyerLogin, buyerItem, sellerItem));
+		if(isLogedIn) sender.addMessage(new TradeOfferMessage(sessionID, sellerLogin, buyerLogin, buyerItem, sellerItem));
 	}
 	
 	public void sentTradeDecisionMessage(boolean offerAccepted, String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
 	{
-		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, offerAccepted, sellerLogin, buyerLogin, buyerItem, sellerItem));
-	}
-	
-	/** TODO DELETE DEPRACIETED SHIEEET */
-	
-	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount)
-	{
-		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount));
-	}
-	
-	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, Item item)
-	{
-		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, item));
-	}
-	
-	public void sentTradeDecisionMessage(boolean offerAccepted, long otherTraderId, Item sellingItem, int goldAmount, Item item)
-	{
-		//if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionId, otherTraderId, offerAccepted, sellingItem, goldAmount, item));
+		if(isLogedIn) sender.addMessage(new TradeDecisionMessage(sessionID, offerAccepted, sellerLogin, buyerLogin, buyerItem, sellerItem));
 	}
 	
 	public void sentEndTradeMessage(Item item)
 	{
-		if(isLogedIn) sender.addMessage(new TradeEndMessage(sessionId, login, item));
+		if(isLogedIn) sender.addMessage(new TradeEndMessage(sessionID, login, item));
 	}
 	
 	public MessageStatus register(String login, String password)
@@ -169,7 +152,7 @@ public class ClientConnection extends Thread
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
 	    	{
 	    		isLogedIn = true;
-	    		this.sessionId = fromServer.getSessionID(); 
+	    		this.sessionID = fromServer.getSessionID(); 
 	    		
 	    		start();
 	    	}	    	
@@ -205,7 +188,7 @@ public class ClientConnection extends Thread
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
 	    	{
 	    		isLogedIn = true;
-	    		this.sessionId = fromServer.getSessionID(); 
+	    		this.sessionID = fromServer.getSessionID(); 
 	    		this.login = login;
 	    		
 	    		start();
@@ -317,6 +300,10 @@ public class ClientConnection extends Thread
 				MyGame.getPlayer().setGold(moneyMessage.getMoney());
 			break;
 			
+			case AUCTION_UPDATE_LIST:
+				MyGame.getTradeManager().setAuctions(((AuctionUpdateListMessage) callback).getAuctions());
+			break;
+			
 			default:
 				System.out.println("Unknown command");
 		}
@@ -329,7 +316,7 @@ public class ClientConnection extends Thread
 
 	public void pingServer()
 	{
-		sender.addMessage(new PingMessage(sessionId, System.currentTimeMillis()));
+		sender.addMessage(new PingMessage(sessionID, System.currentTimeMillis()));
 	}
 	
 	public synchronized void stopConnection()
@@ -366,5 +353,15 @@ public class ClientConnection extends Thread
 	public String getLogin()
 	{
 		return login;
+	}
+
+	public void sendMessage(Message message)
+	{
+		if(isLogedIn) sender.addMessage(message);
+	}
+	
+	public long getSessionID()
+	{
+		return sessionID;
 	}
 }

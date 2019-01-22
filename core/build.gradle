@@ -27,6 +27,15 @@ dependencies
 	implementation "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
 }
 
+    test
+	{
+		useJUnitPlatform()	
+		testLogging
+		{
+			events "passed", "skipped", "failed", "standardOut", "standardError"
+		}
+	}
+
 sourceSets {
 	jmh {
 		java.srcDirs = ["src/jmh/java"]

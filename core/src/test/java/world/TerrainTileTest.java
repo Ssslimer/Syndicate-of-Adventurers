@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
 
-class TerrainTileTest {
+public class TerrainTileTest {
 
 	@Test
-	void test() {
+	public void test() {
 		
 		Vector3 pos = new Vector3(4, 10, 55);
 		int terrainType = 4;

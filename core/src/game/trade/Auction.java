@@ -97,4 +97,29 @@ public class Auction
 	{
 		return auctionId;
 	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append(auctionId);
+		builder.append(' ');
+		builder.append(currentPrice);
+		builder.append(' ');
+		builder.append(owner.getLogin());
+		builder.append(' ');
+		builder.append(item);
+		
+		return builder.toString();
+	}
+	
+	public Item getItem()
+	{
+		return item;
+	}
+	
+	public int getCurrentPrice()
+	{
+		return currentPrice;
+	}
 }

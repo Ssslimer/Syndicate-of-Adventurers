@@ -28,6 +28,7 @@ import client.MyGame;
 import entities.Entity;
 import entities.EntityPlayer;
 import networking.MoveDirection;
+import networking.messages.fromclient.trade.AuctionOpenListMessage;
 import trade.TradeState;
 import util.ConfigConstants;
 import util.GdxUtils;
@@ -38,6 +39,7 @@ public class GameScreen implements Screen, InputProcessor
 	
 	private InputMultiplexer inputMultiplexer;
 	private Stage stage, tradeStage, tradeOfferStage, tradeDecisionStage;
+	private Stage auctionStage = new Stage();
 	      
 	private Dialog respawnDialog;
 	
@@ -51,8 +53,10 @@ public class GameScreen implements Screen, InputProcessor
     private boolean usingChat, displayingChat;
     
     public static boolean isTrading = false;
+    public static boolean isInAuction = false;
     
     private TradeRenderer tradeRenderer;
+    private AuctionRenderer auctionRenderer;
     
     private float timer; // for ping
     
@@ -69,8 +73,10 @@ public class GameScreen implements Screen, InputProcessor
 		tradeStage = new Stage();
 		tradeOfferStage = new Stage();
 		tradeDecisionStage = new Stage();
-		responseStage = new Stage();
-		inputMultiplexer = new InputMultiplexer();	
+		responseStage = new Stage();		
+		inputMultiplexer = new InputMultiplexer();
+		
+		auctionRenderer = new AuctionRenderer(auctionStage);
     	
     	spriteBatch = new SpriteBatch();
     	chatTexture = MyGame.getResources().getTexture("GUI_CHAT_WINDOW");
@@ -116,6 +122,7 @@ public class GameScreen implements Screen, InputProcessor
         renderHUD();
         
         if(isTrading) tradeRenderer.render();
+        if(isInAuction) auctionRenderer.render();
                
         if(MyGame.getPlayer() != null && !MyGame.getPlayer().isAlive())
         {
@@ -241,10 +248,10 @@ public class GameScreen implements Screen, InputProcessor
 					if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage, responseStage); 
 					MyGame.getPlayer().setTradeState(TradeState.STARTING_SELLING);
 					isTrading = true;
+					isInAuction = false;
 				break;
 				
 				case Input.Keys.Y:
-
 						if(tradeRenderer == null) tradeRenderer = new TradeRenderer(CHAT_WIDTH, CHAT_HEIGHT, tradeStage, tradeOfferStage, tradeDecisionStage, responseStage); 
 						
 						EntityPlayer seller = MyGame.getGameMap().findClosestTradingEntity(MyGame.getPlayer().getPosition());
@@ -253,10 +260,15 @@ public class GameScreen implements Screen, InputProcessor
 							MyGame.getPlayer().setTradingWithId(seller.getId());
 							MyGame.getPlayer().setTradeState(TradeState.BUYING);
 							isTrading = true;
-						}
-					
-							
+						}			
 				break;
+				
+				case Input.Keys.U:
+					isInAuction = !isInAuction;
+					isTrading = false;
+				break;
+				
+				
 			}
 		}
 		
@@ -339,6 +351,8 @@ public class GameScreen implements Screen, InputProcessor
 			MyGame.getClient().attack();	
 		}
 		
+		if(isInAuction) auctionStage.touchDown(screenX, screenY, pointer, button);
+		
 		return !usingChat;
 	}
 
@@ -372,6 +386,8 @@ public class GameScreen implements Screen, InputProcessor
 			tradeStage.touchUp(screenX, screenY, pointer, button);
 			return true;
 		}
+		
+		if(isInAuction) auctionStage.touchUp(screenX, screenY, pointer, button);
 		
 		return !usingChat; 
 	}

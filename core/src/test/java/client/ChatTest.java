@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class ChatTest 
+public class ChatTest 
 {
 	private static final int MAX_SIZE = 30;
 	
 	@Test
-	void test() 
+	public void test() 
 	{
 		assertNotNull(Chat.getChatMessages());
 		assertTrue(Chat.getChatMessages().isEmpty());

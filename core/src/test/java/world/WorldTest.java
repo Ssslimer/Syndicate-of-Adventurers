@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector3;
 
-class WorldTest 
+public class WorldTest 
 {
 	@Test
-	void test() 
+	public void test() 
 	{
 		World world = new World();
 		
