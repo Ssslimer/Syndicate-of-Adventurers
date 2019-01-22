@@ -174,9 +174,7 @@ public class MessageHandler extends Thread
 	}
 
 	private synchronized void processRegister(ConnectionToClient connectionWithClient, RegisterMessage message) throws IOException
-	{		
-		connectionWithClient.stopCommunication();
-		
+	{
 		String login = message.getLogin();
 		char[] password = message.getPassword().toCharArray();
 		String hashedPassword = server.getAuthManager().hashPassword(password);

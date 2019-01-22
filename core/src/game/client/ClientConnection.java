@@ -151,8 +151,9 @@ public class ClientConnection extends Thread
 	    	System.out.println("Message from server: " + fromServer.toString());
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
 	    	{
-	    		isLogedIn = true;
 	    		this.sessionID = fromServer.getSessionID(); 
+	    		this.login = login;
+	    		isLogedIn = true;
 	    		
 	    		start();
 	    	}	    	
@@ -186,10 +187,10 @@ public class ClientConnection extends Thread
 	    	
 	    	AuthLoginMessage fromServer = (AuthLoginMessage) getDataFromServer();
 	    	if(fromServer.getMessageStatus() == MessageStatus.OK) 
-	    	{
-	    		isLogedIn = true;
+	    	{    		
 	    		this.sessionID = fromServer.getSessionID(); 
 	    		this.login = login;
+	    		isLogedIn = true;
 	    		
 	    		start();
 	    	}
