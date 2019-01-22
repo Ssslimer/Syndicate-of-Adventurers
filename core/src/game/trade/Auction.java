@@ -30,6 +30,7 @@ public class Auction
 		this.owner.removeItem(item);
 		this.item = item;
 		this.minimalPrice = minimalPrice;
+		this.currentPrice = minimalPrice;
 		
 		synchronized(this)
 		{

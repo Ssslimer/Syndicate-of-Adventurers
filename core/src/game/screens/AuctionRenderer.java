@@ -83,12 +83,12 @@ public class AuctionRenderer
 		batch.draw(tradeWindowTexture, 0, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT/2);
 		
 		String data = "Owner: " + displayedAuction.getOwner().getLogin()+" Item: " + displayedAuction.getItem();
-		float dataPosX = 150;
+		float dataPosX = 0;
 		float dataPosY = 600;
 		tradeFont.draw(batch, data, dataPosX, dataPosY);
 
-		String price = String.valueOf(displayedAuction.getCurrentPrice()) + "$";	
-		float pricePosX = 150;
+		String price = "Current price: " + String.valueOf(displayedAuction.getCurrentPrice()) + "$";	
+		float pricePosX = 0;
 		float pricePosY = 570;
 		tradeFont.draw(batch, price, pricePosX, pricePosY);
 	}
@@ -176,6 +176,15 @@ public class AuctionRenderer
 			public void clicked(InputEvent event, float x, float y)
 			{
 				displayedAuction = null;
+				
+				for(Actor actor : stage.getActors())
+				{
+			        if(actor == exitAuction)
+			        {
+			        	actor.addAction(Actions.removeActor());
+			        	return;
+			        }
+			    }				
 			}
 		});
 		
@@ -210,7 +219,8 @@ public class AuctionRenderer
     					if(auction.getAuctionId() == auctioID)
     					{
     						displayedAuction = auction;
-    						setupExitAuctionButton(125, 100, 50, 20);
+    						setupExitAuctionButton(125, 400, 50, 20);  						
+    						
     						return;
     					}
     				}

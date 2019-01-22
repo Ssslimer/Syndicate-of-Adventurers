@@ -101,8 +101,8 @@ public class JoinServerScreen implements Screen
 		style.font = new BitmapFont();
 		
 		playerNameField = new TextField("", style);
-		//playerNameField.setText("Login...");
-		playerNameField.setText("test");
+		playerNameField.setText("Login...");
+		//playerNameField.setText("test");
 		playerNameField.setWidth(200);
 		playerNameField.setHeight(50);
 		float posX = (Gdx.graphics.getWidth()-playerNameField.getWidth()) / 2f;
@@ -134,8 +134,8 @@ public class JoinServerScreen implements Screen
 		style.font = new BitmapFont();
 		
 		passwordField = new TextField("", style);
-		//passwordField.setText("Password...");
-		passwordField.setText("test");
+		passwordField.setText("Password...");
+		//passwordField.setText("test");
 		passwordField.setPasswordCharacter('*');
 		passwordField.setWidth(200);
 		passwordField.setHeight(50);

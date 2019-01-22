@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import client.MyGame;
 import entities.Entity;
+import entities.EntityEnemy;
 import entities.EntityPlayer;
 import entities.Item;
 import networking.messages.fromserver.SpawnEntityMessage;
@@ -38,9 +39,6 @@ public class World implements Serializable
 	public World()
 	{
 		generateMap();
-		
-		//if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
-		//if(!isLocal) spawnEntity(new EntityEnemy(new Vector3(5, 5, 2)));
 	}
 
 	public synchronized void spawnEntity(Entity entity)
@@ -176,12 +174,12 @@ public class World implements Serializable
 			}
 		}
 
-//		if(!isLocal && Timer.getTickCount() % 100 == 0)
-//		{
-//			int posX = Server.random.nextInt(4) - 2;
-//			int posY = Server.random.nextInt(4) - 2;
-//			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
-//		}
+		if(!isLocal && Timer.getTickCount() % 500 == 0)
+		{
+			int posX = Server.random.nextInt(20) - 10;
+			int posY = Server.random.nextInt(20) - 10;
+			spawnEntity(new EntityEnemy(new Vector3(posX, posY, 2)));
+		}
 	}
 
 	public EntityPlayer findClosestTradingEntity(Vector3 pos)
