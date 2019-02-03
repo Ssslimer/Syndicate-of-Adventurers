@@ -11,9 +11,6 @@ dependencies
     compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 	compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"  
-
-	testImplementation "org.openjdk.jmh:jmh-core:$jmhVersion"
-	testImplementation "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
 }
 
 task run(dependsOn: classes, type: JavaExec) {

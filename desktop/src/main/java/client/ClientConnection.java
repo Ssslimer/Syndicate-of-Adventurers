@@ -245,31 +245,29 @@ public class ClientConnection extends Thread
 			case UPDATE_TRADE_START: // we get info that other player started trade
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeStartEntityMessage tradeStartMessage = (UpdateTradeStartEntityMessage) callback;
-				MyGame.getGameMap().setEntityTradeStart( tradeStartMessage.getLogin(), tradeStartMessage.getItem());
+				ClientTrade.setEntityTradeStart( tradeStartMessage.getLogin(), tradeStartMessage.getItem());
 			break;
 			
 			case UPDATE_TRADE_OFFER:
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeOfferMessage tradeOfferUpdate = (UpdateTradeOfferMessage) callback;
-				MyGame.getGameMap().updateTradeOffer(tradeOfferUpdate.getSellerLogin(), tradeOfferUpdate.getBuyerLogin(), tradeOfferUpdate.getBuyerItem(), tradeOfferUpdate.getSellerItem());
+				ClientTrade.updateTradeOffer(tradeOfferUpdate.getSellerLogin(), tradeOfferUpdate.getBuyerLogin(), tradeOfferUpdate.getBuyerItem());
 			break;
 			
 			case UPDATE_TRADE_DECISION:
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeDecisionMessage msg = (UpdateTradeDecisionMessage) callback;
-				MyGame.getGameMap().updateTradeDecision(msg.isOfferAccepted(), msg.getSellerLogin(), msg.getBuyerLogin(), msg.getBuyerItem(), msg.getSellerItem());
+				ClientTrade.updateTradeDecision(msg.isOfferAccepted(), msg.getSellerLogin(), msg.getBuyerLogin(), msg.getBuyerItem(), msg.getSellerItem());
 			break;
 			
 			case UPDATE_TRADE_END:
 				if(MyGame.getGameMap() == null) break;
 				UpdateTradeEndMessage tradeEndMsg = (UpdateTradeEndMessage) callback;
-				MyGame.getGameMap().updateTradeEnd(tradeEndMsg.getLogin());
+				ClientTrade.updateTradeEnd(tradeEndMsg.getLogin());
 			break;
 			
 			case DAMAGE_ENTITY:
 				if(MyGame.getGameMap() == null) break;
-				DamageEntityMessage damageEntity = (DamageEntityMessage) callback;
-				/** TODO add some graphical effect*/
 				Sound sound = MyGame.getResources().getSound("CLANG");
 				sound.play(1f);
 			break;
@@ -284,7 +282,6 @@ public class ClientConnection extends Thread
 				else MyGame.getGameMap().removeEntity(entity);
 					
 				MyGame.getRenderer().removeEntity(entity);
-				/** TODO add some graphical effect and sound */
 			break;
 			
 			case PLAYER_LOGOUT:

@@ -11,7 +11,6 @@ public class Loot implements Serializable
 	private final int goldLoot;
 	private final Item item;
 	
-	/** TODO remove random loot to generator */
 	public Loot()
 	{
 		goldLoot = Server.random.nextInt(50);	

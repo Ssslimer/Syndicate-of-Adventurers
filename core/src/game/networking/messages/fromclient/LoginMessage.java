@@ -8,7 +8,7 @@ public class LoginMessage extends ClientMessage
 {
 	private static final long serialVersionUID = 1444243380705734934L;
 	
-	private String login, password;
+	private final String login, password;
 	
 	public LoginMessage(String login, String password)
 	{

@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import entities.Entity;
 import entities.EntityEnemy;
 import entities.EntityPlayer;
-import util.MathHelper;
+import utils.MathHelper;
 import world.TerrainTile;
 
 public class WorldRenderer

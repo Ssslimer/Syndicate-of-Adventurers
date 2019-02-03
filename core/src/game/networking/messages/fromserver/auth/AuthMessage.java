@@ -10,7 +10,7 @@ public class AuthMessage extends Message
 {
 	private static final long serialVersionUID = 2431956245233772488L;
 
-	private MessageStatus status;
+	private final MessageStatus status;
 	
 	public AuthMessage(MessageStatus status)
 	{

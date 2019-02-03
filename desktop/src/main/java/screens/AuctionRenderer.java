@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,7 +22,7 @@ import client.MyGame;
 import entities.Item;
 import entities.ItemType;
 import trade.Auction;
-import util.ConfigConstants;
+import utils.ConfigConstants;
 
 public class AuctionRenderer 
 {	
@@ -150,12 +149,11 @@ public class AuctionRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				if(!listNeedsRefresh) /** TODO */
+				if(!listNeedsRefresh)
 				{
 			        List<Auction> auctions = new ArrayList<>();
 			        auctions.add(new Auction(MyGame.getPlayer(), new Item(1, 2, 0, ItemType.SWORD), 100));
 			        MyGame.getTradeManager().setAuctions(auctions);
-					//MyGame.getClient().sendMessage(new AuctionOpenListMessage(MyGame.getClient().getSessionID()));
 					listNeedsRefresh = true;
 				}			
 			}
@@ -191,7 +189,6 @@ public class AuctionRenderer
 		stage.addActor(exitAuction);	
 	}
 
-	/** TODO call when open list button is pressed */
 	private void setupAuctionList()
 	{
 		listNeedsRefresh = true;

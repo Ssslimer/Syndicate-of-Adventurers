@@ -22,30 +22,13 @@ dependencies
     implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
     implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-
-	implementation "org.openjdk.jmh:jmh-core:$jmhVersion"
-	implementation "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
 }
 
-    test
+test
+{
+	useJUnitPlatform()	
+	testLogging
 	{
-		useJUnitPlatform()	
-		testLogging
-		{
-			events "passed", "skipped", "failed", "standardOut", "standardError"
-		}
+		events "passed", "skipped", "failed", "standardOut", "standardError"
 	}
-
-sourceSets {
-	jmh {
-		java.srcDirs = ["src/jmh/java"]
-        compileClasspath += sourceSets.main.runtimeClasspath
-    }
 }
-
-task jmh(type: JavaExec, dependsOn: jmhClasses) {
-	main = 'org.openjdk.jmh.Main'
-	classpath = sourceSets.jmh.compileClasspath + sourceSets.jmh.runtimeClasspath
-}
-	
-classes.finalizedBy(jmhClasses)

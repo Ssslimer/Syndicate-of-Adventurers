@@ -16,7 +16,6 @@ import networking.messages.Message;
 import networking.messages.fromclient.ChatMessage;
 import networking.messages.fromclient.LoginMessage;
 import networking.messages.fromclient.RegisterMessage;
-import networking.messages.fromclient.trade.AuctionOfferPriceMessage;
 import networking.messages.fromclient.trade.AuctionOpenMessage;
 import networking.messages.fromclient.trade.TradeDecisionMessage;
 import networking.messages.fromclient.trade.TradeEndMessage;
@@ -42,7 +41,7 @@ public class MessageHandler extends Thread
 {
 	private final Server server;
 	
-	private ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1); /** TODO add parameter from server config*/
+	private ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 	private Queue<MessageTask> messages = new ConcurrentLinkedQueue<>();
 	private boolean shouldWait = false, isEmpty = true;
 
@@ -97,8 +96,6 @@ public class MessageHandler extends Thread
 		ConnectionToClient connectionWithClient = task.getMessageOwner();			
 		Message message = task.getMessage();
 		
-		//System.out.println("NEW MESSAGE: " + message.getMessageType().toString()); /** TODO remove in the future */
-		
 		switch(message.getMessageType())
 		{			
 			case PING:
@@ -114,7 +111,6 @@ public class MessageHandler extends Thread
 			break;
 
 			case QUIT:
-				/** TODO check whether this is enough */
 				connectionWithClient.stopCommunication();
 			break;
 			
@@ -131,23 +127,23 @@ public class MessageHandler extends Thread
 			break;
 			
 			case TRADE_START:
-				if(connectionWithClient.isLogedIn()) processTradeStart(connectionWithClient, (TradeStartMessage) message);
+				if(connectionWithClient.isLogedIn()) processTradeStart((TradeStartMessage) message);
 			break;
 				
 			case TRADE_OFFER:
-				if(connectionWithClient.isLogedIn()) processTradeOffer(connectionWithClient, (TradeOfferMessage) message);
+				if(connectionWithClient.isLogedIn()) processTradeOffer((TradeOfferMessage) message);
 			break;
 			
 			case TRADE_DECISION:
-				if(connectionWithClient.isLogedIn()) processTradeDecision(connectionWithClient, (TradeDecisionMessage) message);
+				if(connectionWithClient.isLogedIn()) processTradeDecision((TradeDecisionMessage) message);
 			break;
 			
 			case TRADE_END:
-				if(connectionWithClient.isLogedIn()) processTradeEnd(connectionWithClient, (TradeEndMessage) message);
+				if(connectionWithClient.isLogedIn()) processTradeEnd((TradeEndMessage) message);
 			break;
 				
 			case AUCTION_OFFER_PRICE:
-				if(connectionWithClient.isLogedIn()) processAuctionOffer(connectionWithClient, (AuctionOfferPriceMessage) message);
+				
 			break;
 			
 			case AUCTION_OPEN:
@@ -166,11 +162,6 @@ public class MessageHandler extends Thread
 	{
 		EntityPlayer owner = Server.getMap().getPlayer(connectionWithClient.getLogin());
 		Server.getTradeManager().openAuction(owner, message.getItem(), message.getMinimalPrice());
-	}
-
-	private void processAuctionOffer(ConnectionToClient connectionWithClient, AuctionOfferPriceMessage message)
-	{
-		
 	}
 
 	private synchronized void processRegister(ConnectionToClient connectionWithClient, RegisterMessage message) throws IOException
@@ -269,7 +260,7 @@ public class MessageHandler extends Thread
 		}
 	}
 	
-	private void processTradeStart(ConnectionToClient connectionWithClient, TradeStartMessage message)
+	private void processTradeStart(TradeStartMessage message)
 	{	
 		String login = Server.getLogin(message.getSessionId());
 		EntityPlayer player = Server.getMap().getPlayer(login);
@@ -279,15 +270,12 @@ public class MessageHandler extends Thread
 		Server.getConnectionManager().sendToAll(new UpdateTradeStartEntityMessage(login, message.getItem()));
 	}
 	
-	private void processTradeOffer(ConnectionToClient connectionWithClient, TradeOfferMessage message)
+	private void processTradeOffer(TradeOfferMessage message)
 	{
 		String sellerLogin = message.getSellerLogin();
 		String buyerLogin = message.getBuyerLogin();
 		Item sellerItem = message.getSellerItem();
 		Item buyerItem = message.getBuyerItem();
-		
-		System.out.println("SELLER: " + sellerLogin);
-		System.out.println("BUYER: " + buyerLogin);
 		
 		EntityPlayer player = Server.getMap().getPlayer(sellerLogin);
 		player.setHasOffer(true);
@@ -296,9 +284,8 @@ public class MessageHandler extends Thread
 		Server.getConnectionManager().sendToAll(new UpdateTradeOfferMessage(sellerLogin, buyerLogin, buyerItem, sellerItem));
 	}
 	
-	private void processTradeDecision(ConnectionToClient connectionWithClient, TradeDecisionMessage message)
+	private void processTradeDecision(TradeDecisionMessage message)
     {
-        System.out.println("HANDLER OFFER: " + message.getOfferAccepted());
         if(message.getOfferAccepted())
         {
             Item sellingItem = message.getSellerItem();
@@ -334,7 +321,7 @@ public class MessageHandler extends Thread
         }
     }
 
-	private void processTradeEnd(ConnectionToClient connectionWithClient, TradeEndMessage message)
+	private void processTradeEnd(TradeEndMessage message)
 	{
 		String login = message.getLogin();
 		EntityPlayer player = Server.getMap().getPlayer(login);

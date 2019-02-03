@@ -16,12 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import client.MyGame;
+import client.TradeResponse;
 import entities.EntityPlayer;
 import entities.Item;
 import entities.ItemButton;
-import trade.TradeResponse;
 import trade.TradeState;
-import util.ConfigConstants;
+import utils.ConfigConstants;
 
 public class TradeRenderer 
 {
@@ -116,7 +116,6 @@ public class TradeRenderer
 		
 		sellingStage.act();
 		sellingStage.draw();	
-		//stage.clear();
 	}
 	
 	private void renderBuying()
@@ -127,7 +126,6 @@ public class TradeRenderer
 			
 			hasFoundSomeoneToTrade = true;
 		}
-		//String traderName = ((EntityPlayer)MyGame.getGameMap().getEntity(trader.getTradingWithId())).getLogin();
 		
 		String traderName = seller.getLogin();
 		Item item = seller.getSellingOffer().getTraderItem();
@@ -205,8 +203,6 @@ public class TradeRenderer
 			}
 		});
 		
-		//decisionStage.addActor(yesBtn);
-				
 		decision.getContentTable().add(yesBtn);
 	}
 	
@@ -306,10 +302,7 @@ public class TradeRenderer
 		
 		responseDialog.getButtonTable().align(Align.top);
 		responseDialog.getButtonTable().add(okBtn);
-		//responseDialog.getContentTable().addActor(okBtn);
 		responseDialog.row();
-		
-		//responseDialog.getButtonTable().align(Align.top);
 	}
 	
 	private void refreshResponseDialog()
@@ -356,7 +349,6 @@ public class TradeRenderer
 			{
 				if(trader.getTradeState() == TradeState.STARTING_SELLING && tradingItem != null)
 				{
-					//trader.setTradeState(TradeState.SELLING); 
 					MyGame.getClient().sentTradeStartMessage(tradingItem);
 					wasStartTradeMessageSent = true;
 				}
@@ -453,7 +445,6 @@ public class TradeRenderer
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				/** TODO send stop trade message*/
 				if(wasStartTradeMessageSent)
 				{
 					MyGame.getClient().sentEndTradeMessage(tradingItem);

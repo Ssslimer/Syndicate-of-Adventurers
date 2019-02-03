@@ -85,7 +85,6 @@ public class EntityEnemy extends Entity implements Damageable
 		}
 	}
 	
-	/** TODO implement AI */
 	private void attack()
 	{
 		if(lastAttack < ATTACK_COOLDOWN)

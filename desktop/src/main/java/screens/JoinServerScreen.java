@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import client.ClientConnection;
 import client.MyGame;
 import networking.MessageStatus;
-import util.GdxUtils;
+import utils.GdxUtils;
 
 public class JoinServerScreen implements Screen
 {
@@ -203,7 +203,7 @@ public class JoinServerScreen implements Screen
 					dialog.button("OK");
 					dialog.key(Keys.ENTER, null);
 					dialog.setMovable(false);
-					dialog.text("Server offline"); /** TODO add translations? */
+					dialog.text("Server offline");
 					dialog.show(stage);
 					return;
 		    	}
@@ -216,7 +216,7 @@ public class JoinServerScreen implements Screen
 				}
 				else
 				{
-					dialog.text(status.name()); /** TODO add translations? */
+					dialog.text(status.name());
 					dialog.show(stage);
 				}			
 			}

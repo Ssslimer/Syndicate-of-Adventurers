@@ -50,7 +50,6 @@ public class ConnectionToClient extends Thread
 				messageHandler.handleMessage(this, message);
 			}
 			
-			/** TODO send player a disconnect info? */
 			connectionManager.removeConnection(this);
 	    }
 	    catch(SSLHandshakeException e)

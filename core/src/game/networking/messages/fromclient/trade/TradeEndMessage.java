@@ -8,8 +8,8 @@ public class TradeEndMessage extends ClientMessage
 {
 	private static final long serialVersionUID = 8812329717884815272L;
 
-	private String login;
-	private Item item;
+	private final String login;
+	private final Item item;
 	
 	public TradeEndMessage(long sessionId, String login, Item item) 
 	{

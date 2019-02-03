@@ -7,8 +7,8 @@ import networking.messages.Message;
 public class UpdateTradeStartEntityMessage extends Message
 {
 	private static final long serialVersionUID = -3663697575718857975L;
-	private String login;
-	private Item item;
+	private final String login;
+	private final Item item;
 
 	public UpdateTradeStartEntityMessage(String login, Item item) 
 	{
@@ -26,5 +26,4 @@ public class UpdateTradeStartEntityMessage extends Message
 	{
 		return this.item;
 	}
-
 }

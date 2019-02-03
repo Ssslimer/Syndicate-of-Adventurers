@@ -1,12 +1,11 @@
 package trade;
 
-
 import entities.Item;
 
 public class BuyerOffer extends Offer
 {
 	private static final long serialVersionUID = -3741444199214577822L;
-	private int goldAmount;
+	private final int goldAmount;
 	
 	public BuyerOffer(String login, int goldAmount) 
 	{
@@ -29,6 +28,5 @@ public class BuyerOffer extends Offer
 	public int getGoldAmount()
 	{
 		return goldAmount;
-	}
-	
+	}	
 }

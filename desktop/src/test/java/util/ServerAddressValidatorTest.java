@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import utils.ServerAddressValidator;
+
 public class ServerAddressValidatorTest
 {
 	/** Other tests should not be required, as the regex was tested by the creator */

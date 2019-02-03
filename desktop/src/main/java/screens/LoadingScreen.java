@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import client.MyGame;
-import util.GdxUtils;
+import utils.GdxUtils;
 
 public class LoadingScreen implements Screen
 {

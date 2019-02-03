@@ -28,10 +28,9 @@ import client.MyGame;
 import entities.Entity;
 import entities.EntityPlayer;
 import networking.MoveDirection;
-import networking.messages.fromclient.trade.AuctionOpenListMessage;
 import trade.TradeState;
-import util.ConfigConstants;
-import util.GdxUtils;
+import utils.ConfigConstants;
+import utils.GdxUtils;
 
 public class GameScreen implements Screen, InputProcessor 
 {
@@ -57,8 +56,6 @@ public class GameScreen implements Screen, InputProcessor
     
     private TradeRenderer tradeRenderer;
     private AuctionRenderer auctionRenderer;
-    
-    private float timer; // for ping
     
     private MyGame game;
     
@@ -134,17 +131,7 @@ public class GameScreen implements Screen, InputProcessor
 		stage.act();
 		stage.draw();
 	}
-	
-	private void pingServer(float delta)
-	{
-        timer += delta;
-		if(timer > 5)
-		{
-			timer = 0;
-			MyGame.getClient().pingServer();
-		}	
-	}	
-	
+
 	private void renderChat()
 	{
 		spriteBatch.begin();		
@@ -220,7 +207,6 @@ public class GameScreen implements Screen, InputProcessor
 	        }
 		};
 		
-		//respawnDialog.button("Respawn", RespawnChoice.RESPAWN);
 		respawnDialog.button("Quit game", RespawnChoice.QUIT_SERVER);
 		respawnDialog.setMovable(false);
 	}

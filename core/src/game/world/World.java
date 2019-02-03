@@ -9,18 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.math.Vector3;
 
-import client.MyGame;
 import entities.Entity;
 import entities.EntityEnemy;
 import entities.EntityPlayer;
-import entities.Item;
 import networking.messages.fromserver.SpawnEntityMessage;
 import networking.messages.fromserver.UpdateMoneyMessage;
-import screens.TradeRenderer;
 import server.Server;
-import trade.BuyerOffer;
-import trade.Offer;
-import trade.TradeResponse;
 import trade.TradeState;
 import util.Timer;
 
@@ -58,93 +52,6 @@ public class World implements Serializable
 		entity.setVelocity(velocity);
 	}
 	
-	public void setEntityTradeStart(String login, Item item)
-	{
-		EntityPlayer entity = getPlayer(login);	
-		if(entity == null) return;
-		
-		entity.setSellingOffer(new Offer(login, item));
-		entity.setTradeState(TradeState.SELLING);
-	}
-	
-	public void updateTradeOffer(String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem)
-	{
-		EntityPlayer seller = getPlayer(sellerLogin);
-		seller.setHasOffer(true);
-		seller.setBuyingOffer(new BuyerOffer(buyerLogin, buyerItem));
-		
-		System.out.println("PLAYER: " + seller.getLogin() + " HAS OFFER");
-		
-		/**TODO CHECK IF NECESSARY */
-		EntityPlayer buyer = getPlayer(buyerLogin);
-		buyer.setTradeState(TradeState.BUYING);
-		
-	}
-	
-	public void updateTradeDecision(boolean offerAccepted, String sellerLogin, String buyerLogin, Item sellerItem, Item buyerItem)
-	{	
-		if(offerAccepted)
-		{
-			EntityPlayer seller = getPlayer(sellerLogin);
-			EntityPlayer buyer = getPlayer(buyerLogin);
-			
-			seller.removeItem(sellerItem.getType(), sellerItem.getAttack(), sellerItem.getDefence(), sellerItem.getHPBonus());
-			buyer.addItem(sellerItem);
-			
-			buyer.removeItem(buyerItem.getType(), buyerItem.getAttack(), buyerItem.getDefence(), buyerItem.getHPBonus());
-			seller.addItem(buyerItem);
-			
-			seller.setTradeState(TradeState.NOT_TRADING);
-			buyer.setTradeState(TradeState.NOT_TRADING);
-			
-			seller.setHasOffer(false);
-			
-			if(MyGame.getPlayer() == buyer)
-			{
-				TradeRenderer.response = TradeResponse.ACCEPTED;
-				TradeRenderer.displayResponse = true;
-			}
-		}
-		else
-		{
-			EntityPlayer seller = getPlayer(sellerLogin);
-			seller.setHasOffer(false);
-			
-			EntityPlayer buyer = getPlayer(buyerLogin);
-			
-			if(MyGame.getPlayer() == buyer)
-			{
-				TradeRenderer.response = TradeResponse.NOT_ACCEPTED;
-				TradeRenderer.displayResponse = true;
-			}
-		}
-	}
-	
-	public void updateTradeEnd(String login)
-	{
-		EntityPlayer player = getPlayer(login);
-		player.setTradeState(TradeState.NOT_TRADING);
-	}
-	
-	/**TODO REMOVE SHIEET BUT LATER */
-	
-	public void setEntityTradeStateBuying(String login, Item item)
-	{
-		EntityPlayer entity = getPlayer(login);
-		entity.setBuyingOffer(new BuyerOffer(login, item));
-		entity.setTradeState(TradeState.BUYING);
-	}
-	
-	public void setEntityTradeEnd(String login)
-	{
-		/** TODO check if correct */
-		EntityPlayer entity = getPlayer(login);
-		entity.setSellingOffer(null);
-		entity.setBuyingOffer(null);
-		entity.setTradeState(TradeState.NOT_TRADING);
-	}
-	
-	/** TODO tmp map for testing */
 	private void generateMap()
 	{
 		for(int x = -10; x < 10; x++)
@@ -159,7 +66,6 @@ public class World implements Serializable
 
 	public synchronized void update(float delta)
 	{
-		/** TODO fix bug */	
 		for(Entity e : entities.values())
 		{
 			e.update(delta);

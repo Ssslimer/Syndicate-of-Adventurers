@@ -22,8 +22,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import client.ClientConnection;
 import client.MyGame;
-import util.GdxUtils;
-import util.ServerAddressValidator;
+import utils.GdxUtils;
+import utils.ServerAddressValidator;
 
 public class MainMenuScreen implements Screen
 {

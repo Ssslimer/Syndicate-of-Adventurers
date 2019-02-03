@@ -6,12 +6,9 @@ import entities.Item;
 
 public class Offer implements Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7098452146246928216L;
-	protected String login;
-	protected Item item;
+	protected final String login;
+	protected final Item item;
 	
 	public Offer(String login, Item item)
 	{

@@ -36,7 +36,6 @@ allprojects
         junitVersion = '5.3.1'
         junitPlatformVersion = '1.1.0'
         apacheLangVersion = '3.8.1'
-        jmhVersion = '1.21'
     }
 
     repositories 

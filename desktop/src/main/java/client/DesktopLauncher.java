@@ -1,4 +1,4 @@
-package desktop;
+package client;
 
 import java.nio.file.Paths;
 
@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 
 import client.MyGame;
-import util.ConfigConstants;
+import utils.ConfigConstants;
 
 public class DesktopLauncher
 {

@@ -8,10 +8,8 @@ public class UpdateTradeOfferMessage extends Message
 {
 	private static final long serialVersionUID = 6266859747843737975L;
 	
-	private String sellerLogin;
-	private String buyerLogin;
-	private Item sellerItem;
-	private Item buyerItem;
+	private final String sellerLogin, buyerLogin;
+	private final Item sellerItem, buyerItem;
 
 	public UpdateTradeOfferMessage(String sellerLogin, String buyerLogin, Item buyerItem, Item sellerItem) 
 	{
@@ -23,21 +21,23 @@ public class UpdateTradeOfferMessage extends Message
 		this.buyerItem = buyerItem;
 	}
 
-	public String getSellerLogin() {
+	public String getSellerLogin() 
+	{
 		return sellerLogin;
 	}
 
-	public String getBuyerLogin() {
+	public String getBuyerLogin() 
+	{
 		return buyerLogin;
 	}
 
-	public Item getSellerItem() {
+	public Item getSellerItem() 
+	{
 		return sellerItem;
 	}
 
-	public Item getBuyerItem() {
+	public Item getBuyerItem()
+	{
 		return buyerItem;
-	}
-	
-	
+	}		
 }
