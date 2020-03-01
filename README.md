@@ -1,6 +1,14 @@
 # Syndicate-of-Adventurers
 
-The Darkness has arisen in the land of Diarbor.
-Only brave ones have quality of becoming heroes that will defeat eternal evil.
-Shall they dine in Valhalla or die miserable death and burn in hell for Eternity?
-The choice is yours - play Syndicate of Adventurers, create your own hero and become a legend.
+This is a final project for Web Applications Development course
+
+The main goal was to create new/original game with pure Java sockets
+Multiple mechanics had to be implemented, we did:
+- server settings with XML
+- server admins
+- authentication
+- secured connection
+- session keys
+- trade with some currency+items
+- simplistic 2D graphics
+- fighting
